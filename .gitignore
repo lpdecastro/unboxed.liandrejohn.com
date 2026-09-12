@@ -1,0 +1,12 @@
+# Local Files
+local/
+
+# MacOS Files
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Generated build output (run `npm run build` to regenerate)
+css/
+js/
