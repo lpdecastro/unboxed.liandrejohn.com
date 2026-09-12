@@ -3,20 +3,552 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Unboxed</title>
+  <title>Unboxed — Board Game Rentals in Metro Manila</title>
+  <meta name="description" content="Rent board games from a small personal collection in Metro Manila. Pick your dates, pay via GCash, and get games delivered and returned through Lalamove.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
-  <div class="container py-5">
-    <h1 class="mb-3">Unboxed <i class="bi bi-dice-5-fill"></i></h1>
-    <p class="text-body-secondary">Bootstrap and Sass are wired up. Replace this page with the real site.</p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-title="Bootstrap JS is working">
-      Hover me
-    </button>
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- Navbar -->
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg bg-body shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+          <i class="bi bi-dice-5-fill text-primary fs-4"></i>
+          <span>Unboxed</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#how-it-works">How It Works</a>
+            </li>
+            <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+              <a class="btn btn-primary fw-semibold rounded-pill px-3" href="games.html">Browse Games</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow-1">
+
+    <!-- Hero -->
+    <section class="py-6 hero-gradient">
+      <div class="container py-lg-4">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6">
+            <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">Personal Board Game Rentals in Metro Manila</p>
+            <h1 class="display-4 fw-bold mb-3">Game night without <span class="text-primary">buying the game.</span></h1>
+            <p class="lead text-body-secondary mb-4">
+              I'm sharing my small personal collection of 8 games for family nights, dates, parties, and weekend
+              hangouts. Pick your dates, pay through GCash, and have your games delivered through Lalamove.
+            </p>
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+              <a href="games.html" class="btn btn-primary btn-lg fw-semibold rounded-pill px-4">Browse Games</a>
+            </div>
+            <p class="small text-body-secondary mb-0">
+              Rentals from &#8369;50/day <span class="mx-1">&bull;</span> Metro Manila only
+              <span class="mx-1">&bull;</span> Refundable security deposit
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <div class="position-relative">
+              <div class="ratio ratio-4x3 rounded-4 shadow overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1640461470346-c8b56497850a?auto=format&fit=crop&w=900&q=80"
+                  alt="Board game set up on a table for game night"
+                  class="object-fit-cover w-100 h-100"
+                >
+              </div>
+              <span class="badge bg-accent text-dark rounded-pill fs-6 fw-semibold px-3 py-2 shadow position-absolute bottom-0 start-0 m-3">
+                From &#8369;50/day
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Games -->
+    <section class="py-5 py-lg-6" id="games">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">My Collection</p>
+            <h2 class="fs-1 mb-3">Pick something for game night</h2>
+            <p class="text-body-secondary">
+              These are games from my own collection. I only have one copy of each, so availability depends on
+              your rental dates.
+            </p>
+          </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 mt-3">
+          <!-- Monopoly -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="bg-primary-subtle rounded-top-4 d-flex align-items-center justify-content-center py-5">
+                <i class="bi bi-dice-1-fill text-primary display-3"></i>
+              </div>
+              <div class="card-body d-flex flex-column h-100 p-4">
+                <h3 class="h4 card-title mb-2">Monopoly</h3>
+                <p class="text-body-secondary card-desc-clamp mb-3">The classic trading game the whole family knows.</p>
+                <p class="mb-2"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                <ul class="list-unstyled small text-body-secondary mb-4">
+                  <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;6 players</li>
+                  <li><i class="bi bi-clock me-2"></i>Around 1&ndash;3 hours</li>
+                </ul>
+                <a href="games.html" class="btn btn-primary rounded-pill mt-auto"><i class="bi bi-plus-circle me-2"></i>Add to Booking</a>
+              </div>
+            </div>
+          </div>
+          <!-- Exploding Kittens -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="bg-accent-subtle rounded-top-4 d-flex align-items-center justify-content-center py-5">
+                <i class="bi bi-dice-2-fill text-primary display-3"></i>
+              </div>
+              <div class="card-body d-flex flex-column h-100 p-4">
+                <h3 class="h4 card-title mb-2">Exploding Kittens</h3>
+                <p class="text-body-secondary card-desc-clamp mb-3">A fast, hilarious game of strategy, luck, and cats.</p>
+                <p class="mb-2"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                <ul class="list-unstyled small text-body-secondary mb-4">
+                  <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;5 players</li>
+                  <li><i class="bi bi-clock me-2"></i>Around 15 minutes</li>
+                </ul>
+                <a href="games.html" class="btn btn-primary rounded-pill mt-auto"><i class="bi bi-plus-circle me-2"></i>Add to Booking</a>
+              </div>
+            </div>
+          </div>
+          <!-- Monopoly Deal -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="bg-primary-subtle rounded-top-4 d-flex align-items-center justify-content-center py-5">
+                <i class="bi bi-dice-3-fill text-primary display-3"></i>
+              </div>
+              <div class="card-body d-flex flex-column h-100 p-4">
+                <h3 class="h4 card-title mb-2">Monopoly Deal</h3>
+                <p class="text-body-secondary card-desc-clamp mb-3">A quick Monopoly card game for one sitting.</p>
+                <p class="mb-2"><span class="fs-4 fw-bold">&#8369;100</span><span class="text-body-secondary">/day</span></p>
+                <ul class="list-unstyled small text-body-secondary mb-4">
+                  <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;5 players</li>
+                  <li><i class="bi bi-clock me-2"></i>Around 15 minutes</li>
+                </ul>
+                <a href="games.html" class="btn btn-primary rounded-pill mt-auto"><i class="bi bi-plus-circle me-2"></i>Add to Booking</a>
+              </div>
+            </div>
+          </div>
+          <!-- Herd Mentality -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="bg-accent-subtle rounded-top-4 d-flex align-items-center justify-content-center py-5">
+                <i class="bi bi-dice-4-fill text-primary display-3"></i>
+              </div>
+              <div class="card-body d-flex flex-column h-100 p-4">
+                <h3 class="h4 card-title mb-2">Herd Mentality</h3>
+                <p class="text-body-secondary card-desc-clamp mb-3">Guess what everyone else will guess to win.</p>
+                <p class="mb-2"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                <ul class="list-unstyled small text-body-secondary mb-4">
+                  <li class="mb-1"><i class="bi bi-people me-2"></i>4+ players</li>
+                  <li><i class="bi bi-clock me-2"></i>Around 20 minutes</li>
+                </ul>
+                <a href="games.html" class="btn btn-primary rounded-pill mt-auto"><i class="bi bi-plus-circle me-2"></i>Add to Booking</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="games.html" class="btn btn-outline-primary rounded-pill px-4">View All 8 Games</a>
+          <p class="small text-body-secondary mt-3 mb-0">
+            Also available: Game of Life, Piles, RC Plane, and Jackstones.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-5 py-lg-6 bg-body-tertiary" id="how-it-works">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">Simple Rentals</p>
+            <h2 class="fs-1 mb-3">From my shelf to your game night</h2>
+            <p class="text-body-secondary">
+              From picking your games to getting them delivered, renting from Unboxed takes just three simple steps.
+            </p>
+          </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-0">
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-5">
+              <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold fs-5 mb-4" style="width: 3rem; height: 3rem;">1</div>
+              <h3 class="h4 mb-3">Pick your games</h3>
+              <p class="text-body-secondary mb-0">Choose your preferred rental dates, then browse the collection and add the games you'd like to book.</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-5">
+              <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold fs-5 mb-4" style="width: 3rem; height: 3rem;">2</div>
+              <h3 class="h4 mb-3">Pay through GCash</h3>
+              <p class="text-body-secondary mb-0">Pay the rental total and refundable security deposit, then enter your GCash reference number.</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-5">
+              <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold fs-5 mb-4" style="width: 3rem; height: 3rem;">3</div>
+              <h3 class="h4 mb-3">Receive via Lalamove</h3>
+              <p class="text-body-secondary mb-0">Once I verify and confirm your booking, I'll coordinate the Lalamove delivery with you.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="small text-body-secondary mt-5 mb-0 pt-4 border-top">
+          <i class="bi bi-info-circle me-1"></i>Lalamove delivery and return fees are paid separately by the renter.
+        </p>
+      </div>
+    </section>
+
+    <!-- Why Rent From Unboxed -->
+    <section class="py-5 py-lg-6">
+      <div class="container">
+        <div class="row g-5 align-items-start">
+          <div class="col-lg-5">
+            <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">A Small, Personal Collection</p>
+            <h2 class="fs-1 mb-3">Easy to borrow, cared for personally</h2>
+            <p class="text-body-secondary mb-0">
+              Unboxed isn't a big rental shop. These are games I personally own and want other people around
+              Metro Manila to enjoy too.
+            </p>
+          </div>
+          <div class="col-lg-7">
+            <div class="row row-cols-1 row-cols-sm-2 g-4 mt-0">
+              <div class="col d-flex gap-4">
+                <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary fs-5" style="width: 3rem; height: 3rem;">
+                  <i class="bi bi-piggy-bank"></i>
+                </div>
+                <div>
+                  <h3 class="h4 mb-3">Spend less for game night</h3>
+                  <p class="text-body-secondary mb-0">Rent a game for a few days instead of buying one you might only play occasionally.</p>
+                </div>
+              </div>
+              <div class="col d-flex gap-4">
+                <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary fs-5" style="width: 3rem; height: 3rem;">
+                  <i class="bi bi-qr-code"></i>
+                </div>
+                <div>
+                  <h3 class="h4 mb-3">Easy GCash payment</h3>
+                  <p class="text-body-secondary mb-0">No complicated payment setup&mdash;just scan the QR code and send your payment through GCash.</p>
+                </div>
+              </div>
+              <div class="col d-flex gap-4">
+                <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary fs-5" style="width: 3rem; height: 3rem;">
+                  <i class="bi bi-truck"></i>
+                </div>
+                <div>
+                  <h3 class="h4 mb-3">Convenient delivery</h3>
+                  <p class="text-body-secondary mb-0">Your games can be delivered and returned through Lalamove within Metro Manila.</p>
+                </div>
+              </div>
+              <div class="col d-flex gap-4">
+                <div class="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary fs-5" style="width: 3rem; height: 3rem;">
+                  <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                  <h3 class="h4 mb-3">Refundable deposit</h3>
+                  <p class="text-body-secondary mb-0">Your security deposit is returned after the games come back complete and in good condition.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rental Highlights -->
+    <section class="py-5 py-lg-6 bg-body-tertiary">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">Good to Know</p>
+            <h2 class="fs-1 mb-3">Simple pricing, no hidden delivery charges</h2>
+          </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 mt-0">
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-4">
+              <i class="bi bi-tag text-primary fs-3 mb-3"></i>
+              <h3 class="h5 mb-2">From &#8369;50/day</h3>
+              <p class="text-body-secondary mb-0">Rental prices depend on the game.</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-4">
+              <i class="bi bi-percent text-primary fs-3 mb-3"></i>
+              <h3 class="h5 mb-2">10% off, 2+ games</h3>
+              <p class="text-body-secondary mb-0">The discount applies to rental fees only.</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-4">
+              <i class="bi bi-shield-check text-primary fs-3 mb-3"></i>
+              <h3 class="h5 mb-2">Refundable deposit</h3>
+              <p class="text-body-secondary mb-0">Deposits range from &#8369;50 to &#8369;500 depending on the game.</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm p-4">
+              <i class="bi bi-truck text-primary fs-3 mb-3"></i>
+              <h3 class="h5 mb-2">Lalamove paid separately</h3>
+              <p class="text-body-secondary mb-0">Delivery and return fees are not included in your website total.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-center small text-body-secondary mt-4 mb-4">
+          Rental days are counted inclusively. For example, September 20&ndash;22 is a 3-day rental.
+        </p>
+        <div class="text-center">
+          <a href="games.html" class="btn btn-outline-primary rounded-pill px-4">Check Prices &amp; Availability</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rental Policies -->
+    <section class="py-5 py-lg-6">
+      <div class="container">
+        <div class="row g-5">
+          <div class="col-lg-5">
+            <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">Before You Book</p>
+            <h2 class="fs-1 mb-3">A few simple rental rules</h2>
+            <p class="text-body-secondary mb-4">
+              I want the process to be straightforward for both of us. Here are the main things to know before
+              booking.
+            </p>
+            <a href="#rentalPoliciesModal" data-bs-toggle="modal" class="link-primary fw-semibold">
+              View Full Rental Policies <i class="bi bi-arrow-up-right ms-1"></i>
+            </a>
+          </div>
+          <div class="col-lg-7">
+            <div class="accordion accordion-flush" id="policyAccordion">
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy1">
+                    <i class="bi bi-credit-card me-2"></i>Payment &amp; confirmation
+                  </button>
+                </h3>
+                <div id="policy1" class="accordion-collapse collapse" data-bs-parent="#policyAccordion">
+                  <div class="accordion-body text-body-secondary">
+                    Full payment and the security deposit are required through GCash. Your booking is confirmed
+                    only after I verify the payment.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy2">
+                    <i class="bi bi-x-circle me-2"></i>Cancellations
+                  </button>
+                </h3>
+                <div id="policy2" class="accordion-collapse collapse" data-bs-parent="#policyAccordion">
+                  <div class="accordion-body text-body-secondary">
+                    You can cancel while your booking is still pending. Once confirmed, the rental payment is
+                    non-refundable.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy3">
+                    <i class="bi bi-shield-check me-2"></i>Security deposit
+                  </button>
+                </h3>
+                <div id="policy3" class="accordion-collapse collapse" data-bs-parent="#policyAccordion">
+                  <div class="accordion-body text-body-secondary">
+                    Your deposit is refunded after the games are returned and inspected.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy4">
+                    <i class="bi bi-clock-history me-2"></i>Late returns
+                  </button>
+                </h3>
+                <div id="policy4" class="accordion-collapse collapse" data-bs-parent="#policyAccordion">
+                  <div class="accordion-body text-body-secondary">
+                    Late fees are charged per day based on the game you rented.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy5">
+                    <i class="bi bi-tools me-2"></i>Damage or missing pieces
+                  </button>
+                </h3>
+                <div id="policy5" class="accordion-collapse collapse" data-bs-parent="#policyAccordion">
+                  <div class="accordion-body text-body-secondary">
+                    Charges for damaged or missing items may be deducted from the security deposit.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policy6">
+                    <i class="bi bi-truck me-2"></i>Delivery &amp; return
+                  </button>
+                </h3>
+                <div id="policy6" class="accordion-collapse collapse" data-bs-parent="#policyAccordion">
+                  <div class="accordion-body text-body-secondary">
+                    Lalamove is used for both trips. I coordinate delivery, while you arrange the return. Both
+                    fees are paid by the renter.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-5 py-lg-6 bg-final-cta text-white">
+      <div class="container py-lg-3">
+        <div class="row g-5 align-items-center">
+          <div class="col-lg-7">
+            <p class="text-uppercase fw-semibold small text-primary-light ls-wide mb-2">Planning a Game Night?</p>
+            <h2 class="fs-1 mb-3">Find the games that fit your dates.</h2>
+            <p class="lead text-white-50 mb-0" style="max-width: 40rem;">
+              Choose your rental dates, see what&rsquo;s available, and build your booking in just a few minutes.
+            </p>
+          </div>
+          <div class="col-lg-5">
+            <div class="card border-0 shadow p-4 p-lg-5">
+              <h3 class="h4 mb-2">Ready to check?</h3>
+              <p class="text-body-secondary mb-4">Pick your dates and I'll show you which games are available.</p>
+              <a href="games.html" class="btn btn-primary btn-lg rounded-pill w-100 mb-4">Check Game Availability</a>
+              <hr>
+              <ul class="list-unstyled small text-body-secondary mb-0">
+                <li class="mb-2">Metro Manila only</li>
+                <li class="mb-2">GCash payment</li>
+                <li>Lalamove delivery &amp; return</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-body border-top pt-5 pb-4" data-bs-theme="dark">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <a class="d-flex align-items-center gap-2 fw-bold mb-2 text-body text-decoration-none" href="index.html">
+            <i class="bi bi-dice-5-fill text-primary fs-4"></i>
+            <span>Unboxed</span>
+          </a>
+          <p class="small text-body-secondary mb-0">
+            A small personal collection of board games available for rent around Metro Manila.
+          </p>
+        </div>
+        <div class="col-lg-2 col-sm-4">
+          <h3 class="h6 fw-semibold mb-3">Explore</h3>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="index.html" class="link-secondary link-underline-opacity-0">Home</a></li>
+            <li class="mb-2"><a href="games.html" class="link-secondary link-underline-opacity-0">Browse Games</a></li>
+            <li class="mb-2"><a href="#rentalPoliciesModal" data-bs-toggle="modal" class="link-secondary link-underline-opacity-0">Rental Policies</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-4">
+          <h3 class="h6 fw-semibold mb-3">Rental Info</h3>
+          <ul class="list-unstyled small text-body-secondary">
+            <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Metro Manila only</li>
+            <li class="mb-2"><i class="bi bi-wallet2 me-2"></i>Payment via GCash</li>
+            <li><i class="bi bi-truck me-2"></i>Delivery &amp; return via Lalamove</li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-4">
+          <h3 class="h6 fw-semibold mb-3">Contact</h3>
+          <p class="small text-body-secondary mb-0">Contact details coming soon.</p>
+        </div>
+      </div>
+      <hr class="mt-4 mb-3">
+      <p class="small text-body-secondary text-center mb-0">&copy; 2026 Unboxed. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Full Rental Policies Modal -->
+  <div class="modal fade" id="rentalPoliciesModal" tabindex="-1" aria-labelledby="rentalPoliciesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="rentalPoliciesModalLabel">Full Rental Policies</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h3 class="h6 fw-semibold">Payment</h3>
+          <ul class="small text-body-secondary">
+            <li>Full payment, including the security deposit, must be made via GCash before the booking is confirmed.</li>
+            <li>Bookings are confirmed only after payment is manually verified.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Cancellation</h3>
+          <ul class="small text-body-secondary">
+            <li>Customers may cancel before the booking is confirmed.</li>
+            <li>Once confirmed, rental payments are non-refundable.</li>
+            <li>The security deposit will still be refunded if the games have not yet been delivered.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Security Deposit</h3>
+          <ul class="small text-body-secondary">
+            <li>A refundable security deposit is required for every rental.</li>
+            <li>The deposit is returned after the games are returned and inspected.</li>
+            <li>Any late fees, damage fees, or missing-item charges will be deducted from the deposit.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Late Returns</h3>
+          <ul class="small text-body-secondary">
+            <li>Games returned after the agreed return date will be charged the listed late fee per day.</li>
+            <li>Late fees may be deducted from the security deposit.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Damage or Missing Items</h3>
+          <ul class="small text-body-secondary">
+            <li>Customers are responsible for keeping the games and all components in good condition.</li>
+            <li>Charges may apply for damaged or missing cards, pieces, boxes, or other components.</li>
+            <li>If a game is lost or severely damaged, part or all of the security deposit may be withheld.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Delivery and Return</h3>
+          <ul class="small text-body-secondary">
+            <li>Delivery and return are handled through Lalamove.</li>
+            <li>The customer is responsible for both delivery and return fees.</li>
+            <li>Lalamove fees are separate from the rental price.</li>
+          </ul>
+          <h3 class="h6 fw-semibold mb-0">Customer Responsibility</h3>
+          <ul class="small text-body-secondary mb-0">
+            <li>Customers should check the games upon receipt and report any existing damage or missing pieces as soon as possible.</li>
+            <li>Games should be kept clean, dry, and away from food, drinks, pets, and other sources of damage.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal">Got it</button>
+        </div>
+      </div>
+    </div>
   </div>
+
   <script src="js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => new bootstrap.Tooltip(el));
-  </script>
 </body>
 </html>

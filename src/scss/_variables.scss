@@ -1,3 +1,66 @@
 // Bootstrap variable overrides.
 // Set values here before Bootstrap's own defaults are loaded in main.scss.
 // See: node_modules/bootstrap/scss/_variables.scss for everything that can be overridden.
+
+@import "bootstrap/scss/functions";
+
+// Brand palette: coral pop primary + playful teal accent, on a pure white
+// background with ink navy text. These must be set before
+// `bootstrap/scss/variables` loads below, since Bootstrap's $theme-colors
+// map captures $primary's value at the point the map is built.
+$primary: #c84a01;
+$body-bg: #ffffff;
+$body-color: #0b3765;
+$body-tertiary-bg: #f5f8fa;
+
+// Reuse the ink navy as the "dark" theme color too, so a playful dark
+// section (e.g. the hero) stays on-brand instead of Bootstrap's default gray.
+$dark: #072747;
+
+// Slightly friendlier rounded corners without tipping into a toy-like look.
+$border-radius: 0.6rem;
+$border-radius-sm: 0.4rem;
+$border-radius-lg: 0.9rem;
+$border-radius-xl: 1.25rem;
+
+// Poppins headings (bold, loaded via Google Fonts in index.html's <head>)
+// over Inter body copy. $display-font-family covers the .display-* classes
+// (e.g. the hero h1), which don't inherit $headings-font-family on their
+// own. Both must be set before `bootstrap/scss/variables` loads below, same
+// reasoning as the palette above.
+$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-family: "Poppins", $font-family-sans-serif;
+$display-font-family: $headings-font-family;
+$headings-font-weight: 700;
+
+// Pulls in Bootstrap's default $theme-colors (built using our $primary
+// above) so we can extend it below. main.scss's later
+// `@import "bootstrap/scss/bootstrap"` re-imports this harmlessly since
+// every Bootstrap variable is declared with `!default`.
+@import "bootstrap/scss/variables";
+
+// Register a custom "accent" theme color so Bootstrap generates the usual
+// .bg-accent / .text-accent / .btn-accent / *-subtle utilities for it.
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    "accent": #84CC16,
+  )
+);
+
+// Add steps above the default scale's 3rem max so sections can breathe a
+// little more (py-6, py-7 etc.), without changing anything on the existing
+// 0-5 scale.
+$spacers: map-merge(
+  $spacers,
+  (
+    6: 6rem,
+    7: 8rem,
+  )
+);
+
+// A touch more breathing room in the navbar than Bootstrap's default 0.5rem.
+$navbar-padding-y: 0.85rem;
+
+// Slightly airier body copy than Bootstrap's default 1.5.
+// $line-height-base: 1.65;

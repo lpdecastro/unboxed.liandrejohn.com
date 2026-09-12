@@ -7,3 +7,45 @@
 // Bootstrap Icons (fonts are copied to css/fonts via `npm run assets:icons`)
 $bootstrap-icons-font-dir: "fonts";
 @import "bootstrap-icons/font/bootstrap-icons";
+
+// Bootstrap has no letter-spacing utility, so this is a small hand-written
+// exception per the coding standards. Used on section eyebrow labels.
+.ls-wide {
+  letter-spacing: 0.06em;
+}
+
+// Hero background: light overall, gently deepening toward the far corner.
+// Bootstrap's own `.bg-gradient` only overlays a fixed light/dark sheen on a
+// solid bg-* color, it can't blend two arbitrary theme colors like this.
+.hero-gradient {
+  background: linear-gradient(
+    225deg,
+    var(--bs-tertiary-bg) 0%,
+    color-mix(in srgb, var(--bs-tertiary-bg) 95%, var(--bs-dark) 5%) 100%
+  );
+}
+
+// Final CTA background: the same navy as the body copy color, used as a
+// deliberate solid block rather than a text color.
+.bg-final-cta {
+  background-color: var(--bs-body-color);
+}
+
+// Clamps game card descriptions to a fixed 2 lines so price/meta/CTA line up
+// across cards regardless of how long each description is. Bootstrap's
+// .text-truncate utility only handles a single line.
+.card-desc-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// A lighter tint of primary for text on dark backgrounds. Bootstrap's own
+// .text-primary-emphasis mixes toward black (for extra contrast on light
+// backgrounds), and there's no .text-primary-subtle utility for text
+// (subtle variants are background-only), so neither gives a lighter primary.
+.text-primary-light {
+  color: color-mix(in srgb, var(--bs-primary) 100%, white 56%);
+}
