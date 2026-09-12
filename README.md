@@ -1,4 +1,4 @@
-# Unboxed
+# Unboxed Board Game Rental
 
 A personal board game rental site for Metro Manila. Browse games, check availability for a date range, book, and pay via GCash — delivery and returns are handled through Lalamove.
 
@@ -51,11 +51,18 @@ Then open `index.html` in a browser (or serve the folder with any static file se
 ## Project Structure
 
 ```
-├── src/scss/       # Sass source (main.scss imports Bootstrap + overrides in _variables.scss)
-├── css/            # Compiled CSS (generated, gitignored)
-├── js/             # Bootstrap's JS bundle (copied, gitignored)
-├── img/            # Site images
-└── index.html      # Static pages
+├── .claude/skills/feature/  # Feature workflow skill (load/start/complete a feature)
+├── context/                 # Project context read by Claude Code (see CLAUDE.md)
+│   ├── project-overview.md  # Product plan: pricing, policies, booking flow, data model
+│   ├── ai-interaction.md    # AI workflow/communication guidelines
+│   ├── current-feature.md   # Active feature spec + completed feature history
+│   ├── contents/            # Page copy (Home, Game Listing)
+│   └── features/            # Per-feature specs
+├── src/scss/                # Sass source (main.scss imports Bootstrap + overrides in _variables.scss)
+├── css/                     # Compiled CSS (generated, gitignored)
+├── js/                      # Bootstrap's JS bundle (copied, gitignored)
+├── img/                     # Site images
+└── index.html               # Static pages
 ```
 
 `css/` and `js/` are build output, not committed — run `npm run build` to regenerate them. A CI/CD pipeline will run this build step before deployment once it's set up.
