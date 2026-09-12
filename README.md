@@ -55,6 +55,7 @@ Then open `index.html` in a browser (or serve the folder with any static file se
 ├── context/                 # Project context read by Claude Code (see CLAUDE.md)
 │   ├── project-overview.md  # Product plan: pricing, policies, booking flow, data model
 │   ├── ai-interaction.md    # AI workflow/communication guidelines
+│   ├── coding-standards.md  # Bootstrap/Sass coding conventions
 │   ├── current-feature.md   # Active feature spec + completed feature history
 │   ├── contents/            # Page copy (Home, Game Listing)
 │   └── features/            # Per-feature specs
