@@ -344,7 +344,7 @@
               <div class="sticky-top d-flex flex-column gap-4" style="top: 1.5rem;">
 
                 <!-- Booking Summary -->
-                <div class="card border-0 shadow-sm p-4">
+                <div class="card border-0 shadow-sm p-4" id="summaryCard">
                   <h2 class="h5 mb-3">Your Booking</h2>
 
                   <div id="summaryEmptyState" class="text-center py-4">
@@ -373,44 +373,31 @@
                       <span class="fw-semibold">Amount to Pay</span>
                       <span class="fs-4 fw-bold" id="summaryTotal">&#8369;0</span>
                     </div>
-                    <p class="small text-body-secondary mb-1"><i class="bi bi-percent me-1"></i>Rent 2 or more games and get 10% off the rental fees.</p>
-                    <p class="small text-body-secondary mb-1"><i class="bi bi-truck me-1"></i>Delivery and return are handled through Lalamove.</p>
-                    <p class="small text-body-secondary mb-1"><i class="bi bi-wallet2 me-1"></i>Lalamove delivery and return fees are paid separately by the renter.</p>
-                    <p class="small text-body-secondary mb-0"><i class="bi bi-shield-check me-1"></i>Deposits are refunded after the games are returned and inspected.</p>
+                    <div id="summaryStepError" class="alert alert-danger small d-none mb-3" role="alert"></div>
+                    <div class="d-grid">
+                      <button type="button" class="btn btn-primary rounded-pill fw-semibold" id="summaryNextBtn">Next</button>
+                    </div>
                   </div>
-                </div>
-
-                <!-- Customer Details -->
-                <div class="card border-0 shadow-sm p-4">
-                  <h2 class="h5 mb-1">Your Details</h2>
-                  <p class="small text-body-secondary mb-3">I&rsquo;ll use these details to confirm your booking and coordinate delivery.</p>
-                  <div class="mb-3">
-                    <label for="customerName" class="form-label fw-semibold">Full Name</label>
-                    <input type="text" class="form-control" id="customerName" placeholder="Juan Dela Cruz" required>
-                    <div class="invalid-feedback">Please enter your full name.</div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="customerMobile" class="form-label fw-semibold">Mobile Number</label>
-                    <input type="tel" class="form-control" id="customerMobile" placeholder="09XX XXX XXXX" required>
-                    <div class="invalid-feedback">Enter a valid Philippine mobile number.</div>
-                  </div>
-                  <div class="mb-1">
-                    <label for="customerAddress" class="form-label fw-semibold">Complete Delivery Address</label>
-                    <textarea class="form-control" id="customerAddress" rows="2" placeholder="House/unit, street, barangay, city, Metro Manila" required></textarea>
-                    <div class="invalid-feedback">Please enter a complete Metro Manila delivery address.</div>
-                  </div>
-                  <p class="small text-body-secondary mb-0">Rentals are available within Metro Manila only.</p>
                 </div>
 
                 <!-- GCash Payment -->
-                <div class="card border-0 shadow-sm p-4">
-                  <h2 class="h5 mb-1">Pay with GCash</h2>
-                  <p class="small text-body-secondary mb-3">Send the full amount shown below before submitting your booking.</p>
+                <div class="card border-0 shadow-sm p-4 d-none" id="gcashCard">
+                  <div class="d-flex align-items-center gap-3 mb-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 p-0" id="gcashPrevBtn" style="width: 2.5rem; height: 2.5rem;" aria-label="Back to booking summary">
+                      <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <div>
+                      <h2 class="h5 mb-1">Pay with GCash</h2>
+                      <p class="small text-body-secondary mb-0">Send the full amount shown below before submitting your booking.</p>
+                    </div>
+                  </div>
                   <div class="d-flex justify-content-between align-items-center bg-body-tertiary rounded-3 p-3 mb-3">
                     <span class="small fw-semibold">Amount to Send</span>
                     <span class="fs-5 fw-bold" id="gcashAmount">&#8369;0</span>
                   </div>
-                  <p class="small text-body-secondary mb-3">This includes your rental fees and refundable security deposits. Lalamove fees are not included.</p>
+                  <p class="small text-body-secondary mb-3" id="gcashDepositNote">
+                    <i class="bi bi-shield-check me-1"></i>Includes &#8369;0 refundable security deposit.
+                  </p>
                   <div class="border border-2 border-dashed rounded-3 d-flex flex-column align-items-center justify-content-center text-center p-4 mb-3 bg-body-tertiary">
                     <i class="bi bi-qr-code-scan fs-1 text-body-secondary mb-2"></i>
                     <p class="small text-body-secondary mb-0">Scan to Pay<br>GCash QR code coming soon</p>
@@ -425,39 +412,71 @@
                     <input type="text" class="form-control" id="gcashReference" placeholder="Enter your transaction reference number" required>
                     <div class="invalid-feedback">Please enter your GCash reference number.</div>
                   </div>
-                  <p class="small text-body-secondary mb-0">
+                  <p class="small text-body-secondary mb-3">
                     <i class="bi bi-info-circle me-1"></i>Your booking is not confirmed yet. I&rsquo;ll manually verify your GCash payment after you submit.
                   </p>
+                  <div id="gcashStepError" class="alert alert-danger small d-none mb-3" role="alert"></div>
+                  <div class="d-grid">
+                    <button type="button" class="btn btn-primary rounded-pill fw-semibold" id="gcashNextBtn">Next</button>
+                  </div>
                 </div>
 
-                <!-- Rental Agreement + Submit -->
-                <div class="card border-0 shadow-sm p-4">
-                  <h2 class="h5 mb-3">Before You Submit</h2>
-                  <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" id="agreementCheck" required>
-                    <label class="form-check-label small" for="agreementCheck">
-                      I&rsquo;ve read and agree to the rental policies, including the cancellation rules, refundable deposit, late fees, damage or missing-item charges, and my responsibility for Lalamove delivery and return fees.
-                    </label>
-                    <div class="invalid-feedback">Please confirm you agree to the rental policies.</div>
+                <!-- Customer Details -->
+                <div class="card border-0 shadow-sm p-4 d-none" id="customerCard">
+                  <div class="d-flex align-items-center gap-3 mb-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 p-0" id="customerPrevBtn" style="width: 2.5rem; height: 2.5rem;" aria-label="Back to GCash payment">
+                      <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <div>
+                      <h2 class="h5 mb-1">Your Details</h2>
+                      <p class="small text-body-secondary mb-0">I&rsquo;ll use these details to confirm your booking and coordinate delivery.</p>
+                    </div>
                   </div>
-                  <a href="#rentalPoliciesModal" data-bs-toggle="modal" class="link-primary fw-semibold small d-inline-block mb-3">
-                    Read Rental Policies <i class="bi bi-arrow-up-right ms-1"></i>
-                  </a>
-                  <p class="small text-body-secondary mb-4">Confirmed rental payments are non-refundable. Your security deposit is returned after the games are returned and inspected.</p>
+                  <div class="mb-3">
+                    <label for="customerName" class="form-label fw-semibold">Full Name</label>
+                    <input type="text" class="form-control" id="customerName" placeholder="Juan Dela Cruz" required>
+                    <div class="invalid-feedback">Please enter your full name.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="customerMobile" class="form-label fw-semibold">Mobile Number</label>
+                    <input type="tel" class="form-control" id="customerMobile" placeholder="09XX XXX XXXX" required>
+                    <div class="invalid-feedback">Enter a valid Philippine mobile number.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="customerAddress" class="form-label fw-semibold">Complete Delivery Address</label>
+                    <textarea class="form-control" id="customerAddress" rows="2" placeholder="House/unit, street, barangay, city, Metro Manila" required></textarea>
+                    <div class="invalid-feedback">Please enter a complete Metro Manila delivery address.</div>
+                  </div>
+                  <p class="small text-body-secondary mb-3">Rentals are available within Metro Manila only. Lalamove fees are paid directly to the rider.</p>
 
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="fw-semibold">Amount to Pay</span>
-                    <span class="fs-5 fw-bold" id="submitTotal">&#8369;0</span>
+                  <div class="bg-body-tertiary rounded-3 p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small fw-semibold">Amount Paid</span>
+                      <span class="fs-5 fw-bold" id="submitTotal">&#8369;0</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-1">
+                      <span class="text-body-secondary">Refundable Security Deposit</span>
+                      <span id="customerDepositAmount">&#8369;0</span>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                      <span class="text-body-secondary">GCash Ref</span>
+                      <span id="customerGcashRef">&mdash;</span>
+                    </div>
                   </div>
+
+                  <p class="small text-body-secondary mb-3">
+                    By submitting, you confirm you understand the
+                    <a href="#rentalPoliciesModal" data-bs-toggle="modal" class="link-primary fw-semibold">rental policies</a>,
+                    including cancellation, refundable deposits, late fees, and Lalamove responsibilities.
+                  </p>
 
                   <div id="formErrorAlert" class="alert alert-danger small d-none mb-3" role="alert"></div>
 
                   <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg fw-semibold rounded-pill" id="submitBookingBtn">
+                    <button type="submit" class="btn btn-primary fw-semibold rounded-pill" id="submitBookingBtn">
                       Submit Booking
                     </button>
                   </div>
-                  <p class="small text-body-secondary text-center mt-3 mb-0">I&rsquo;ll check availability again before your booking is submitted.</p>
                 </div>
 
               </div>
@@ -697,6 +716,7 @@
       var filterAll = document.getElementById('filterAll');
       var noResultsMessage = document.getElementById('noResultsMessage');
 
+      var summaryCard = document.getElementById('summaryCard');
       var summaryEmptyState = document.getElementById('summaryEmptyState');
       var summaryBookingState = document.getElementById('summaryBookingState');
       var summaryGameList = document.getElementById('summaryGameList');
@@ -705,8 +725,24 @@
       var summaryDiscount = document.getElementById('summaryDiscount');
       var summaryDeposit = document.getElementById('summaryDeposit');
       var summaryTotal = document.getElementById('summaryTotal');
+      var summaryStepError = document.getElementById('summaryStepError');
+      var summaryNextBtn = document.getElementById('summaryNextBtn');
+
+      var gcashCard = document.getElementById('gcashCard');
       var gcashAmount = document.getElementById('gcashAmount');
+      var gcashDepositNote = document.getElementById('gcashDepositNote');
+      var gcashReference = document.getElementById('gcashReference');
+      var gcashStepError = document.getElementById('gcashStepError');
+      var gcashPrevBtn = document.getElementById('gcashPrevBtn');
+      var gcashNextBtn = document.getElementById('gcashNextBtn');
+
+      var customerCard = document.getElementById('customerCard');
+      var customerPrevBtn = document.getElementById('customerPrevBtn');
       var submitTotal = document.getElementById('submitTotal');
+      var customerDepositAmount = document.getElementById('customerDepositAmount');
+      var customerGcashRef = document.getElementById('customerGcashRef');
+
+      var currentStep = 1;
 
       var bookingForm = document.getElementById('bookingForm');
       var formErrorAlert = document.getElementById('formErrorAlert');
@@ -906,14 +942,10 @@
         var selectedCards = gameCards.filter(function (c) { return selectedSlugs.has(c.dataset.slug); });
 
         if (selectedCards.length === 0) {
-          summaryEmptyState.classList.remove('d-none');
-          summaryBookingState.classList.add('d-none');
-          updateTotals(0, 0, 0);
+          updateTotals(0, 0);
+          renderStepUI();
           return;
         }
-
-        summaryEmptyState.classList.add('d-none');
-        summaryBookingState.classList.remove('d-none');
 
         var subtotal = 0;
         var depositTotal = 0;
@@ -953,20 +985,91 @@
         summaryDeposit.textContent = peso(depositTotal);
 
         var grandTotal = subtotal - discount + depositTotal;
-        updateTotals(grandTotal, subtotal, discount);
+        updateTotals(grandTotal, depositTotal);
 
         Array.prototype.forEach.call(summaryGameList.querySelectorAll('.remove-game-btn'), function (btn) {
           btn.addEventListener('click', function () {
             toggleGame(btn.dataset.slug);
           });
         });
+
+        renderStepUI();
       }
 
-      function updateTotals(grandTotal) {
-        summaryTotal.textContent = peso(grandTotal);
-        gcashAmount.textContent = peso(grandTotal);
-        submitTotal.textContent = peso(grandTotal);
+      function updateTotals(grandTotal, depositTotal) {
+        var totalText = peso(grandTotal);
+        var depositText = peso(depositTotal);
+
+        summaryTotal.textContent = totalText;
+
+        gcashAmount.textContent = totalText;
+        gcashDepositNote.innerHTML = '<i class="bi bi-shield-check me-1"></i>Includes ' + depositText + ' refundable security deposit.';
+
+        submitTotal.textContent = totalText;
+        customerDepositAmount.textContent = depositText;
       }
+
+      // Step navigation
+
+      function renderStepUI() {
+        var hasGames = selectedSlugs.size > 0;
+
+        summaryCard.classList.toggle('d-none', currentStep !== 1);
+        summaryEmptyState.classList.toggle('d-none', hasGames);
+        summaryBookingState.classList.toggle('d-none', !hasGames);
+
+        gcashCard.classList.toggle('d-none', currentStep !== 2);
+        customerCard.classList.toggle('d-none', currentStep !== 3);
+      }
+
+      function goToStep(step) {
+        currentStep = step;
+        renderStepUI();
+      }
+
+      summaryNextBtn.addEventListener('click', function () {
+        var errors = [];
+        if (selectedSlugs.size === 0) errors.push('Add at least one game to your booking.');
+        if (!availabilityChecked) errors.push('Check availability for your rental dates first.');
+
+        if (errors.length > 0) {
+          summaryStepError.textContent = errors.join(' ');
+          summaryStepError.classList.remove('d-none');
+          return;
+        }
+
+        summaryStepError.classList.add('d-none');
+        goToStep(2);
+      });
+
+      gcashNextBtn.addEventListener('click', function () {
+        var ref = gcashReference.value.trim();
+        if (!ref) {
+          gcashReference.classList.add('is-invalid');
+          gcashStepError.textContent = 'Please enter your GCash reference number.';
+          gcashStepError.classList.remove('d-none');
+          return;
+        }
+
+        gcashReference.classList.remove('is-invalid');
+        gcashStepError.classList.add('d-none');
+        customerGcashRef.textContent = ref;
+        goToStep(3);
+      });
+
+      gcashReference.addEventListener('input', function () {
+        gcashReference.classList.remove('is-invalid');
+      });
+
+      gcashPrevBtn.addEventListener('click', function () {
+        goToStep(1);
+      });
+
+      customerPrevBtn.addEventListener('click', function () {
+        goToStep(2);
+      });
+
+      renderStepUI();
 
       // Submission
 
