@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Choose Your Games — Unboxed</title>
+  <meta name="description" content="Pick your rental dates, check which board games are available, and book your games from Unboxed's Metro Manila collection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- Navbar -->
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg bg-body shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+          <img src="img/logo.png" alt="" width="42" height="32" class="d-block">
+          <span>Unboxed</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#how-it-works">How It Works</a>
+            </li>
+            <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+              <a class="btn btn-primary fw-semibold rounded-pill px-3 active" aria-current="page" href="games.html">Browse Games</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow-1">
+
+    <!-- Booking Area -->
+    <section class="py-4 py-lg-5">
+      <div class="container">
+
+        <h1 class="visually-hidden">Choose Your Games</h1>
+
+        <!-- Rental Date Selector -->
+        <div class="card border shadow-sm p-3 p-lg-4 mb-5">
+          <h2 class="h4 mb-1">When do you need the games?</h2>
+          <p class="small text-body-secondary mb-4">
+            Metro Manila only <span class="mx-1">&bull;</span> Refundable deposits
+            <span class="mx-1">&bull;</span> Delivery and return via Lalamove
+          </p>
+          <form id="dateForm" class="row g-3 align-items-start" novalidate>
+            <div class="col-sm-6 col-lg-4">
+              <label for="startDate" class="form-label fw-semibold">Start Date</label>
+              <input type="date" class="form-control" id="startDate" required>
+              <div class="invalid-feedback">Start date can&rsquo;t be in the past.</div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+              <label for="endDate" class="form-label fw-semibold">End Date</label>
+              <input type="date" class="form-control" id="endDate" required>
+              <div class="invalid-feedback">End date must be on or after the start date.</div>
+            </div>
+            <div class="col-lg-4 d-grid d-lg-block">
+              <label class="form-label d-none d-lg-block">&nbsp;</label>
+              <button type="submit" class="btn btn-primary fw-semibold rounded-pill px-4" id="checkAvailabilityBtn">
+                <i class="bi bi-search me-2"></i>Check Availability
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="row g-4">
+          <!-- Game Filters + Grid -->
+          <div class="col-lg-8">
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+              <div class="btn-group" role="group" aria-label="Game filters">
+                <input type="radio" class="btn-check" name="gameFilter" id="filterAll" checked>
+                <label class="btn btn-outline-primary rounded-pill me-2" for="filterAll">All Games</label>
+                <input type="radio" class="btn-check" name="gameFilter" id="filterAvailable" disabled>
+                <label class="btn btn-outline-primary rounded-pill" for="filterAvailable">Available</label>
+              </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4" id="gameGrid">
+
+              <!-- Monopoly -->
+              <div class="col game-card" data-slug="monopoly" data-name="Monopoly" data-price="150" data-deposit="500" data-late-fee="150" data-players="2&ndash;6" data-play-time="60&ndash;180 min" data-age="8+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <img src="img/games/monopoly.jpg" alt="Monopoly board game box" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Monopoly</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">A classic for longer game nights where everyone buys, trades, negotiates, and tries not to go bankrupt.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;6 players</li>
+                      <li><i class="bi bi-clock me-2"></i>60&ndash;180 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Roll the dice, buy properties as you land on them, build houses and hotels, and try to bankrupt everyone else before you run out of cash.</p>
+                </template>
+              </div>
+
+              <!-- Exploding Kittens -->
+              <div class="col game-card" data-slug="exploding-kittens" data-name="Exploding Kittens" data-price="150" data-deposit="500" data-late-fee="150" data-players="2&ndash;5" data-play-time="About 15 min" data-age="7+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <img src="img/games/exploding-kittens.jpg" alt="Exploding Kittens card game box" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Exploding Kittens</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">A quick, chaotic card game with simple rules, sneaky moves, and plenty of chances to ruin your friends&rsquo; plans.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;5 players</li>
+                      <li><i class="bi bi-clock me-2"></i>About 15 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Draw cards each turn and use action cards to skip, peek, or sabotage your opponents &mdash; just don&rsquo;t draw an Exploding Kitten without a Defuse card in hand.</p>
+                </template>
+              </div>
+
+              <!-- Monopoly Deal -->
+              <div class="col game-card" data-slug="monopoly-deal" data-name="Monopoly Deal" data-price="100" data-deposit="100" data-late-fee="100" data-players="2&ndash;5" data-play-time="About 15 min" data-age="8+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <img src="img/games/monopoly-deal.jpg" alt="Monopoly Deal card game box" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Monopoly Deal</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">All the trading and deal-making of Monopoly packed into a much faster card game.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;5 players</li>
+                      <li><i class="bi bi-clock me-2"></i>About 15 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;100</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;100 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Play property, money, and action cards from your hand to be the first to collect three full property sets.</p>
+                </template>
+              </div>
+
+              <!-- Game of Life -->
+              <div class="col game-card" data-slug="game-of-life" data-name="Game of Life" data-price="150" data-deposit="500" data-late-fee="150" data-players="2&ndash;4" data-play-time="About 45&ndash;60 min" data-age="8+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <div class="bg-primary-subtle d-flex align-items-center justify-content-center w-100 h-100">
+                        <i class="bi bi-signpost-split-fill text-primary display-3"></i>
+                      </div>
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Game of Life</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">Make your way through careers, family choices, expenses, and unexpected turns in this easygoing family classic.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;4 players</li>
+                      <li><i class="bi bi-clock me-2"></i>About 45&ndash;60 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Spin the wheel to move along the path of life, picking careers, salaries, and family along the way, then see who retires with the most money.</p>
+                </template>
+              </div>
+
+              <!-- Herd Mentality -->
+              <div class="col game-card" data-slug="herd-mentality" data-name="Herd Mentality" data-price="150" data-deposit="500" data-late-fee="150" data-players="4&ndash;20" data-play-time="About 20 min" data-age="10+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <img src="img/games/herd-mentality.jpg" alt="Herd Mentality board game box" class="w-100 h-100 object-fit-cover">
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Herd Mentality</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">Try to think like everyone else. The closer your answers are to the group, the better your chances of winning.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>4+ players</li>
+                      <li><i class="bi bi-clock me-2"></i>About 20 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Everyone secretly answers the same question, then reveals at once &mdash; match the most common answer to earn the pink cow token.</p>
+                </template>
+              </div>
+
+              <!-- Piles -->
+              <div class="col game-card" data-slug="piles" data-name="Piles" data-price="150" data-deposit="500" data-late-fee="150" data-players="2&ndash;8" data-play-time="10&ndash;15 min" data-age="8+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <div class="bg-accent-subtle d-flex align-items-center justify-content-center w-100 h-100">
+                        <i class="bi bi-stack text-primary display-3"></i>
+                      </div>
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Piles</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">A fast card-matching race where everyone plays at the same time. Easy to learn and great when you want something quick.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>2&ndash;8 players</li>
+                      <li><i class="bi bi-clock me-2"></i>10&ndash;15 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Flip cards onto shared piles at the same time as everyone else and be the first to empty your hand.</p>
+                </template>
+              </div>
+
+              <!-- RC Plane -->
+              <div class="col game-card" data-slug="rc-plane" data-name="RC Plane" data-price="150" data-deposit="200" data-late-fee="150" data-players="1+ / take turns" data-play-time="Flexible" data-age="Check exact model">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <div class="bg-primary-subtle d-flex align-items-center justify-content-center w-100 h-100">
+                        <i class="bi bi-airplane text-primary display-3"></i>
+                      </div>
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">RC Plane</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">Something different from the tabletop&mdash;take turns flying an RC plane and see who can handle it best.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>1+ / take turns</li>
+                      <li><i class="bi bi-clock me-2"></i>Flexible</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;200 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Take turns at the controls and see who can keep it steady, land it smoothly, and rack up the most flight time.</p>
+                </template>
+              </div>
+
+              <!-- Jackstones -->
+              <div class="col game-card" data-slug="jackstones" data-name="Jackstones" data-price="50" data-deposit="50" data-late-fee="50" data-players="1+" data-play-time="10&ndash;20 min" data-age="6+">
+                <div class="card h-100 border-0 shadow-sm">
+                  <div class="position-relative rounded-top-4 overflow-hidden">
+                    <div class="ratio ratio-1x1 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">
+                      <div class="bg-accent-subtle d-flex align-items-center justify-content-center w-100 h-100">
+                        <i class="bi bi-stars text-primary display-3"></i>
+                      </div>
+                    </div>
+                    <span class="badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3">Select dates to check</span>
+                  </div>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h3 class="h5 card-title mb-2 view-details-trigger" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#gameDetailsModal">Jackstones</h3>
+                    <p class="text-body-secondary card-desc-clamp mb-3">A simple hand-and-eye coordination classic that&rsquo;s quick to set up and easy to bring anywhere.</p>
+                    <ul class="list-unstyled small text-body-secondary mb-3">
+                      <li class="mb-1"><i class="bi bi-people me-2"></i>1+ players</li>
+                      <li><i class="bi bi-clock me-2"></i>10&ndash;20 min</li>
+                    </ul>
+                    <p class="mb-1"><span class="fs-4 fw-bold">&#8369;50</span><span class="text-body-secondary">/day</span></p>
+                    <p class="small text-body-secondary mb-3">&#8369;50 refundable deposit</p>
+                    <div class="d-grid gap-2 mt-auto">
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                    </div>
+                  </div>
+                </div>
+                <template class="modal-extra-content">
+                  <h3 class="h6 fw-semibold mt-4 mb-2">How to Play</h3>
+                  <p class="text-body-secondary">Toss the ball, scoop up jacks before it bounces back, and work your way up from onesies to as many as you can grab.</p>
+                </template>
+              </div>
+
+            </div>
+
+            <div class="text-center text-body-secondary py-5 d-none" id="noResultsMessage">
+              <i class="bi bi-emoji-frown fs-1 d-block mb-3"></i>
+              No available games match your filter right now.
+            </div>
+          </div>
+
+          <!-- Sticky Checkout Sidebar -->
+          <div class="col-lg-4">
+            <form id="bookingForm" novalidate>
+              <div class="sticky-top d-flex flex-column gap-4" style="top: 1.5rem;">
+
+                <!-- Booking Summary -->
+                <div class="card border-0 shadow-sm p-4">
+                  <h2 class="h5 mb-3">Your Booking</h2>
+
+                  <div id="summaryEmptyState" class="text-center py-4">
+                    <i class="bi bi-cart3 fs-1 text-body-secondary d-block mb-3"></i>
+                    <p class="fw-semibold mb-1">No games added yet</p>
+                    <p class="small text-body-secondary mb-0">Choose your dates and add at least one game to start your booking.</p>
+                  </div>
+
+                  <div id="summaryBookingState" class="d-none">
+                    <ul class="list-unstyled mb-3" id="summaryGameList"></ul>
+                    <hr>
+                    <div class="d-flex justify-content-between small mb-2">
+                      <span class="text-body-secondary">Rental Subtotal</span>
+                      <span id="summarySubtotal">&#8369;0</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-2 d-none" id="summaryDiscountRow">
+                      <span class="text-body-secondary">Multi-Game Discount</span>
+                      <span id="summaryDiscount">&minus;&#8369;0</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-3">
+                      <span class="text-body-secondary">Refundable Deposits</span>
+                      <span id="summaryDeposit">&#8369;0</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="fw-semibold">Amount to Pay</span>
+                      <span class="fs-4 fw-bold" id="summaryTotal">&#8369;0</span>
+                    </div>
+                    <p class="small text-body-secondary mb-1"><i class="bi bi-percent me-1"></i>Rent 2 or more games and get 10% off the rental fees.</p>
+                    <p class="small text-body-secondary mb-1"><i class="bi bi-truck me-1"></i>Delivery and return are handled through Lalamove.</p>
+                    <p class="small text-body-secondary mb-1"><i class="bi bi-wallet2 me-1"></i>Lalamove delivery and return fees are paid separately by the renter.</p>
+                    <p class="small text-body-secondary mb-0"><i class="bi bi-shield-check me-1"></i>Deposits are refunded after the games are returned and inspected.</p>
+                  </div>
+                </div>
+
+                <!-- Customer Details -->
+                <div class="card border-0 shadow-sm p-4">
+                  <h2 class="h5 mb-1">Your Details</h2>
+                  <p class="small text-body-secondary mb-3">I&rsquo;ll use these details to confirm your booking and coordinate delivery.</p>
+                  <div class="mb-3">
+                    <label for="customerName" class="form-label fw-semibold">Full Name</label>
+                    <input type="text" class="form-control" id="customerName" placeholder="Juan Dela Cruz" required>
+                    <div class="invalid-feedback">Please enter your full name.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="customerMobile" class="form-label fw-semibold">Mobile Number</label>
+                    <input type="tel" class="form-control" id="customerMobile" placeholder="09XX XXX XXXX" required>
+                    <div class="invalid-feedback">Enter a valid Philippine mobile number.</div>
+                  </div>
+                  <div class="mb-1">
+                    <label for="customerAddress" class="form-label fw-semibold">Complete Delivery Address</label>
+                    <textarea class="form-control" id="customerAddress" rows="2" placeholder="House/unit, street, barangay, city, Metro Manila" required></textarea>
+                    <div class="invalid-feedback">Please enter a complete Metro Manila delivery address.</div>
+                  </div>
+                  <p class="small text-body-secondary mb-0">Rentals are available within Metro Manila only.</p>
+                </div>
+
+                <!-- GCash Payment -->
+                <div class="card border-0 shadow-sm p-4">
+                  <h2 class="h5 mb-1">Pay with GCash</h2>
+                  <p class="small text-body-secondary mb-3">Send the full amount shown below before submitting your booking.</p>
+                  <div class="d-flex justify-content-between align-items-center bg-body-tertiary rounded-3 p-3 mb-3">
+                    <span class="small fw-semibold">Amount to Send</span>
+                    <span class="fs-5 fw-bold" id="gcashAmount">&#8369;0</span>
+                  </div>
+                  <p class="small text-body-secondary mb-3">This includes your rental fees and refundable security deposits. Lalamove fees are not included.</p>
+                  <div class="border border-2 border-dashed rounded-3 d-flex flex-column align-items-center justify-content-center text-center p-4 mb-3 bg-body-tertiary">
+                    <i class="bi bi-qr-code-scan fs-1 text-body-secondary mb-2"></i>
+                    <p class="small text-body-secondary mb-0">Scan to Pay<br>GCash QR code coming soon</p>
+                  </div>
+                  <ol class="small text-body-secondary ps-3 mb-3">
+                    <li>Open GCash and scan the QR code.</li>
+                    <li>Send exactly the amount shown above.</li>
+                    <li>Copy the GCash reference number after your payment goes through.</li>
+                  </ol>
+                  <div class="mb-2">
+                    <label for="gcashReference" class="form-label fw-semibold">GCash Reference Number</label>
+                    <input type="text" class="form-control" id="gcashReference" placeholder="Enter your transaction reference number" required>
+                    <div class="invalid-feedback">Please enter your GCash reference number.</div>
+                  </div>
+                  <p class="small text-body-secondary mb-0">
+                    <i class="bi bi-info-circle me-1"></i>Your booking is not confirmed yet. I&rsquo;ll manually verify your GCash payment after you submit.
+                  </p>
+                </div>
+
+                <!-- Rental Agreement + Submit -->
+                <div class="card border-0 shadow-sm p-4">
+                  <h2 class="h5 mb-3">Before You Submit</h2>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="agreementCheck" required>
+                    <label class="form-check-label small" for="agreementCheck">
+                      I&rsquo;ve read and agree to the rental policies, including the cancellation rules, refundable deposit, late fees, damage or missing-item charges, and my responsibility for Lalamove delivery and return fees.
+                    </label>
+                    <div class="invalid-feedback">Please confirm you agree to the rental policies.</div>
+                  </div>
+                  <a href="#rentalPoliciesModal" data-bs-toggle="modal" class="link-primary fw-semibold small d-inline-block mb-3">
+                    Read Rental Policies <i class="bi bi-arrow-up-right ms-1"></i>
+                  </a>
+                  <p class="small text-body-secondary mb-4">Confirmed rental payments are non-refundable. Your security deposit is returned after the games are returned and inspected.</p>
+
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-semibold">Amount to Pay</span>
+                    <span class="fs-5 fw-bold" id="submitTotal">&#8369;0</span>
+                  </div>
+
+                  <div id="formErrorAlert" class="alert alert-danger small d-none mb-3" role="alert"></div>
+
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg fw-semibold rounded-pill" id="submitBookingBtn">
+                      Submit Booking
+                    </button>
+                  </div>
+                  <p class="small text-body-secondary text-center mt-3 mb-0">I&rsquo;ll check availability again before your booking is submitted.</p>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Confirmation State -->
+    <section class="py-5 py-lg-6 d-none" id="confirmationSection">
+      <div class="container" style="max-width: 40rem;">
+        <div class="card border-0 shadow-sm p-4 p-lg-5">
+          <p class="text-uppercase text-primary fw-semibold small ls-wide mb-2">Booking Received</p>
+          <h2 class="fs-2 fw-bold mb-3">Thanks! I&rsquo;ve received your booking.</h2>
+          <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+            <span class="fs-5 fw-bold" id="confirmationBookingNumber">BG-0000</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3 py-2">Pending Payment Verification</span>
+          </div>
+          <p class="text-body-secondary mb-4">I&rsquo;ll check your GCash payment and booking details. I&rsquo;ll text you once everything is confirmed.</p>
+
+          <div class="bg-body-tertiary rounded-3 p-4 mb-4">
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <p class="small text-body-secondary mb-1">Games</p>
+                <p class="fw-semibold mb-0" id="confirmationGames">&mdash;</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="small text-body-secondary mb-1">Rental Dates</p>
+                <p class="fw-semibold mb-0" id="confirmationDates">&mdash;</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="small text-body-secondary mb-1">Amount Sent</p>
+                <p class="fw-semibold mb-0" id="confirmationAmount">&mdash;</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="small text-body-secondary mb-1">Delivery Address</p>
+                <p class="fw-semibold mb-0" id="confirmationAddress">&mdash;</p>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="h6 fw-semibold mb-3">What Happens Next</h3>
+          <ul class="list-unstyled mb-4">
+            <li class="d-flex gap-3 mb-3">
+              <span class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-circle bg-primary text-white fw-bold" style="width: 1.75rem; height: 1.75rem; font-size: 0.85rem;">1</span>
+              <span class="text-body-secondary">I verify your GCash payment and game availability.</span>
+            </li>
+            <li class="d-flex gap-3 mb-3">
+              <span class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-circle bg-primary text-white fw-bold" style="width: 1.75rem; height: 1.75rem; font-size: 0.85rem;">2</span>
+              <span class="text-body-secondary">I text you once your booking is confirmed.</span>
+            </li>
+            <li class="d-flex gap-3">
+              <span class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-circle bg-primary text-white fw-bold" style="width: 1.75rem; height: 1.75rem; font-size: 0.85rem;">3</span>
+              <span class="text-body-secondary">I coordinate the Lalamove delivery with you before your rental starts.</span>
+            </li>
+          </ul>
+
+          <p class="small text-body-secondary mb-2"><i class="bi bi-truck me-1"></i>You&rsquo;ll pay the Lalamove delivery fee. On your return date, you&rsquo;ll also arrange and pay for the Lalamove return.</p>
+          <p class="small text-body-secondary mb-4"><i class="bi bi-shield-check me-1"></i>Your security deposit will be refunded after the games are returned and inspected.</p>
+
+          <div class="d-flex flex-wrap gap-3">
+            <button type="button" class="btn btn-primary rounded-pill px-4" id="backToGamesBtn">Back to Games</button>
+            <a href="index.html" class="btn btn-outline-primary rounded-pill px-4">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-body border-top pt-5 pb-4" data-bs-theme="dark">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <a class="d-flex align-items-center gap-2 fw-bold mb-2 text-body text-decoration-none" href="index.html">
+            <i class="bi bi-dice-5-fill text-primary fs-4"></i>
+            <span>Unboxed</span>
+          </a>
+          <p class="small text-body-secondary mb-0">
+            A small personal collection of board games available for rent around Metro Manila.
+          </p>
+        </div>
+        <div class="col-lg-2 col-sm-4">
+          <h3 class="h6 fw-semibold mb-3">Explore</h3>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="index.html" class="link-secondary link-underline-opacity-0">Home</a></li>
+            <li class="mb-2"><a href="games.html" class="link-secondary link-underline-opacity-0">Browse Games</a></li>
+            <li class="mb-2"><a href="#rentalPoliciesModal" data-bs-toggle="modal" class="link-secondary link-underline-opacity-0">Rental Policies</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-4">
+          <h3 class="h6 fw-semibold mb-3">Rental Info</h3>
+          <ul class="list-unstyled small text-body-secondary">
+            <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Metro Manila only</li>
+            <li class="mb-2"><i class="bi bi-wallet2 me-2"></i>Payment via GCash</li>
+            <li><i class="bi bi-truck me-2"></i>Delivery &amp; return via Lalamove</li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-sm-4">
+          <h3 class="h6 fw-semibold mb-3">Contact</h3>
+          <p class="small text-body-secondary mb-0">Contact details coming soon.</p>
+        </div>
+      </div>
+      <hr class="mt-4 mb-3">
+      <p class="small text-body-secondary text-center mb-0">&copy; 2026 Unboxed. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Game Details Modal -->
+  <div class="modal fade" id="gameDetailsModal" tabindex="-1" aria-labelledby="gameDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="gameDetailsModalLabel">Game Name</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="ratio ratio-16x9 rounded-3 overflow-hidden mb-4" id="gameDetailsModalImageWrap">
+            <img src="" alt="" class="w-100 h-100 object-fit-cover" id="gameDetailsModalImage">
+          </div>
+          <p id="gameDetailsModalDescription" class="text-body-secondary"></p>
+          <div class="row row-cols-3 text-center g-2 my-3">
+            <div class="col">
+              <p class="small text-body-secondary mb-1">Players</p>
+              <p class="fw-semibold mb-0" id="gameDetailsModalPlayers">&mdash;</p>
+            </div>
+            <div class="col">
+              <p class="small text-body-secondary mb-1">Play Time</p>
+              <p class="fw-semibold mb-0" id="gameDetailsModalPlayTime">&mdash;</p>
+            </div>
+            <div class="col">
+              <p class="small text-body-secondary mb-1">Recommended Age</p>
+              <p class="fw-semibold mb-0" id="gameDetailsModalAge">&mdash;</p>
+            </div>
+          </div>
+          <div id="gameDetailsModalExtra"></div>
+          <h3 class="h6 fw-semibold mt-4 mb-2">What&rsquo;s Included</h3>
+          <p class="text-body-secondary">All game pieces and components included with my copy will be checked before delivery.</p>
+          <div class="row row-cols-3 text-center g-2 mt-3 pt-3 border-top">
+            <div class="col">
+              <p class="small text-body-secondary mb-1">Rental</p>
+              <p class="fw-semibold mb-0" id="gameDetailsModalPrice">&mdash;</p>
+            </div>
+            <div class="col">
+              <p class="small text-body-secondary mb-1">Refundable Deposit</p>
+              <p class="fw-semibold mb-0" id="gameDetailsModalDeposit">&mdash;</p>
+            </div>
+            <div class="col">
+              <p class="small text-body-secondary mb-1">Late Fee</p>
+              <p class="fw-semibold mb-0" id="gameDetailsModalLateFee">&mdash;</p>
+            </div>
+          </div>
+          <p class="small text-body-secondary mt-4 mb-0">Please check the game when it arrives and let me know as soon as possible if anything looks damaged or missing.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4" id="gameDetailsModalAddBtn">Add to Booking</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Rental Policies Modal -->
+  <div class="modal fade" id="rentalPoliciesModal" tabindex="-1" aria-labelledby="rentalPoliciesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="rentalPoliciesModalLabel">Full Rental Policies</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h3 class="h6 fw-semibold">Payment</h3>
+          <ul class="small text-body-secondary">
+            <li>Full payment, including the security deposit, must be made via GCash before the booking is confirmed.</li>
+            <li>Bookings are confirmed only after payment is manually verified.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Cancellation</h3>
+          <ul class="small text-body-secondary">
+            <li>Customers may cancel before the booking is confirmed.</li>
+            <li>Once confirmed, rental payments are non-refundable.</li>
+            <li>The security deposit will still be refunded if the games have not yet been delivered.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Security Deposit</h3>
+          <ul class="small text-body-secondary">
+            <li>A refundable security deposit is required for every rental.</li>
+            <li>The deposit is returned after the games are returned and inspected.</li>
+            <li>Any late fees, damage fees, or missing-item charges will be deducted from the deposit.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Late Returns</h3>
+          <ul class="small text-body-secondary">
+            <li>Games returned after the agreed return date will be charged the listed late fee per day.</li>
+            <li>Late fees may be deducted from the security deposit.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Damage or Missing Items</h3>
+          <ul class="small text-body-secondary">
+            <li>Customers are responsible for keeping the games and all components in good condition.</li>
+            <li>Charges may apply for damaged or missing cards, pieces, boxes, or other components.</li>
+            <li>If a game is lost or severely damaged, part or all of the security deposit may be withheld.</li>
+          </ul>
+          <h3 class="h6 fw-semibold">Delivery and Return</h3>
+          <ul class="small text-body-secondary">
+            <li>Delivery and return are handled through Lalamove.</li>
+            <li>The customer is responsible for both delivery and return fees.</li>
+            <li>Lalamove fees are separate from the rental price.</li>
+          </ul>
+          <h3 class="h6 fw-semibold mb-0">Customer Responsibility</h3>
+          <ul class="small text-body-secondary mb-0">
+            <li>Customers should check the games upon receipt and report any existing damage or missing pieces as soon as possible.</li>
+            <li>Games should be kept clean, dry, and away from food, drinks, pets, and other sources of damage.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal">Got it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var PHP = '₱';
+      var gameCards = Array.prototype.slice.call(document.querySelectorAll('.game-card'));
+      var selectedSlugs = new Set();
+      var rentalDays = 0;
+      var availabilityChecked = false;
+      var isSubmitting = false;
+
+      var dateForm = document.getElementById('dateForm');
+      var startDateInput = document.getElementById('startDate');
+      var endDateInput = document.getElementById('endDate');
+      var filterAvailable = document.getElementById('filterAvailable');
+      var filterAll = document.getElementById('filterAll');
+      var noResultsMessage = document.getElementById('noResultsMessage');
+
+      var summaryEmptyState = document.getElementById('summaryEmptyState');
+      var summaryBookingState = document.getElementById('summaryBookingState');
+      var summaryGameList = document.getElementById('summaryGameList');
+      var summarySubtotal = document.getElementById('summarySubtotal');
+      var summaryDiscountRow = document.getElementById('summaryDiscountRow');
+      var summaryDiscount = document.getElementById('summaryDiscount');
+      var summaryDeposit = document.getElementById('summaryDeposit');
+      var summaryTotal = document.getElementById('summaryTotal');
+      var gcashAmount = document.getElementById('gcashAmount');
+      var submitTotal = document.getElementById('submitTotal');
+
+      var bookingForm = document.getElementById('bookingForm');
+      var formErrorAlert = document.getElementById('formErrorAlert');
+      var submitBookingBtn = document.getElementById('submitBookingBtn');
+
+      var bookingSection = document.querySelector('#dateForm').closest('section');
+      var confirmationSection = document.getElementById('confirmationSection');
+      var backToGamesBtn = document.getElementById('backToGamesBtn');
+
+      var gameDetailsModalEl = document.getElementById('gameDetailsModal');
+      var gameDetailsModal = new bootstrap.Modal(gameDetailsModalEl);
+      var activeModalSlug = null;
+
+      function peso(amount) {
+        return PHP + Math.round(amount).toLocaleString('en-PH');
+      }
+
+      function formatDate(value) {
+        var d = new Date(value + 'T00:00:00');
+        return d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      // Availability & filtering
+
+      function parseDateInputs() {
+        return { start: startDateInput.value, end: endDateInput.value };
+      }
+
+      dateForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var today = new Date().toISOString().slice(0, 10);
+        var dates = parseDateInputs();
+        var startInvalid = !dates.start || dates.start < today;
+        var endInvalid = !dates.end || dates.end < dates.start;
+
+        startDateInput.classList.toggle('is-invalid', startInvalid);
+        endDateInput.classList.toggle('is-invalid', !startInvalid && endInvalid);
+        if (startInvalid) endDateInput.classList.remove('is-invalid');
+
+        if (startInvalid || endInvalid) return;
+
+        startDateInput.classList.remove('is-invalid');
+        endDateInput.classList.remove('is-invalid');
+
+        var msPerDay = 24 * 60 * 60 * 1000;
+        rentalDays = Math.round((new Date(dates.end) - new Date(dates.start)) / msPerDay) + 1;
+        availabilityChecked = true;
+
+        filterAvailable.disabled = false;
+
+        gameCards.forEach(function (card) {
+          setCardAvailability(card, true);
+        });
+
+        applyFilter();
+        renderSummary();
+      });
+
+      function setCardAvailability(card, available) {
+        card.dataset.status = available ? 'available' : 'unavailable';
+        var badge = card.querySelector('.availability-badge');
+        var addBtn = card.querySelector('.add-to-booking-btn');
+        var slug = card.dataset.slug;
+
+        if (available) {
+          badge.textContent = 'Available';
+          badge.className = 'badge availability-badge bg-success rounded-pill position-absolute top-0 end-0 m-3';
+          addBtn.disabled = selectedSlugs.has(slug) ? true : false;
+          addBtn.title = '';
+        } else {
+          badge.textContent = 'Unavailable for selected dates';
+          badge.className = 'badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3';
+          addBtn.disabled = true;
+          addBtn.title = 'Unavailable for selected dates';
+        }
+        updateCardButtonLabel(card);
+      }
+
+      function updateCardButtonLabel(card) {
+        var addBtn = card.querySelector('.add-to-booking-btn');
+        var slug = card.dataset.slug;
+        if (selectedSlugs.has(slug)) {
+          addBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Added';
+          addBtn.classList.remove('btn-primary');
+          addBtn.classList.add('btn-outline-success');
+          addBtn.disabled = false;
+        } else {
+          addBtn.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Add to Booking';
+          addBtn.classList.remove('btn-outline-success');
+          addBtn.classList.add('btn-primary');
+          addBtn.disabled = !availabilityChecked || card.dataset.status === 'unavailable';
+          addBtn.title = availabilityChecked ? '' : 'Select your dates first';
+        }
+      }
+
+      function applyFilter() {
+        var showAvailableOnly = filterAvailable.checked;
+        var visibleCount = 0;
+        gameCards.forEach(function (card) {
+          var show = !showAvailableOnly || card.dataset.status === 'available';
+          card.classList.toggle('d-none', !show);
+          if (show) visibleCount++;
+        });
+        noResultsMessage.classList.toggle('d-none', visibleCount > 0);
+      }
+
+      filterAll.addEventListener('change', applyFilter);
+      filterAvailable.addEventListener('change', applyFilter);
+
+      // Add to booking / remove
+
+      function toggleGame(slug) {
+        if (selectedSlugs.has(slug)) {
+          selectedSlugs.delete(slug);
+        } else {
+          selectedSlugs.add(slug);
+        }
+        var card = gameCards.find(function (c) { return c.dataset.slug === slug; });
+        if (card) updateCardButtonLabel(card);
+        if (activeModalSlug === slug) updateModalAddButton();
+        renderSummary();
+      }
+
+      gameCards.forEach(function (card) {
+        var addBtn = card.querySelector('.add-to-booking-btn');
+        addBtn.addEventListener('click', function () {
+          if (addBtn.disabled) return;
+          toggleGame(card.dataset.slug);
+        });
+
+        var viewTriggers = card.querySelectorAll('.view-details-trigger');
+        viewTriggers.forEach(function (trigger) {
+          trigger.addEventListener('click', function () {
+            openGameDetails(card);
+          });
+          trigger.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              trigger.click();
+            }
+          });
+        });
+      });
+
+      // Game details modal
+
+      function openGameDetails(card) {
+        activeModalSlug = card.dataset.slug;
+        document.getElementById('gameDetailsModalLabel').textContent = card.dataset.name;
+        document.getElementById('gameDetailsModalDescription').textContent =
+          card.querySelector('.card-desc-clamp').textContent.trim();
+        document.getElementById('gameDetailsModalPlayers').textContent = card.dataset.players;
+        document.getElementById('gameDetailsModalPlayTime').textContent = card.dataset.playTime;
+        document.getElementById('gameDetailsModalAge').textContent = card.dataset.age;
+        document.getElementById('gameDetailsModalPrice').textContent = peso(card.dataset.price) + '/day';
+        document.getElementById('gameDetailsModalDeposit').textContent = peso(card.dataset.deposit);
+        document.getElementById('gameDetailsModalLateFee').textContent = peso(card.dataset.lateFee) + '/day';
+
+        var cardImg = card.querySelector('img');
+        var imgWrap = document.getElementById('gameDetailsModalImageWrap');
+        var modalImg = document.getElementById('gameDetailsModalImage');
+        if (cardImg) {
+          modalImg.src = cardImg.src;
+          modalImg.alt = cardImg.alt;
+          imgWrap.classList.remove('d-none');
+        } else {
+          imgWrap.classList.add('d-none');
+        }
+
+        var template = card.querySelector('.modal-extra-content');
+        var extra = document.getElementById('gameDetailsModalExtra');
+        extra.innerHTML = '';
+        if (template) extra.appendChild(template.content.cloneNode(true));
+
+        updateModalAddButton();
+        gameDetailsModal.show();
+      }
+
+      function updateModalAddButton() {
+        var card = gameCards.find(function (c) { return c.dataset.slug === activeModalSlug; });
+        var modalBtn = document.getElementById('gameDetailsModalAddBtn');
+        if (!card) return;
+        var addBtn = card.querySelector('.add-to-booking-btn');
+        modalBtn.disabled = addBtn.disabled && !selectedSlugs.has(activeModalSlug);
+        modalBtn.textContent = selectedSlugs.has(activeModalSlug) ? 'Added' : 'Add to Booking';
+        modalBtn.classList.toggle('btn-outline-success', selectedSlugs.has(activeModalSlug));
+        modalBtn.classList.toggle('btn-primary', !selectedSlugs.has(activeModalSlug));
+      }
+
+      document.getElementById('gameDetailsModalAddBtn').addEventListener('click', function () {
+        if (activeModalSlug) toggleGame(activeModalSlug);
+      });
+
+      // Booking summary
+
+      function renderSummary() {
+        var selectedCards = gameCards.filter(function (c) { return selectedSlugs.has(c.dataset.slug); });
+
+        if (selectedCards.length === 0) {
+          summaryEmptyState.classList.remove('d-none');
+          summaryBookingState.classList.add('d-none');
+          updateTotals(0, 0, 0);
+          return;
+        }
+
+        summaryEmptyState.classList.add('d-none');
+        summaryBookingState.classList.remove('d-none');
+
+        var subtotal = 0;
+        var depositTotal = 0;
+        summaryGameList.innerHTML = '';
+
+        selectedCards.forEach(function (card) {
+          var price = Number(card.dataset.price);
+          var deposit = Number(card.dataset.deposit);
+          var days = rentalDays || 0;
+          var amount = price * days;
+          subtotal += amount;
+          depositTotal += deposit;
+
+          var li = document.createElement('li');
+          li.className = 'd-flex justify-content-between align-items-start mb-2';
+          li.innerHTML =
+            '<span>' +
+              '<span class="d-block fw-semibold small">' + card.dataset.name + '</span>' +
+              '<span class="d-block text-body-secondary small">' + peso(price) + ' &times; ' + days + (days === 1 ? ' day' : ' days') + '</span>' +
+            '</span>' +
+            '<span class="d-flex align-items-center gap-2">' +
+              '<span class="small fw-semibold">' + peso(amount) + '</span>' +
+              '<button type="button" class="btn btn-sm btn-link text-danger p-0 remove-game-btn" data-slug="' + card.dataset.slug + '">Remove</button>' +
+            '</span>';
+          summaryGameList.appendChild(li);
+        });
+
+        var discount = selectedCards.length >= 2 ? subtotal * 0.1 : 0;
+
+        summarySubtotal.textContent = peso(subtotal);
+        if (discount > 0) {
+          summaryDiscountRow.classList.remove('d-none');
+          summaryDiscount.textContent = '−' + peso(discount);
+        } else {
+          summaryDiscountRow.classList.add('d-none');
+        }
+        summaryDeposit.textContent = peso(depositTotal);
+
+        var grandTotal = subtotal - discount + depositTotal;
+        updateTotals(grandTotal, subtotal, discount);
+
+        Array.prototype.forEach.call(summaryGameList.querySelectorAll('.remove-game-btn'), function (btn) {
+          btn.addEventListener('click', function () {
+            toggleGame(btn.dataset.slug);
+          });
+        });
+      }
+
+      function updateTotals(grandTotal) {
+        summaryTotal.textContent = peso(grandTotal);
+        gcashAmount.textContent = peso(grandTotal);
+        submitTotal.textContent = peso(grandTotal);
+      }
+
+      // Submission
+
+      bookingForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (isSubmitting) return;
+
+        var errors = [];
+        if (selectedSlugs.size === 0) errors.push('Add at least one game to your booking.');
+        if (!availabilityChecked) errors.push('Check availability for your rental dates first.');
+
+        var mobileInput = document.getElementById('customerMobile');
+        if (mobileInput.value && !/^(09|\+639)\d{9}$/.test(mobileInput.value.replace(/[\s-]/g, ''))) {
+          mobileInput.setCustomValidity('invalid');
+        } else {
+          mobileInput.setCustomValidity('');
+        }
+
+        bookingForm.classList.add('was-validated');
+        var formValid = bookingForm.checkValidity();
+
+        if (!formValid || errors.length > 0) {
+          formErrorAlert.textContent = errors.length > 0 ? errors.join(' ') : 'Please check the highlighted fields before submitting.';
+          formErrorAlert.classList.remove('d-none');
+          return;
+        }
+
+        formErrorAlert.classList.add('d-none');
+        isSubmitting = true;
+        submitBookingBtn.disabled = true;
+        submitBookingBtn.textContent = 'Submitting Booking…';
+
+        // Recheck availability immediately before creating the booking.
+        setTimeout(function () {
+          showConfirmation();
+          isSubmitting = false;
+          submitBookingBtn.disabled = false;
+          submitBookingBtn.textContent = 'Submit Booking';
+        }, 600);
+      });
+
+      function generateBookingNumber() {
+        return 'BG-' + Math.floor(1000 + Math.random() * 9000);
+      }
+
+      function showConfirmation() {
+        var selectedCards = gameCards.filter(function (c) { return selectedSlugs.has(c.dataset.slug); });
+        var names = selectedCards.map(function (c) { return c.dataset.name; }).join(', ');
+        var dates = parseDateInputs();
+
+        document.getElementById('confirmationBookingNumber').textContent = generateBookingNumber();
+        document.getElementById('confirmationGames').textContent = names;
+        document.getElementById('confirmationDates').textContent =
+          formatDate(dates.start) + ' – ' + formatDate(dates.end) + ' (' + rentalDays + (rentalDays === 1 ? ' day' : ' days') + ')';
+        document.getElementById('confirmationAmount').textContent = submitTotal.textContent;
+        document.getElementById('confirmationAddress').textContent = document.getElementById('customerAddress').value;
+
+        bookingSection.classList.add('d-none');
+        confirmationSection.classList.remove('d-none');
+        confirmationSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      backToGamesBtn.addEventListener('click', function () {
+        window.location.reload();
+      });
+    })();
+  </script>
+</body>
+</html>

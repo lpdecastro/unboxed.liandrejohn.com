@@ -9,7 +9,7 @@
 
     - Change H1 back to `# Current Feature`
     - Clear Goals and Notes section (keep placeholder comments)
-    - Add feature summary to the END of History
+    - Add concise feature summary bullet point to the END of History
 
 5. Commit the reset.
 6. Push main to origin

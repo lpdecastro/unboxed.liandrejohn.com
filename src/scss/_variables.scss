@@ -62,5 +62,16 @@ $spacers: map-merge(
 // A touch more breathing room in the navbar than Bootstrap's default 0.5rem.
 $navbar-padding-y: 0.85rem;
 
+// Widen the largest breakpoints' containers so the game grid and sticky
+// booking summary have more room on desktop, without changing the smaller
+// breakpoints' mobile-first behavior.
+$container-max-widths: map-merge(
+  $container-max-widths,
+  (
+    xl: 1200px,
+    xxl: 1440px,
+  )
+);
+
 // Slightly airier body copy than Bootstrap's default 1.5.
 // $line-height-base: 1.65;

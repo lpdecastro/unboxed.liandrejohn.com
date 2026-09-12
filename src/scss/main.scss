@@ -49,3 +49,15 @@ $bootstrap-icons-font-dir: "fonts";
 .text-primary-light {
   color: color-mix(in srgb, var(--bs-primary) 100%, white 56%);
 }
+
+// Bootstrap has no dashed-border utility. Used on the GCash QR placeholder
+// on the game listing page to read as a "drop-in-here" area.
+.border-dashed {
+  border-style: dashed !important;
+}
+
+// Bootstrap has no cursor utility. Used on game card images/headings that
+// open the details modal but aren't native buttons or links.
+.view-details-trigger {
+  cursor: pointer;
+}
