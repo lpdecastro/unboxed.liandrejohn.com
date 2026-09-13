@@ -56,17 +56,24 @@
             <span class="mx-1">&bull;</span> Delivery and return via Lalamove
           </p>
           <form id="dateForm" class="row g-3 align-items-start" novalidate>
-            <div class="col-sm-6 col-lg-4">
+            <div class="col-sm-6 col-lg-3">
               <label for="startDate" class="form-label fw-semibold">Start Date</label>
               <input type="date" class="form-control" id="startDate" required>
               <div class="invalid-feedback">Start date can&rsquo;t be in the past.</div>
             </div>
-            <div class="col-sm-6 col-lg-4">
+            <div class="col-sm-6 col-lg-3">
               <label for="endDate" class="form-label fw-semibold">End Date</label>
               <input type="date" class="form-control" id="endDate" required>
               <div class="invalid-feedback">End date must be on or after the start date.</div>
             </div>
-            <div class="col-lg-4 d-grid d-lg-block">
+            <div class="col-sm-6 col-lg-3">
+              <label for="gameFilterSelect" class="form-label fw-semibold">Show <span class="text-body-secondary fw-normal">(optional)</span></label>
+              <select class="form-select" id="gameFilterSelect">
+                <option value="all" selected>All Games</option>
+                <option value="available" id="filterAvailableOption" disabled>Available Only</option>
+              </select>
+            </div>
+            <div class="col-sm-6 col-lg-3 d-grid d-lg-block">
               <label class="form-label d-none d-lg-block">&nbsp;</label>
               <button type="submit" class="btn btn-primary fw-semibold rounded-pill px-4" id="checkAvailabilityBtn">
                 <i class="bi bi-search me-2"></i>Check Availability
@@ -77,16 +84,7 @@
 
         <div class="row g-4">
           <!-- Game Filters + Grid -->
-          <div class="col-lg-8">
-
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-              <div class="btn-group" role="group" aria-label="Game filters">
-                <input type="radio" class="btn-check" name="gameFilter" id="filterAll" checked>
-                <label class="btn btn-outline-primary rounded-pill me-2" for="filterAll">All Games</label>
-                <input type="radio" class="btn-check" name="gameFilter" id="filterAvailable" disabled>
-                <label class="btn btn-outline-primary rounded-pill" for="filterAvailable">Available</label>
-              </div>
-            </div>
+          <div class="col-lg-8" id="gridColumn">
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4" id="gameGrid">
 
@@ -109,7 +107,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -138,7 +136,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -167,7 +165,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;100</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;100 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -198,7 +196,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -227,7 +225,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -258,7 +256,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;500 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -289,7 +287,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;150</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;200 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -320,7 +318,7 @@
                     <p class="mb-1"><span class="fs-4 fw-bold">&#8369;50</span><span class="text-body-secondary">/day</span></p>
                     <p class="small text-body-secondary mb-3">&#8369;50 refundable deposit</p>
                     <div class="d-grid gap-2 mt-auto">
-                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn" disabled title="Select your dates first"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
+                      <button type="button" class="btn btn-primary rounded-pill add-to-booking-btn"><i class="bi bi-cart-plus me-2"></i>Add to Booking</button>
                     </div>
                   </div>
                 </div>
@@ -335,6 +333,40 @@
             <div class="text-center text-body-secondary py-5 d-none" id="noResultsMessage">
               <i class="bi bi-emoji-frown fs-1 d-block mb-3"></i>
               No available games match your filter right now.
+            </div>
+          </div>
+
+          <!-- Read-Only Booking Summary (replaces the grid once payment/details are in progress) -->
+          <div class="col-lg-8 d-none" id="readonlySummaryColumn">
+            <div class="card border-0 shadow-sm p-4 p-lg-5">
+              <h2 class="h4 mb-4">Booking Summary</h2>
+              <div class="d-flex justify-content-between small mb-3 pb-3 border-bottom">
+                <span class="text-body-secondary">Rental Dates</span>
+                <span class="fw-semibold" id="readonlySummaryDates">&mdash;</span>
+              </div>
+              <ul class="list-unstyled mb-3" id="readonlySummaryGameList"></ul>
+              <hr>
+              <div class="d-flex justify-content-between small mb-2">
+                <span class="text-body-secondary">Rental Subtotal</span>
+                <span id="readonlySummarySubtotal">&#8369;0</span>
+              </div>
+              <div class="d-flex justify-content-between small mb-2 d-none" id="readonlySummaryDiscountRow">
+                <span class="text-body-secondary">Multi-Game Discount</span>
+                <span id="readonlySummaryDiscount">&minus;&#8369;0</span>
+              </div>
+              <div class="d-flex justify-content-between small mb-3">
+                <span class="text-body-secondary">Refundable Deposits</span>
+                <span id="readonlySummaryDeposit">&#8369;0</span>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-semibold">Amount to Pay</span>
+                <span class="fs-3 fw-bold" id="readonlySummaryTotal">&#8369;0</span>
+              </div>
+              <div class="d-flex justify-content-between small pt-3 border-top">
+                <span class="text-body-secondary">GCash Ref</span>
+                <span id="readonlySummaryGcashRef">&mdash;</span>
+              </div>
             </div>
           </div>
 
@@ -354,28 +386,46 @@
                   </div>
 
                   <div id="summaryBookingState" class="d-none">
+                    <p class="small fw-semibold mb-2">Rental Dates</p>
+                    <div class="row g-2 mb-3">
+                      <div class="col-6">
+                        <label for="summaryEditStartDate" class="visually-hidden">Start Date</label>
+                        <input type="date" class="form-control" id="summaryEditStartDate" aria-label="Start Date" required>
+                        <div class="invalid-feedback">Start date can&rsquo;t be in the past.</div>
+                      </div>
+                      <div class="col-6">
+                        <label for="summaryEditEndDate" class="visually-hidden">End Date</label>
+                        <input type="date" class="form-control" id="summaryEditEndDate" aria-label="End Date" required>
+                        <div class="invalid-feedback">End date must be on or after the start date.</div>
+                      </div>
+                    </div>
+                    <div id="summaryEditDateError" class="alert alert-danger small d-none mb-3" role="alert"></div>
                     <ul class="list-unstyled mb-3" id="summaryGameList"></ul>
-                    <hr>
-                    <div class="d-flex justify-content-between small mb-2">
-                      <span class="text-body-secondary">Rental Subtotal</span>
-                      <span id="summarySubtotal">&#8369;0</span>
-                    </div>
-                    <div class="d-flex justify-content-between small mb-2 d-none" id="summaryDiscountRow">
-                      <span class="text-body-secondary">Multi-Game Discount</span>
-                      <span id="summaryDiscount">&minus;&#8369;0</span>
-                    </div>
-                    <div class="d-flex justify-content-between small mb-3">
-                      <span class="text-body-secondary">Refundable Deposits</span>
-                      <span id="summaryDeposit">&#8369;0</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="fw-semibold">Amount to Pay</span>
-                      <span class="fs-4 fw-bold" id="summaryTotal">&#8369;0</span>
+                    <div id="summaryTotalsBlock" class="d-none">
+                      <hr>
+                      <div class="d-flex justify-content-between small mb-2">
+                        <span class="text-body-secondary">Rental Subtotal</span>
+                        <span id="summarySubtotal">&#8369;0</span>
+                      </div>
+                      <div class="d-flex justify-content-between small mb-2 d-none" id="summaryDiscountRow">
+                        <span class="text-body-secondary">Multi-Game Discount</span>
+                        <span id="summaryDiscount">&minus;&#8369;0</span>
+                      </div>
+                      <div class="d-flex justify-content-between small mb-3">
+                        <span class="text-body-secondary">Refundable Deposits</span>
+                        <span id="summaryDeposit">&#8369;0</span>
+                      </div>
+                      <hr>
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-semibold">Amount to Pay</span>
+                        <span class="fs-4 fw-bold" id="summaryTotal">&#8369;0</span>
+                      </div>
                     </div>
                     <div id="summaryStepError" class="alert alert-danger small d-none mb-3" role="alert"></div>
                     <div class="d-grid">
-                      <button type="button" class="btn btn-primary rounded-pill fw-semibold" id="summaryNextBtn">Next</button>
+                      <button type="button" class="btn btn-primary rounded-pill fw-semibold" id="summaryNextBtn">
+                        <i class="bi bi-search me-2"></i>Check Availability
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -388,23 +438,16 @@
                     </button>
                     <div>
                       <h2 class="h5 mb-1">Pay with GCash</h2>
-                      <p class="small text-body-secondary mb-0">Send the full amount shown below before submitting your booking.</p>
+                      <p class="small text-body-secondary mb-0">Send the Amount to Pay shown in your Booking Summary before submitting.</p>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center bg-body-tertiary rounded-3 p-3 mb-3">
-                    <span class="small fw-semibold">Amount to Send</span>
-                    <span class="fs-5 fw-bold" id="gcashAmount">&#8369;0</span>
-                  </div>
-                  <p class="small text-body-secondary mb-3" id="gcashDepositNote">
-                    <i class="bi bi-shield-check me-1"></i>Includes &#8369;0 refundable security deposit.
-                  </p>
                   <div class="border border-2 border-dashed rounded-3 d-flex flex-column align-items-center justify-content-center text-center p-4 mb-3 bg-body-tertiary">
                     <i class="bi bi-qr-code-scan fs-1 text-body-secondary mb-2"></i>
                     <p class="small text-body-secondary mb-0">Scan to Pay<br>GCash QR code coming soon</p>
                   </div>
                   <ol class="small text-body-secondary ps-3 mb-3">
                     <li>Open GCash and scan the QR code.</li>
-                    <li>Send exactly the amount shown above.</li>
+                    <li>Send exactly the Amount to Pay shown in your Booking Summary.</li>
                     <li>Copy the GCash reference number after your payment goes through.</li>
                   </ol>
                   <div class="mb-2">
@@ -448,21 +491,6 @@
                     <div class="invalid-feedback">Please enter a complete Metro Manila delivery address.</div>
                   </div>
                   <p class="small text-body-secondary mb-3">Rentals are available within Metro Manila only. Lalamove fees are paid directly to the rider.</p>
-
-                  <div class="bg-body-tertiary rounded-3 p-3 mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span class="small fw-semibold">Amount Paid</span>
-                      <span class="fs-5 fw-bold" id="submitTotal">&#8369;0</span>
-                    </div>
-                    <div class="d-flex justify-content-between small mb-1">
-                      <span class="text-body-secondary">Refundable Security Deposit</span>
-                      <span id="customerDepositAmount">&#8369;0</span>
-                    </div>
-                    <div class="d-flex justify-content-between small">
-                      <span class="text-body-secondary">GCash Ref</span>
-                      <span id="customerGcashRef">&mdash;</span>
-                    </div>
-                  </div>
 
                   <p class="small text-body-secondary mb-3">
                     By submitting, you confirm you understand the
@@ -712,14 +740,29 @@
       var dateForm = document.getElementById('dateForm');
       var startDateInput = document.getElementById('startDate');
       var endDateInput = document.getElementById('endDate');
-      var filterAvailable = document.getElementById('filterAvailable');
-      var filterAll = document.getElementById('filterAll');
+      var gameFilterSelect = document.getElementById('gameFilterSelect');
+      var filterAvailableOption = document.getElementById('filterAvailableOption');
       var noResultsMessage = document.getElementById('noResultsMessage');
+
+      var gridColumn = document.getElementById('gridColumn');
+      var readonlySummaryColumn = document.getElementById('readonlySummaryColumn');
+      var readonlySummaryDates = document.getElementById('readonlySummaryDates');
+      var readonlySummaryGameList = document.getElementById('readonlySummaryGameList');
+      var readonlySummarySubtotal = document.getElementById('readonlySummarySubtotal');
+      var readonlySummaryDiscountRow = document.getElementById('readonlySummaryDiscountRow');
+      var readonlySummaryDiscount = document.getElementById('readonlySummaryDiscount');
+      var readonlySummaryDeposit = document.getElementById('readonlySummaryDeposit');
+      var readonlySummaryTotal = document.getElementById('readonlySummaryTotal');
+      var readonlySummaryGcashRef = document.getElementById('readonlySummaryGcashRef');
 
       var summaryCard = document.getElementById('summaryCard');
       var summaryEmptyState = document.getElementById('summaryEmptyState');
       var summaryBookingState = document.getElementById('summaryBookingState');
+      var summaryEditStartDate = document.getElementById('summaryEditStartDate');
+      var summaryEditEndDate = document.getElementById('summaryEditEndDate');
+      var summaryEditDateError = document.getElementById('summaryEditDateError');
       var summaryGameList = document.getElementById('summaryGameList');
+      var summaryTotalsBlock = document.getElementById('summaryTotalsBlock');
       var summarySubtotal = document.getElementById('summarySubtotal');
       var summaryDiscountRow = document.getElementById('summaryDiscountRow');
       var summaryDiscount = document.getElementById('summaryDiscount');
@@ -729,8 +772,6 @@
       var summaryNextBtn = document.getElementById('summaryNextBtn');
 
       var gcashCard = document.getElementById('gcashCard');
-      var gcashAmount = document.getElementById('gcashAmount');
-      var gcashDepositNote = document.getElementById('gcashDepositNote');
       var gcashReference = document.getElementById('gcashReference');
       var gcashStepError = document.getElementById('gcashStepError');
       var gcashPrevBtn = document.getElementById('gcashPrevBtn');
@@ -738,9 +779,6 @@
 
       var customerCard = document.getElementById('customerCard');
       var customerPrevBtn = document.getElementById('customerPrevBtn');
-      var submitTotal = document.getElementById('submitTotal');
-      var customerDepositAmount = document.getElementById('customerDepositAmount');
-      var customerGcashRef = document.getElementById('customerGcashRef');
 
       var currentStep = 1;
 
@@ -767,56 +805,112 @@
 
       // Availability & filtering
 
+      // Hardcoded sample booked ranges to demo the "unavailable" state — no backend yet.
+      var bookedRanges = {
+        'monopoly': [{ start: '2026-09-20', end: '2026-09-22' }],
+        'piles': [{ start: '2026-10-05', end: '2026-10-07' }]
+      };
+
+      function rangesOverlap(aStart, aEnd, bStart, bEnd) {
+        return aStart <= bEnd && bStart <= aEnd;
+      }
+
+      function isSlugAvailable(slug, start, end) {
+        var ranges = bookedRanges[slug];
+        if (!ranges) return true;
+        return !ranges.some(function (r) { return rangesOverlap(start, end, r.start, r.end); });
+      }
+
       function parseDateInputs() {
         return { start: startDateInput.value, end: endDateInput.value };
       }
 
-      dateForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+      function validateDates(start, end) {
         var today = new Date().toISOString().slice(0, 10);
-        var dates = parseDateInputs();
-        var startInvalid = !dates.start || dates.start < today;
-        var endInvalid = !dates.end || dates.end < dates.start;
+        var startInvalid = !start || start < today;
+        var endInvalid = !end || end < start;
+        return { startInvalid: startInvalid, endInvalid: endInvalid };
+      }
 
-        startDateInput.classList.toggle('is-invalid', startInvalid);
-        endDateInput.classList.toggle('is-invalid', !startInvalid && endInvalid);
-        if (startInvalid) endDateInput.classList.remove('is-invalid');
+      function syncDateInputs(start, end) {
+        startDateInput.value = start;
+        endDateInput.value = end;
+        summaryEditStartDate.value = start;
+        summaryEditEndDate.value = end;
+      }
 
-        if (startInvalid || endInvalid) return;
+      function handleSummaryDateEdit() {
+        // Before the first check, dates are only applied via the Check Availability button.
+        if (!availabilityChecked) return;
 
-        startDateInput.classList.remove('is-invalid');
-        endDateInput.classList.remove('is-invalid');
+        var start = summaryEditStartDate.value;
+        var end = summaryEditEndDate.value;
+        if (!start || !end) return;
 
+        var v = validateDates(start, end);
+        summaryEditStartDate.classList.toggle('is-invalid', v.startInvalid);
+        summaryEditEndDate.classList.toggle('is-invalid', !v.startInvalid && v.endInvalid);
+        if (v.startInvalid) summaryEditEndDate.classList.remove('is-invalid');
+
+        if (v.startInvalid || v.endInvalid) {
+          summaryEditDateError.textContent = 'Please choose a valid rental date range.';
+          summaryEditDateError.classList.remove('d-none');
+          return;
+        }
+
+        summaryEditStartDate.classList.remove('is-invalid');
+        summaryEditEndDate.classList.remove('is-invalid');
+        summaryEditDateError.classList.add('d-none');
+
+        performAvailabilityCheck(start, end);
+      }
+
+      summaryEditStartDate.addEventListener('change', handleSummaryDateEdit);
+      summaryEditEndDate.addEventListener('change', handleSummaryDateEdit);
+
+      function performAvailabilityCheck(start, end) {
         var msPerDay = 24 * 60 * 60 * 1000;
-        rentalDays = Math.round((new Date(dates.end) - new Date(dates.start)) / msPerDay) + 1;
+        rentalDays = Math.round((new Date(end) - new Date(start)) / msPerDay) + 1;
         availabilityChecked = true;
+        syncDateInputs(start, end);
 
-        filterAvailable.disabled = false;
+        filterAvailableOption.disabled = false;
 
         gameCards.forEach(function (card) {
-          setCardAvailability(card, true);
+          setCardAvailability(card, isSlugAvailable(card.dataset.slug, start, end));
         });
 
         applyFilter();
         renderSummary();
+      }
+
+      dateForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var dates = parseDateInputs();
+        var v = validateDates(dates.start, dates.end);
+
+        startDateInput.classList.toggle('is-invalid', v.startInvalid);
+        endDateInput.classList.toggle('is-invalid', !v.startInvalid && v.endInvalid);
+        if (v.startInvalid) endDateInput.classList.remove('is-invalid');
+
+        if (v.startInvalid || v.endInvalid) return;
+
+        startDateInput.classList.remove('is-invalid');
+        endDateInput.classList.remove('is-invalid');
+
+        performAvailabilityCheck(dates.start, dates.end);
       });
 
       function setCardAvailability(card, available) {
         card.dataset.status = available ? 'available' : 'unavailable';
         var badge = card.querySelector('.availability-badge');
-        var addBtn = card.querySelector('.add-to-booking-btn');
-        var slug = card.dataset.slug;
 
         if (available) {
           badge.textContent = 'Available';
           badge.className = 'badge availability-badge bg-success rounded-pill position-absolute top-0 end-0 m-3';
-          addBtn.disabled = selectedSlugs.has(slug) ? true : false;
-          addBtn.title = '';
         } else {
           badge.textContent = 'Unavailable for selected dates';
-          badge.className = 'badge availability-badge bg-secondary rounded-pill position-absolute top-0 end-0 m-3';
-          addBtn.disabled = true;
-          addBtn.title = 'Unavailable for selected dates';
+          badge.className = 'badge availability-badge bg-danger rounded-pill position-absolute top-0 end-0 m-3';
         }
         updateCardButtonLabel(card);
       }
@@ -828,18 +922,17 @@
           addBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Added';
           addBtn.classList.remove('btn-primary');
           addBtn.classList.add('btn-outline-success');
-          addBtn.disabled = false;
         } else {
           addBtn.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Add to Booking';
           addBtn.classList.remove('btn-outline-success');
           addBtn.classList.add('btn-primary');
-          addBtn.disabled = !availabilityChecked || card.dataset.status === 'unavailable';
-          addBtn.title = availabilityChecked ? '' : 'Select your dates first';
         }
+        addBtn.disabled = false;
+        addBtn.title = '';
       }
 
       function applyFilter() {
-        var showAvailableOnly = filterAvailable.checked;
+        var showAvailableOnly = gameFilterSelect.value === 'available';
         var visibleCount = 0;
         gameCards.forEach(function (card) {
           var show = !showAvailableOnly || card.dataset.status === 'available';
@@ -849,8 +942,7 @@
         noResultsMessage.classList.toggle('d-none', visibleCount > 0);
       }
 
-      filterAll.addEventListener('change', applyFilter);
-      filterAvailable.addEventListener('change', applyFilter);
+      gameFilterSelect.addEventListener('change', applyFilter);
 
       // Add to booking / remove
 
@@ -925,8 +1017,7 @@
         var card = gameCards.find(function (c) { return c.dataset.slug === activeModalSlug; });
         var modalBtn = document.getElementById('gameDetailsModalAddBtn');
         if (!card) return;
-        var addBtn = card.querySelector('.add-to-booking-btn');
-        modalBtn.disabled = addBtn.disabled && !selectedSlugs.has(activeModalSlug);
+        modalBtn.disabled = false;
         modalBtn.textContent = selectedSlugs.has(activeModalSlug) ? 'Added' : 'Add to Booking';
         modalBtn.classList.toggle('btn-outline-success', selectedSlugs.has(activeModalSlug));
         modalBtn.classList.toggle('btn-primary', !selectedSlugs.has(activeModalSlug));
@@ -942,14 +1033,107 @@
         var selectedCards = gameCards.filter(function (c) { return selectedSlugs.has(c.dataset.slug); });
 
         if (selectedCards.length === 0) {
-          updateTotals(0, 0);
+          updateTotals(0);
+          renderStepUI();
+          return;
+        }
+
+        summaryGameList.innerHTML = '';
+
+        if (!availabilityChecked) {
+          selectedCards.forEach(function (card) {
+            var li = document.createElement('li');
+            li.className = 'd-flex justify-content-between align-items-center mb-2';
+            li.innerHTML =
+              '<span class="fw-semibold small">' + card.dataset.name + '</span>' +
+              '<button type="button" class="btn btn-sm btn-link text-danger p-0 remove-game-btn" data-slug="' + card.dataset.slug + '">Remove</button>';
+            summaryGameList.appendChild(li);
+          });
+
+          Array.prototype.forEach.call(summaryGameList.querySelectorAll('.remove-game-btn'), function (btn) {
+            btn.addEventListener('click', function () {
+              toggleGame(btn.dataset.slug);
+            });
+          });
+
+          summaryTotalsBlock.classList.add('d-none');
+          summaryStepError.classList.add('d-none');
+          summaryNextBtn.disabled = false;
+          updateTotals(0);
           renderStepUI();
           return;
         }
 
         var subtotal = 0;
         var depositTotal = 0;
-        summaryGameList.innerHTML = '';
+
+        selectedCards.forEach(function (card) {
+          var price = Number(card.dataset.price);
+          var deposit = Number(card.dataset.deposit);
+          var days = rentalDays || 0;
+          var amount = price * days;
+          var isUnavailable = card.dataset.status === 'unavailable';
+          subtotal += amount;
+          depositTotal += deposit;
+
+          var li = document.createElement('li');
+          li.className = 'd-flex justify-content-between align-items-start mb-2';
+          li.innerHTML =
+            '<span>' +
+              '<span class="d-block fw-semibold small">' + card.dataset.name +
+                (isUnavailable ? ' <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill ms-1">Unavailable</span>' : '') +
+              '</span>' +
+              '<span class="d-block text-body-secondary small">' + peso(price) + ' &times; ' + days + (days === 1 ? ' day' : ' days') + '</span>' +
+            '</span>' +
+            '<span class="d-flex align-items-center gap-2">' +
+              '<span class="small fw-semibold">' + peso(amount) + '</span>' +
+              '<button type="button" class="btn btn-sm btn-link text-danger p-0 remove-game-btn" data-slug="' + card.dataset.slug + '">Remove</button>' +
+            '</span>';
+          summaryGameList.appendChild(li);
+        });
+
+        var discount = selectedCards.length >= 2 ? subtotal * 0.1 : 0;
+
+        summaryTotalsBlock.classList.remove('d-none');
+        summarySubtotal.textContent = peso(subtotal);
+        if (discount > 0) {
+          summaryDiscountRow.classList.remove('d-none');
+          summaryDiscount.textContent = '−' + peso(discount);
+        } else {
+          summaryDiscountRow.classList.add('d-none');
+        }
+        summaryDeposit.textContent = peso(depositTotal);
+
+        var grandTotal = subtotal - discount + depositTotal;
+        updateTotals(grandTotal);
+
+        Array.prototype.forEach.call(summaryGameList.querySelectorAll('.remove-game-btn'), function (btn) {
+          btn.addEventListener('click', function () {
+            toggleGame(btn.dataset.slug);
+          });
+        });
+
+        var hasUnavailable = selectedCards.some(function (c) { return c.dataset.status === 'unavailable'; });
+        summaryNextBtn.disabled = hasUnavailable;
+        if (hasUnavailable) {
+          summaryStepError.textContent = 'One or more games in your booking are unavailable for these dates. Remove them or choose different dates to continue.';
+          summaryStepError.classList.remove('d-none');
+        } else {
+          summaryStepError.classList.add('d-none');
+        }
+
+        renderStepUI();
+      }
+
+      function updateTotals(grandTotal) {
+        summaryTotal.textContent = peso(grandTotal);
+      }
+
+      function renderReadonlySummary() {
+        var selectedCards = gameCards.filter(function (c) { return selectedSlugs.has(c.dataset.slug); });
+        var subtotal = 0;
+        var depositTotal = 0;
+        readonlySummaryGameList.innerHTML = '';
 
         selectedCards.forEach(function (card) {
           var price = Number(card.dataset.price);
@@ -966,57 +1150,43 @@
               '<span class="d-block fw-semibold small">' + card.dataset.name + '</span>' +
               '<span class="d-block text-body-secondary small">' + peso(price) + ' &times; ' + days + (days === 1 ? ' day' : ' days') + '</span>' +
             '</span>' +
-            '<span class="d-flex align-items-center gap-2">' +
-              '<span class="small fw-semibold">' + peso(amount) + '</span>' +
-              '<button type="button" class="btn btn-sm btn-link text-danger p-0 remove-game-btn" data-slug="' + card.dataset.slug + '">Remove</button>' +
-            '</span>';
-          summaryGameList.appendChild(li);
+            '<span class="small fw-semibold">' + peso(amount) + '</span>';
+          readonlySummaryGameList.appendChild(li);
         });
 
         var discount = selectedCards.length >= 2 ? subtotal * 0.1 : 0;
 
-        summarySubtotal.textContent = peso(subtotal);
+        readonlySummaryDates.textContent =
+          formatDate(summaryEditStartDate.value) + ' – ' + formatDate(summaryEditEndDate.value) +
+          ' (' + rentalDays + (rentalDays === 1 ? ' day' : ' days') + ')';
+        readonlySummarySubtotal.textContent = peso(subtotal);
         if (discount > 0) {
-          summaryDiscountRow.classList.remove('d-none');
-          summaryDiscount.textContent = '−' + peso(discount);
+          readonlySummaryDiscountRow.classList.remove('d-none');
+          readonlySummaryDiscount.textContent = '−' + peso(discount);
         } else {
-          summaryDiscountRow.classList.add('d-none');
+          readonlySummaryDiscountRow.classList.add('d-none');
         }
-        summaryDeposit.textContent = peso(depositTotal);
+        readonlySummaryDeposit.textContent = peso(depositTotal);
 
         var grandTotal = subtotal - discount + depositTotal;
-        updateTotals(grandTotal, depositTotal);
-
-        Array.prototype.forEach.call(summaryGameList.querySelectorAll('.remove-game-btn'), function (btn) {
-          btn.addEventListener('click', function () {
-            toggleGame(btn.dataset.slug);
-          });
-        });
-
-        renderStepUI();
-      }
-
-      function updateTotals(grandTotal, depositTotal) {
-        var totalText = peso(grandTotal);
-        var depositText = peso(depositTotal);
-
-        summaryTotal.textContent = totalText;
-
-        gcashAmount.textContent = totalText;
-        gcashDepositNote.innerHTML = '<i class="bi bi-shield-check me-1"></i>Includes ' + depositText + ' refundable security deposit.';
-
-        submitTotal.textContent = totalText;
-        customerDepositAmount.textContent = depositText;
+        readonlySummaryTotal.textContent = peso(grandTotal);
       }
 
       // Step navigation
 
       function renderStepUI() {
         var hasGames = selectedSlugs.size > 0;
+        var isBuildingBooking = currentStep === 1;
+
+        gridColumn.classList.toggle('d-none', !isBuildingBooking);
+        readonlySummaryColumn.classList.toggle('d-none', isBuildingBooking);
+        if (!isBuildingBooking) renderReadonlySummary();
 
         summaryCard.classList.toggle('d-none', currentStep !== 1);
         summaryEmptyState.classList.toggle('d-none', hasGames);
         summaryBookingState.classList.toggle('d-none', !hasGames);
+
+        summaryNextBtn.innerHTML = availabilityChecked ? 'Next' : '<i class="bi bi-search me-2"></i>Check Availability';
 
         gcashCard.classList.toggle('d-none', currentStep !== 2);
         customerCard.classList.toggle('d-none', currentStep !== 3);
@@ -1028,9 +1198,34 @@
       }
 
       summaryNextBtn.addEventListener('click', function () {
+        if (!availabilityChecked) {
+          var start = summaryEditStartDate.value;
+          var end = summaryEditEndDate.value;
+          var v = validateDates(start, end);
+
+          summaryEditStartDate.classList.toggle('is-invalid', v.startInvalid);
+          summaryEditEndDate.classList.toggle('is-invalid', !v.startInvalid && v.endInvalid);
+          if (v.startInvalid) summaryEditEndDate.classList.remove('is-invalid');
+
+          if (v.startInvalid || v.endInvalid) {
+            summaryEditDateError.textContent = 'Please choose a valid rental date range.';
+            summaryEditDateError.classList.remove('d-none');
+            return;
+          }
+
+          summaryEditStartDate.classList.remove('is-invalid');
+          summaryEditEndDate.classList.remove('is-invalid');
+          summaryEditDateError.classList.add('d-none');
+
+          performAvailabilityCheck(start, end);
+          return;
+        }
+
         var errors = [];
         if (selectedSlugs.size === 0) errors.push('Add at least one game to your booking.');
-        if (!availabilityChecked) errors.push('Check availability for your rental dates first.');
+        if (gameCards.some(function (c) { return selectedSlugs.has(c.dataset.slug) && c.dataset.status === 'unavailable'; })) {
+          errors.push('Remove unavailable games or choose different dates to continue.');
+        }
 
         if (errors.length > 0) {
           summaryStepError.textContent = errors.join(' ');
@@ -1053,7 +1248,7 @@
 
         gcashReference.classList.remove('is-invalid');
         gcashStepError.classList.add('d-none');
-        customerGcashRef.textContent = ref;
+        readonlySummaryGcashRef.textContent = ref;
         goToStep(3);
       });
 
@@ -1124,7 +1319,7 @@
         document.getElementById('confirmationGames').textContent = names;
         document.getElementById('confirmationDates').textContent =
           formatDate(dates.start) + ' – ' + formatDate(dates.end) + ' (' + rentalDays + (rentalDays === 1 ? ' day' : ' days') + ')';
-        document.getElementById('confirmationAmount').textContent = submitTotal.textContent;
+        document.getElementById('confirmationAmount').textContent = readonlySummaryTotal.textContent;
         document.getElementById('confirmationAddress').textContent = document.getElementById('customerAddress').value;
 
         bookingSection.classList.add('d-none');
