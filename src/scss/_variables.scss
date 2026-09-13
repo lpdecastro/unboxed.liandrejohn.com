@@ -8,10 +8,10 @@
 // background with ink navy text. These must be set before
 // `bootstrap/scss/variables` loads below, since Bootstrap's $theme-colors
 // map captures $primary's value at the point the map is built.
-$primary: #c84a01;
+$primary: #c44901;
 $body-bg: #ffffff;
 $body-color: #0b3765;
-$body-tertiary-bg: #f5f8fa;
+$body-tertiary-bg: #f7f9fc;
 
 // Reuse the ink navy as the "dark" theme color too, so a playful dark
 // section (e.g. the hero) stays on-brand instead of Bootstrap's default gray.

@@ -14,17 +14,6 @@ $bootstrap-icons-font-dir: "fonts";
   letter-spacing: 0.06em;
 }
 
-// Hero background: light overall, gently deepening toward the far corner.
-// Bootstrap's own `.bg-gradient` only overlays a fixed light/dark sheen on a
-// solid bg-* color, it can't blend two arbitrary theme colors like this.
-.hero-gradient {
-  background: linear-gradient(
-    225deg,
-    var(--bs-tertiary-bg) 0%,
-    color-mix(in srgb, var(--bs-tertiary-bg) 95%, var(--bs-dark) 5%) 100%
-  );
-}
-
 // Final CTA background: the same navy as the body copy color, used as a
 // deliberate solid block rather than a text color.
 .bg-final-cta {
@@ -47,7 +36,7 @@ $bootstrap-icons-font-dir: "fonts";
 // backgrounds), and there's no .text-primary-subtle utility for text
 // (subtle variants are background-only), so neither gives a lighter primary.
 .text-primary-light {
-  color: color-mix(in srgb, var(--bs-primary) 100%, white 56%);
+  color: color-mix(in srgb, var(--bs-primary) 100%, white 75%);
 }
 
 // Bootstrap has no dashed-border utility. Used on the GCash QR placeholder
