@@ -1,24 +1,16 @@
-# Current Feature: Games DB Integration
+# Current Feature
 
 ## Goals
 
-- Replace `src/data/games.js` as the game catalog source with MongoDB, read via Next.js Server Actions (not a static import, not an API route).
-- Extend the `Game` model and `src/data/games.json` seed data with the fields `games.js` has that the schema is missing: `shortDescription`, `howToPlay`, `icon`, `placeholderBg` (optional), `age`. Migrate real content, not placeholders. Re-seed and confirm no validation errors.
-- Add `src/app/actions/games.js` (`'use server'`) with `getGames()` (all active games, shaped like the current `games.js` export) and `checkAvailability(startDate, endDate)` (per-game availability from `Booking` overlaps against `confirmed`/`out-for-delivery`/`rented`/`return-pending`, replacing hardcoded `bookedRanges`).
-- Convert `src/app/page.js` and `src/app/games/page.js` to async server components calling `getGames()`; pass `games` into `GamesPageClient` as a prop.
-- `GamesPageClient.jsx`: drop the `@/data/games` import, accept `games` as a prop, call `checkAvailability` server action on **Check Availability** instead of the client-side `bookedRanges` lookup.
-- Delete `src/data/games.js` once nothing imports it.
-- Update `README.md` (Status, Project Structure) and `CLAUDE.md` (architecture section) to reflect MongoDB as the live data source and drop the "no API routes reading/writing the database yet" note.
+<!-- Goals for the active feature go here -->
 
 ## Notes
 
-- `GameCard` / `GameDetailsModal` need no shape changes — the extended `Game` schema preserves fields they already consume.
-- Out of scope: booking submission stays a client-side fake (`setTimeout`, random booking number); no admin dashboard, auth, or payment integration.
-- All game reads must go through Server Actions per `context/coding-standards.md` — no new API routes.
-- Full spec: `context/features/games-db-integration-spec.md`.
+<!-- Additional context, constraints, or details from spec go here -->
 
 ## History
 
+- Replaced the static `src/data/games.js` catalog with MongoDB reads per `context/features/games-db-integration-spec.md`: extended the `Game` model and `src/data/games.json` seed data with `shortDescription`, `howToPlay`, `icon`, `placeholderBg`, `age`; added `src/app/actions/games.js` (`'use server'`) with `getGames()` and `checkAvailability(startDate, endDate)` (overlap-checks `Booking` against `confirmed`/`out-for-delivery`/`rented`/`return-pending`, `pending` doesn't block); converted `src/app/page.jsx` and `src/app/games/page.jsx` to async server components calling `getGames()`; `GamesPageClient` now takes `games` as a prop and calls `checkAvailability` on **Check Availability** instead of the old hardcoded `bookedRanges` map. Deleted `src/data/games.js`. Verified: `npm run seed` runs clean against the extended schema, production build passes, and `/` and `/games` render real DB content (including placeholder-art games and their icons) via a `next dev` smoke test; availability logic double-checked directly against the seeded bookings (confirmed booking blocks, pending booking doesn't). README/CLAUDE.md updated to describe the new data flow. Booking submission is still a client-side fake — a separate future spec.
 - Built the homepage per `context/features/homepage-spec.md`: Navbar, Hero, Featured Games, How It Works, Why Rent From Unboxed, Pricing/Rental Highlights, Rental Policies Preview, Final CTA, and Footer, with theme variable overrides for a fun, trustworthy, board-game-friendly look. Responsive on desktop and mobile.
 - Optimized and integrated the provided game box photos and logo per `context/features/image-opt-spec.md`. Cropped the 4 available game photos (Monopoly, Exploding Kittens, Monopoly Deal, Herd Mentality) to a consistent square aspect ratio, resized, and compressed to web-friendly JPEGs (~344KB total, down from ~4.1MB of raw source photos), replacing the icon placeholders on the homepage's featured game cards. Cropped a transparent navbar-mark PNG from the full logo artwork and wired it into the navbar brand. Source images were actually at root `img/` rather than the `context/img/` path the spec referenced. Game of Life, Piles, RC Plane, and Jackstones still have no source photos and are still pending.
 - Built the Game Listing Page (`games.html`) per `context/features/game-listing-page-spec.md`: rental date selector, game filters, game grid for all 8 games, game details modal, sticky booking summary, customer details, GCash payment, rental agreement, submit booking, and a front-end-only booking confirmation state, all wired together with JS since no backend exists yet. Iterated on the initial layout post-build: dropped the page header and hero image in favor of a visually-hidden `<h1>`, trimmed section padding throughout, replaced each card's "View Details" button with a clickable image/heading (data-bs-toggle triggers), stacked card CTAs, dropped the age line from cards, and widened the largest container breakpoints (xl/xxl) site-wide for more room on desktop. Game of Life, Piles, RC Plane, and Jackstones still use placeholder art, and the GCash section still needs a real QR code.
