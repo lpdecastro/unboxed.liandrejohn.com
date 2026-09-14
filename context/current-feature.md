@@ -1,22 +1,16 @@
-# Current Feature: Analytics Event Tracking
+# Current Feature
 
 ## Goals
 
-- Add a `trackEvent` helper (`src/lib/analytics.js`) wrapping `sendGAEvent` from `@next/third-parties/google`, safe to call whether or not `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set.
-- Track link/CTA clicks across the navbar, footer, and homepage (`cta_click`, `mobile_menu_toggle`, `open_rental_policies`, `policy_preview_expand`, `faq_expand`, `homepage_quick_add_click`).
-- Track game discovery and the full booking funnel in `GamesPageClient.jsx`: filters, view details, quick-add from URL, check availability, add/remove game, mobile summary open, booking summary next, GCash step next, submit attempt, and success/error outcomes.
-- Purely additive: no visible UI/behavior change to any interaction.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Full spec: `context/features/analytics-event-tracking-spec.md`.
-- Builds on GA4 page-view tracking already wired up in `context/features/google-analytics-spec.md` (root layout, gated on `NEXT_PUBLIC_GA_MEASUREMENT_ID`).
-- `Navbar.jsx` and `GamesPageClient.jsx` are already `"use client"` — add `trackEvent` calls directly into their existing handlers.
-- `Footer.jsx`, `RentalPoliciesModal.jsx`, and `src/app/page.jsx` are server components — use two new small client wrappers (`src/components/analytics/TrackedLink.jsx`, `TrackedElement.jsx`) only where a click needs tracking, instead of converting those files to client components.
-- Out of scope: server-side/Measurement Protocol events, GA4 Enhanced Ecommerce schema, cookie consent gating, GA4 auto-collected events (scroll depth, outbound clicks), other analytics providers, GA4 property-side config (conversions/funnel reports).
-- Event names are `snake_case`, flat primitive params, no GA-reserved prefixes.
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Added custom GA4 event tracking per `context/features/analytics-event-tracking-spec.md`: added `trackEvent` (`src/lib/analytics.js`), a thin wrapper around `sendGAEvent` from `@next/third-parties/google` that no-ops when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is unset — needed because `sendGAEvent` itself logs a console warning if `GoogleAnalytics` was never rendered, which the guard avoids. `Navbar.jsx` and `GamesPageClient.jsx` were already `"use client"`, so their existing handlers call `trackEvent` directly; two new small client wrappers, `src/components/analytics/TrackedLink.jsx` and `TrackedElement.jsx`, let the server-rendered `Footer.jsx` and `src/app/page.jsx` fire click events without converting those files to client components. Instrumented ~20 events across nav/footer/homepage CTAs, the mobile menu, the rental-policies modal trigger, both homepage accordions (policy preview + FAQ), and the full `/games` booking funnel (filters, view details, quick-add from URL, check availability, add/remove game, mobile summary open, booking-summary Next, GCash-step Next, submit attempt, booking success/error). Purely additive — no visible UI or behavior change to any interaction. Verified: production build passes with no compile errors or unused-import warnings; a read-only check against another session's already-running dev server confirmed `/` and `/games` both still render correctly.
 
 - Added Google Analytics (GA4) page view tracking per `context/features/google-analytics-spec.md`: installed `@next/third-parties` and rendered its `GoogleAnalytics` component once from the root layout (`src/app/layout.jsx`, as a sibling of `<body>` inside `<html>`, the standard Next.js App Router placement), so it covers both `/` and `/games` without per-page code. Gated on a new `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var (added to `.env.example`) — unset/empty skips rendering entirely, matching the existing degrade-gracefully pattern used for `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. Page-view tracking only; no custom events, consent banner, or other providers, per spec's explicit out-of-scope list. Verified: production build passes both with the env var unset (grepped build output — no GA/gtag references at all) and with a test measurement ID set (grepped build output — script and ID present in the client bundle); not independently verified against a live GA4 Realtime report, which needs a real measurement ID and browser, per the spec's own carve-out. README.md documents the new env var under a new "Google Analytics Setup" section.
 
