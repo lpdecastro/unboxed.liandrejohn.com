@@ -1,31 +1,16 @@
-# Current Feature: Email Notification on Booking
+# Current Feature
 
 ## Goals
 
-- Send an email to `liandrejohn88@gmail.com` via Web3Forms whenever a booking is created, so the admin knows to verify GCash payment without polling the database.
-- `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` is read from env and documented in `.env.example`.
-- A new booking triggers a POST to Web3Forms containing booking number, customer name, mobile, address, games, dates, rental days, grand total, and GCash reference number.
-- The email send happens only after the `Booking` document is successfully saved.
-- A Web3Forms failure (bad key, network error, non-2xx response) is caught and logged, and does not affect the booking's success response to the client.
-- Production build passes; a booking submitted through the running dev server results in an email arriving at `liandrejohn88@gmail.com`.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Spec: `context/features/email-notification-spec.md`. **Deviated from spec** — see below.
-- Dependency: `createBooking` in `src/app/actions/bookings.js` (per `context/features/submit-booking-spec.md`) already exists and persists the `Booking` document — this feature hooks into its success path.
-- **Spec called for calling Web3Forms from inside the `createBooking` Server Action (server-to-server). That does not work**: Web3Forms' free plan hard-blocks non-browser calls — confirmed via `curl` returning `{"success":false,"message":"This method is not allowed. Use our API in client side or contact support with server IP address (Pro plan is required)"}` (403), and via their own docs (`docs.web3forms.com/getting-started/troubleshooting`): server-side calls need a **paid plan** + the server's IP added to their Safelist by their support team. No header (`Origin`, `Referer`, `User-Agent`) works around it.
-- Fixed by moving the call to the browser instead: `src/lib/notifications.js` exports `sendBookingNotificationEmail(...)`, called from `GamesPageClient.jsx`'s `handleBookingSubmit` right after `createBooking` succeeds and `setSubmitted(...)` runs (not awaited — fire-and-forget so it can't delay the confirmation UI).
-- Env var is therefore `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` (not `WEB3FORMS_ACCESS_KEY`) since it must ship in the client bundle — this matches Web3Forms' own intended usage (keys are meant to be embedded in client-side HTML forms; abuse is guarded by their own domain/Origin allowlist and Cloudflare bot protection, not by keeping the key secret).
-- POST JSON to `https://api.web3forms.com/submit`, no new dependency, plain `fetch`.
-  - `access_key`: `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`
-  - `subject`: e.g. `New Booking BG-1024 - Pending Verification`
-  - `from_name`: `Unboxed`
-  - Body fields: booking number, customer name, mobile, delivery address, game names, rental dates (already formatted, includes day count), grand total, GCash reference number — all already available client-side (form state + `createBooking`'s return value), no extra server round-trip needed.
-- Free Web3Forms plan doesn't support a per-request `to` override — delivery inbox is whatever the access key's account is registered with (`liandrejohn88@gmail.com`).
-- Treat email delivery as best-effort: wrapped in `try/catch`, `console.error` on failure, never touches the booking success response (booking is already persisted server-side before this fires).
-- Out of scope: SMS to customer, any email to the customer, retry/delivery-status tracking, emails for status transitions other than creation.
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Added a Web3Forms booking notification email per `context/features/email-notification-spec.md`, with one significant deviation from the spec: the spec called for sending it from inside the `createBooking` Server Action (server-to-server), but Web3Forms' free plan hard-blocks non-browser calls — confirmed via `curl` (a clean 403 JSON response: `"Use our API in client side or contact support with server IP address (Pro plan is required)"`) and their own docs, which require a **paid plan** plus the server's IP added to their Safelist; no request header (`Origin`, `Referer`, `User-Agent`) works around it. Fixed by moving the call to the browser: `src/lib/notifications.js` exports `sendBookingNotificationEmail(...)`, fired (not awaited) from `GamesPageClient.jsx`'s `handleBookingSubmit` right after `createBooking` succeeds and the confirmation state is set, using all the booking details already available client-side (form state + `createBooking`'s return value) — no extra server round-trip. The access key is therefore `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` (ships in the client bundle by necessity — this matches Web3Forms' intended usage, where keys are meant to be embedded client-side and abuse is guarded by their own domain/Origin allowlist and Cloudflare bot protection rather than secrecy), documented in `.env.example`. POSTs booking number, customer name/mobile/delivery address, games, rental dates, grand total, and GCash reference number to `https://api.web3forms.com/submit`; wrapped in `try/catch` with `console.error` on failure so a Web3Forms outage or bad key never affects the booking's success response — verified directly against local MongoDB (unset key no-ops silently; an invalid key's 403 is caught and logged) while the booking still persists correctly either way. Production build passes and the client bundle was confirmed to contain the Web3Forms call. Not independently verified that a real email lands in `liandrejohn88@gmail.com` from an actual browser submission — that's the one remaining check, since Web3Forms' bot/Origin checks only fully apply in a real browser context which wasn't available to test headlessly this session.
 
 - Added custom GA4 event tracking per `context/features/analytics-event-tracking-spec.md`: added `trackEvent` (`src/lib/analytics.js`), a thin wrapper around `sendGAEvent` from `@next/third-parties/google` that no-ops when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is unset — needed because `sendGAEvent` itself logs a console warning if `GoogleAnalytics` was never rendered, which the guard avoids. `Navbar.jsx` and `GamesPageClient.jsx` were already `"use client"`, so their existing handlers call `trackEvent` directly; two new small client wrappers, `src/components/analytics/TrackedLink.jsx` and `TrackedElement.jsx`, let the server-rendered `Footer.jsx` and `src/app/page.jsx` fire click events without converting those files to client components. Instrumented ~20 events across nav/footer/homepage CTAs, the mobile menu, the rental-policies modal trigger, both homepage accordions (policy preview + FAQ), and the full `/games` booking funnel (filters, view details, quick-add from URL, check availability, add/remove game, mobile summary open, booking-summary Next, GCash-step Next, submit attempt, booking success/error). Purely additive — no visible UI or behavior change to any interaction. Verified: production build passes with no compile errors or unused-import warnings; a read-only check against another session's already-running dev server confirmed `/` and `/games` both still render correctly.
 
