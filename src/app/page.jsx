@@ -127,7 +127,7 @@ export default async function HomePage() {
                         </li>
                       </ul>
                       <Link
-                        href="/games"
+                        href={`/games?add=${game.slug}`}
                         className="btn btn-primary rounded-pill mt-auto"
                       >
                         <i className="bi bi-plus-circle me-2"></i>Add to

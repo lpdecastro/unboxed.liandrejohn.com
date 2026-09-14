@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Home Add to Booking
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Featured game cards on the homepage link to `/games?add={slug}` instead of a plain `/games` link.
+- Landing on `/games?add={validSlug}` sets both rental dates to today, runs the availability check automatically, and adds that game to the booking selection — regardless of whether it's available.
+- If the game turns out unavailable for today, it stays selected but tagged `Unavailable`, and the existing `hasUnavailableSelected` check disables the Next button until the user changes dates or removes it.
+- Page auto-scrolls to the sticky booking summary (or game grid on mobile) so the result is visible without hunting.
+- An unrecognized `add` slug, or no `add` param, leaves `/games` behaving exactly as it does today.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/home-add-to-booking-spec.md`.
+- Homepage (`src/app/page.jsx`) is a server component — just change the featured card's `Link href`.
+- `src/app/games/page.jsx` reads `add` from `searchParams` and passes it to `GamesPageClient` (e.g. `initialAddSlug`).
+- `GamesPageClient.jsx` already has `startDate`/`endDate`/`selectedSlugs`/`availabilityChecked` state and a `recheckWithDates(start, end)` helper — reuse it in a mount-only `useEffect` instead of duplicating availability-check logic.
+- Today's date must be computed the same way `validateDates` does (`new Date().toISOString().slice(0, 10)`).
+- Runs once per page load only; no special-casing after the initial pre-fill.
+- Out of scope: custom (non-today) dates via URL, auto-adding more than one game, changes to `GameCard`'s own toggle behavior on the games page.
 
 ## History
 

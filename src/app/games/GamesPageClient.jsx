@@ -17,7 +17,7 @@ function validateDates(start, end) {
   return { startInvalid, endInvalid };
 }
 
-export default function GamesPageClient({ games }) {
+export default function GamesPageClient({ games, initialAddSlug }) {
   // Rental dates + availability
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -111,6 +111,37 @@ export default function GamesPageClient({ games }) {
       confirmationRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [submitted]);
+
+  // Coming from a homepage "Add to Booking" link (?add={slug}): default the
+  // rental dates to today, check availability, and add that game to the
+  // booking regardless of the result. Runs once on mount only.
+  useEffect(() => {
+    if (!initialAddSlug) return;
+    const game = games.find((g) => g.slug === initialAddSlug);
+    if (!game) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    setStartDate(today);
+    setEndDate(today);
+    setSelectedSlugs((prev) => new Set(prev).add(game.slug));
+
+    let cancelled = false;
+    recheckWithDates(today, today).then(() => {
+      if (cancelled || !stickyRef.current) return;
+      const headerHeight = document.getElementById("siteHeader")?.offsetHeight ?? 0;
+      const top =
+        window.scrollY +
+        stickyRef.current.getBoundingClientRect().top -
+        headerHeight -
+        16;
+      window.scrollTo({ top, behavior: "smooth" });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const datesAreValid =
     Boolean(startDate) &&
@@ -509,7 +540,7 @@ export default function GamesPageClient({ games }) {
                 )}
 
                 {/* Sticky Checkout Sidebar */}
-                <div className="col-lg-4">
+                <div className="col-lg-4 order-first order-lg-last">
                   <form
                     className={`h-100${formValidated ? " was-validated" : ""}`}
                     noValidate
