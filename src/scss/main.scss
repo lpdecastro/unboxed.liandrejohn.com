@@ -32,13 +32,10 @@ $bootstrap-icons-font-dir: "/fonts";
   overflow: hidden;
 }
 
-// Bootstrap's ratio/line-clamp utilities have no responsive (per-breakpoint)
-// variants, so on mobile — where GameCard renders full-width, one per row —
-// shrink the image and description to fit more cards on screen.
+// Bootstrap's line-clamp utility has no responsive (per-breakpoint) variant,
+// so on mobile — where GameCard renders full-width, one per row — clamp the
+// description to 1 line to fit more cards on screen.
 @include media-breakpoint-down(sm) {
-  .game-card .ratio-1x1 {
-    --bs-aspect-ratio: 75%; // 4:3 instead of square
-  }
   .game-card .card-desc-clamp {
     -webkit-line-clamp: 1;
     line-clamp: 1;

@@ -149,6 +149,10 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     setStartDate(today);
     setEndDate(today);
     setSelectedSlugs((prev) => new Set(prev).add(game.slug));
+    toast(`${game.name} added to your booking.`, {
+      toastId: game.slug,
+      icon: <i className="bi bi-check-circle text-success"></i>,
+    });
 
     let cancelled = false;
     recheckWithDates(today, today).then(() => {
