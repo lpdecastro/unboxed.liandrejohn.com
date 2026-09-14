@@ -14,7 +14,7 @@ export default function GameCard({ game, status, isSelected, onToggle, onViewDet
   const isDisabled = status === "unavailable" && !isSelected;
 
   return (
-    <div className="col">
+    <div className="col game-card">
       <div className="card h-100 border-0 shadow-sm">
         <div className="position-relative rounded-top-4 overflow-hidden">
           <div
@@ -51,7 +51,7 @@ export default function GameCard({ game, status, isSelected, onToggle, onViewDet
             {badge.text}
           </span>
         </div>
-        <div className="card-body d-flex flex-column p-4">
+        <div className="card-body d-flex flex-column p-3 p-sm-4">
           <h3
             className="h5 card-title mb-2 view-details-trigger"
             role="button"
@@ -66,10 +66,10 @@ export default function GameCard({ game, status, isSelected, onToggle, onViewDet
           >
             {game.name}
           </h3>
-          <p className="text-body-secondary card-desc-clamp mb-3">
+          <p className="text-body-secondary card-desc-clamp mb-2 mb-sm-3">
             {game.description}
           </p>
-          <ul className="list-unstyled small text-body-secondary mb-3">
+          <ul className="list-unstyled small text-body-secondary mb-2 mb-sm-3">
             <li className="mb-1">
               <i className="bi bi-people me-2"></i>
               {game.players}
@@ -83,7 +83,7 @@ export default function GameCard({ game, status, isSelected, onToggle, onViewDet
             <span className="fs-4 fw-bold">&#8369;{game.pricePerDay}</span>
             <span className="text-body-secondary">/day</span>
           </p>
-          <p className="small text-body-secondary mb-3">
+          <p className="small text-body-secondary mb-2 mb-sm-3">
             &#8369;{game.deposit} refundable deposit
           </p>
           <div className="d-grid gap-2 mt-auto">
