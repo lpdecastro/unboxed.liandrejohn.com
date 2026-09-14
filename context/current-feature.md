@@ -1,21 +1,16 @@
-# Current Feature: Trim Bootstrap SCSS Imports
+# Current Feature
 
 ## Goals
 
-- Shrink the compiled Bootstrap CSS bundle (currently 320KB, PSI's dominant render-blocking request on `/` and `/games`) by importing only the Bootstrap partials this site actually uses.
-- Replace the single `@import "bootstrap/scss/bootstrap"` in `src/scss/main.scss` with Bootstrap's own import stack, keeping partial order, commenting out (not deleting) confirmed-unused partials.
-- No visible layout/copy/booking-flow behavior change — byte-size reduction only.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Spec: `context/features/trim-bootstrap-scss-imports-spec.md`.
-- Keep (config/foundation): `functions`, `variables`, `variables-dark`, `maps`, `mixins`, `utilities`, `root`, `reboot`, `type`, `images`, `containers`, `grid`, `helpers`, `utilities/api`.
-- Keep (components in use): `forms`, `buttons`, `transitions`, `nav`, `navbar`, `card`, `accordion`, `badge`, `alert`, `close`, `modal`, `carousel`, `offcanvas`.
-- Drop (comment out, unused): `tables`, `dropdown`, `button-group`, `breadcrumb`, `pagination`, `progress`, `list-group`, `toasts`, `tooltip`, `popover`, `spinners`, `placeholders`.
-- Out of scope: trimming `bootstrap.bundle.min.js`, `react-toastify` CSS, Bootstrap Icons, critical-CSS inlining, any visible regression, or re-adding dropped components preemptively.
-- Verification is manual (no visual regression tooling): check every "keep" component's interactive states on both pages, confirm `npm run build` passes with no new warnings, and compare compiled CSS size before/after (baseline 320KB).
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Trimmed Bootstrap SCSS imports per `context/features/trim-bootstrap-scss-imports-spec.md`: replaced the single `@import "bootstrap/scss/bootstrap"` in `src/scss/main.scss` with Bootstrap's own documented partial import stack (same order), commenting out (not deleting) 12 components with no usage anywhere in `src/` — `tables`, `dropdown`, `button-group`, `breadcrumb`, `pagination`, `progress`, `list-group`, `toasts`, `tooltip`, `popover`, `spinners`, `placeholders`. Shrinks the compiled CSS bundle from 320KB to 275KB (~14% smaller), confirmed by diffing a stashed-baseline build against the change. Verified: production build passes with no new warning categories (only more repetitions of the pre-existing Sass `@import`-deprecation notice, an unavoidable side effect of splitting one import into ~30); the compiled CSS was grepped to confirm every "keep" component's real rules are present (`.modal-content`, `.offcanvas`, `.carousel-item`, `.accordion-button`, `.badge`, `.alert-danger`, `.navbar-toggler`, `.card-body`, `.btn-outline-primary`, `.form-control`, `.nav-link`, `.btn-close`, `.invalid-feedback`) and every dropped component's actual styles are absent (only benign cross-references like `:not(.dropdown-menu)` selectors and form-validation `.valid-tooltip`/`.invalid-tooltip` remain); a `src/` grep independently confirmed no usage of any dropped component was missed by the spec's audit. Not independently click-tested in a real browser — no Playwright/browser tool was available this session, so interactive states (modal/offcanvas open-close, carousel swipe, accordion expand) rely on the CSS/build-level verification above rather than a live interaction check.
 
 - Improved mobile Lighthouse/PageSpeed performance per `context/features/improve-lighthouse-pagespeed-performance-spec.md`: switched Google Fonts (Inter, Poppins) from a render-blocking `fonts.googleapis.com` `<link>` to self-hosted `next/font/google` in `src/app/layout.jsx`, wired via the generated `--font-inter`/`--font-poppins` CSS variables in `src/scss/_variables.scss`. Right-sized three oversized static images with no visible quality loss: `public/img/favicon.png` (1254px, 836KB → 180px, 5.5KB), `logo.png`/`logo-dark.png` (2172px, 552–581KB → 900px, 19–21KB, same 3:1 aspect ratio). Code-split `AddressAutocomplete` and `GameDetailsModal` in `src/app/games/GamesPageClient.jsx` via `next/dynamic`: `AddressAutocomplete` (`ssr: false`) so the `@googlemaps/js-api-loader` chunk is only fetched once the customer-details step (step 3) is reached — confirmed via a production build that its chunk has zero references in `/games`'s initial HTML; `GameDetailsModal` kept `ssr: true` (still split into its own chunk, but present at hydration) specifically to avoid a ref-timing race with the Bootstrap `Modal` instance the existing code programmatically creates against it — also hardened that instantiation with a lazy fallback in `openGameDetails` so the modal still opens correctly even if its chunk hadn't mounted by the time the original setup effect ran. Verified: production build passes clean; HTML/asset inspection done against an isolated `next start` on a scratch port (avoided the dev server already running on :3000 from another session) confirmed no `fonts.googleapis.com` references, the new tiny asset sizes served correctly, and the expected chunk-splitting behavior. No Lighthouse CI in this repo, so no automated before/after score was captured — that comparison is left to a manual Lighthouse/PSI run.
 
