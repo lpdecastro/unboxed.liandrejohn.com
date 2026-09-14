@@ -1,18 +1,16 @@
-# Current Feature: Max Rental Days
+# Current Feature
 
 ## Goals
 
-- Cap the games page rental date range at 7 days (inclusive) so customers can't book beyond a week, validated both client- and server-side.
-- `validateDates` in `GamesPageClient.jsx` gains a `rangeInvalid` check (end more than 6 days after start) wired into `datesAreValid`, `recheckWithDates`, `handleDateFormSubmit`, and `handleSummaryNext`, plus an `is-invalid`/`invalid-feedback` message on the end date input.
-- `createBooking` (`src/app/actions/bookings.js`) mirrors the same 7-day cap server-side, rejecting a >7-day range even if the client check is bypassed.
-- Existing date validations (past start date, end before start date) keep working unchanged; no change to pricing/discount math or the `Booking` schema.
+<!-- Goals for the active feature go here -->
 
 ## Notes
 
-- Spec: `context/features/max-rental-days-spec.md`.
-- Out of scope: a configurable/admin-editable day cap; changes to minimum rental length; the `?add={slug}` auto-fill flow (always a 1-day range, unaffected).
+<!-- Additional context, constraints, or details from spec go here -->
 
 ## History
+
+- Capped games page rentals at a maximum of 7 days per `context/features/max-rental-days-spec.md`: `validateDates` in `GamesPageClient.jsx` gained a `rangeInvalid` check (end more than 6 days after start), wired into `datesAreValid`, `recheckWithDates`, `handleDateFormSubmit`, and `handleSummaryNext` so an out-of-range selection blocks the availability check and step advance the same way an already-invalid date does. `createBooking` (`src/app/actions/bookings.js`) mirrors the same cap server-side, rejecting a >7-day range even if the client check is bypassed. Iterated on the UX past the spec: the native date inputs (both the main selector and the sticky summary's edit fields) now carry `min`/`max` attributes so the browser's calendar greys out invalid days, and concise "(max 7 days)" notes sit beside the End Date and Rental Dates labels for visibility before a customer even opens the picker. Verified: production build passes, and a standalone script against the real local MongoDB confirmed `createBooking` rejects an 8-day range and accepts an exact 7-day range with correct pricing (test booking cleaned up). Mid-session, an over-broad `pkill -f "next dev"` accidentally killed a dev server already running on port 3000 that belonged to another session/terminal — flagged to the user immediately; no code was affected, but worth noting for future process cleanup.
 
 - Added a homepage "Add to Booking" quick-add per `context/features/home-add-to-booking-spec.md`: each featured game card on the homepage now links to `/games?add={slug}` instead of a plain `/games` link. Landing on `/games` with a valid `add` slug pre-fills both rental dates to today, runs the existing `checkAvailability`/`recheckWithDates` flow automatically, and adds that game to `selectedSlugs` regardless of availability — an unavailable game stays selected but shows the `Unavailable` badge and blocks the Next button via the existing `hasUnavailableSelected` guard, reusing pre-existing logic rather than duplicating it. Also reordered the games page layout so the sticky "Your Booking" summary renders above the game grid on mobile (Bootstrap `order-first`/`order-lg-last` utilities, desktop untouched), and pointed the auto-add scroll at the top of that summary box, offset below the sticky navbar via a manual `getBoundingClientRect`/`scrollTo` calculation. An unrecognized `add` slug or no param leaves `/games` behaving exactly as before. Verified with Playwright against the real dev server and MongoDB (including a temporary test booking to confirm the unavailable-tag/disabled-Next path); production build passes.
 
