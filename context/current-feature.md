@@ -1,23 +1,16 @@
-# Current Feature: SEO for Homepage & Games Page
+# Current Feature
 
 ## Goals
 
-- Add `NEXT_PUBLIC_SITE_URL` (`.env.example` + README/CLAUDE.md docs) and set `metadataBase` in `src/app/layout.jsx` from it (fallback `http://localhost:3000`).
-- Expand root layout metadata: `openGraph`, `twitter` (`summary_large_image`), `alternates.canonical: "/"`, explicit `robots: { index: true, follow: true }`, and `title.template`/`title.default` (e.g. `%s — Unboxed`).
-- Give `/games` its own extended metadata (`openGraph`/`twitter`/`alternates.canonical: "/games"`), copy specific to browsing/booking (Monopoly, Exploding Kittens, GCash, Lalamove, Metro Manila).
-- Reuse `public/img/logo.png` as the OG/Twitter image (absolute via `metadataBase`) — no new design asset.
-- Add `src/components/JsonLd.jsx` (server component) and emit `LocalBusiness` JSON-LD on `/`, `ItemList`/`Product` JSON-LD on `/games` from the existing `getGames()` result (no new data fetching).
-- Add `src/app/sitemap.js` and `src/app/robots.js`, both resolving via `NEXT_PUBLIC_SITE_URL`; verify `/sitemap.xml` and `/robots.txt` serve correctly in dev.
-- Confirm each page still has exactly one `<h1>`; no visible content/layout/booking-flow changes.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Spec: `context/features/seo-homepage-games-page-spec.md`.
-- Metadata/structured-data only — do not touch visible copy, layout, or booking behavior.
-- Out of scope: real 1200×630 OG image design, per-game `/games/[slug]` pages, analytics/Search Console/backlinks, Core Web Vitals/perf work, blog/content pages.
-- Acceptance includes: production build passes; a view-source/dev-server check confirms the rendered `<head>` contains the new OG/Twitter/canonical tags and JSON-LD `<script>` blocks on both `/` and `/games`.
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Added SEO metadata, JSON-LD, and sitemap/robots for `/` and `/games` per `context/features/seo-homepage-games-page-spec.md`: `src/app/layout.jsx` now sets `metadataBase` from a new `NEXT_PUBLIC_SITE_URL` env var (falls back to `http://localhost:3000`), a `title.template`/`default` (`%s — Unboxed`), and root `openGraph`/`twitter`/`alternates.canonical`/`robots`; `src/app/games/page.jsx` extends metadata with the same shape and games-specific copy. Reused `public/img/logo.png` as the OG/Twitter image. Added `src/components/JsonLd.jsx` (a plain server component rendering a `<script type="application/ld+json">` tag) — the homepage emits a `LocalBusiness` node, `/games` emits an `ItemList`/`Product` node built from the page's existing `getGames()` result, no new data fetching. Added `src/app/sitemap.js` and `src/app/robots.js`, both env-driven, serving `/sitemap.xml` and `/robots.txt`. Purely additive: no visible copy/layout/booking-flow changes, each page still has exactly one `<h1>`. Verified: production build passes; a dev-server check confirmed `/sitemap.xml`, `/robots.txt`, and the rendered `<head>`/JSON-LD `<script>` blocks on both pages. README/CLAUDE.md updated with the new env var.
 
 - Added a scroll-to-top button and an auto-hiding sticky navbar per `context/features/scroll-to-top-and-auto-hiding-navbar-spec.md`: `Navbar.jsx` became a client component that tracks scroll direction and slides itself off-screen via a `site-navbar--hidden` (`transform: translateY(-100%)`) modifier class once the user scrolls past an 80px threshold, reappearing immediately on scroll-up and staying visible at the top of the page or while the mobile `#mainNav` collapse menu is open — `translateY` was used instead of `display`/`visibility` specifically because `page.jsx`/`GamesPageClient.jsx` read the header's `offsetHeight` for existing scroll-offset math, which needed to keep working while the header is hidden. A new `ScrollToTopButton.jsx` client component (fixed bottom-right, `bi-arrow-up`, fades in past the same threshold) is rendered once on each page; on `/games` it takes a `raised` prop tied to the same condition as the mobile booking bottom bar so the two never overlap. Both features needed a few small scoped custom-CSS exceptions in `main.scss` (transform/transition, fixed positioning) since no Bootstrap utility covers either, following the file's existing pattern of commented, scoped exceptions. Verified: production build passes; a read-only check against another session's already-running dev server confirmed the new markup/classes render on `/` and `/games`. Not independently click-tested in a real browser — no Playwright/browser tool was available this session, so the hide/show feel and button fade rely on code review rather than a live interaction check.
 - Added a mobile carousel for the homepage Featured Games section per `context/features/featured-games-mobile-carousel-spec.md`: below `576px`, the section now shows a swipeable Bootstrap carousel (one game per slide, prev/next controls, indicators, no autoplay) instead of the stacked grid; both layouts render from a single `renderFeaturedCard(game)` helper in `src/app/page.jsx` so their content can't drift apart, and the tablet/desktop grid (`sm` and up) is unchanged, just gated with `d-none d-sm-flex` alongside the carousel's `d-sm-none`. Bootstrap's carousel indicators default to absolute positioning meant for full-bleed images, which would have covered each card's "Add to Booking" button — moved to static flow below the slide and recolored via Bootstrap's own `--bs-carousel-indicator-bg` CSS variables (scoped `.featured-games-carousel` rule in `main.scss`) rather than custom carousel markup. Verified: production build passes.
