@@ -1,7 +1,7 @@
 ---
 name: feature
-description: Manage current feature workflow - load, start, or complete
-argument-hint: load|start|complete
+description: Manage current feature workflow - draft, load, start, or complete
+argument-hint: draft|load|start|complete
 ---
 
 # Feature Workflow
@@ -25,11 +25,12 @@ current-feature.md has these sections:
 
 Execute the requested actions: $ARGUMENTS
 
-| Action     | Description                               |
-| ---------- | ----------------------------------------- |
-| `load`     | Load a feature spec or inline description |
-| `start`    | Begin implementation, create branch       |
-| `complete` | Log, commit, push, merge, reset           |
+| Action     | Description                                      |
+| ---------- | ------------------------------------------------- |
+| `draft`    | Draft a new feature spec into context/features/   |
+| `load`     | Load a feature spec or inline description         |
+| `start`    | Begin implementation, create branch                |
+| `complete` | Log, commit, push, merge, reset                    |
 
 See [actions/](actions/) for detailed instructions.
 
