@@ -1,12 +1,19 @@
-# Current Feature
+# Current Feature: Improve Lighthouse & PageSpeed Performance (Mobile)
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Eliminate the render-blocking Google Fonts `<link>` in `src/app/layout.jsx` by switching to `next/font/google` (Inter 400/500/600/700, Poppins 600/700), same rendered typography.
+- Replace the unoptimized 836KB `public/img/favicon.png` with a properly-sized favicon (~32–48px, plus apple-icon variant if separate), under ~50KB combined.
+- Re-export `public/img/logo.png` and `logo-dark.png` at a source size appropriate for their navbar/footer rendered use, no visible quality loss.
+- Lazy-load (`next/dynamic`) `AddressAutocomplete` and `GameDetailsModal` in `src/app/games/GamesPageClient.jsx` so the Google Maps loader and modal code aren't in `/games`'s initial JS bundle.
+- No visible layout/copy/booking-flow changes; `npm run build` passes with no new warnings.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Full spec: `context/features/improve-lighthouse-pagespeed-performance-spec.md`.
+- Out of scope: trimming Bootstrap SCSS to only-used components, any booking/pricing/server-action logic changes, infra/CDN/hosting changes, server↔client component conversions, Lighthouse CI/score-budget enforcement.
+- Everything else audited was already solid and untouched: `next/image` usage (correct `sizes`/`fill`/`priority`), `GoogleAnalytics` (already deferred), `BootstrapClient` (already client-only dynamic import), Web3Forms call (already fire-and-forget).
+- Verification will be manual — no Lighthouse CI in this repo: `npm run build` + a Lighthouse/PSI run against a deployed or `next start` build, compared to a baseline captured before changes. Smoke-test modal open and address autocomplete (step 3) behavior after converting to dynamic imports.
 
 ## History
 

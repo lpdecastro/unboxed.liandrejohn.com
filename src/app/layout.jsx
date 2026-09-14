@@ -1,6 +1,21 @@
+import { Inter, Poppins } from "next/font/google";
 import "../scss/main.scss";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import BootstrapClient from "@/components/BootstrapClient";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
@@ -45,19 +60,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="d-flex flex-column min-vh-100">
         {children}
         <BootstrapClient />

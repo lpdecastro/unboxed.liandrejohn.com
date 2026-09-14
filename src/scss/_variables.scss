@@ -23,13 +23,15 @@ $border-radius-sm: 0.4rem;
 $border-radius-lg: 0.9rem;
 $border-radius-xl: 1.25rem;
 
-// Poppins headings (bold, loaded via Google Fonts in index.html's <head>)
-// over Inter body copy. $display-font-family covers the .display-* classes
-// (e.g. the hero h1), which don't inherit $headings-font-family on their
-// own. Both must be set before `bootstrap/scss/variables` loads below, same
-// reasoning as the palette above.
-$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-$headings-font-family: "Poppins", $font-family-sans-serif;
+// Poppins headings (bold) over Inter body copy, both self-hosted via
+// `next/font/google` in `src/app/layout.jsx`, which exposes them as the
+// `--font-inter`/`--font-poppins` CSS variables applied on `<html>`.
+// $display-font-family covers the .display-* classes (e.g. the hero h1),
+// which don't inherit $headings-font-family on their own. Both must be set
+// before `bootstrap/scss/variables` loads below, same reasoning as the
+// palette above.
+$font-family-sans-serif: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-family: var(--font-poppins), $font-family-sans-serif;
 $display-font-family: $headings-font-family;
 $headings-font-weight: 700;
 

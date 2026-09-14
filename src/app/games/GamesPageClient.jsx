@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/Navbar";
@@ -9,13 +10,23 @@ import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import GameCard from "@/components/games/GameCard";
-import GameDetailsModal from "@/components/games/GameDetailsModal";
-import AddressAutocomplete from "@/components/games/AddressAutocomplete";
 import { checkAvailability } from "@/app/actions/games";
 import { createBooking } from "@/app/actions/bookings";
 import { peso, formatDate } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
 import { sendBookingNotificationEmail } from "@/lib/notifications";
+
+// Code-split: GameDetailsModal is only needed once a game's details are
+// opened, and AddressAutocomplete (which pulls in the Google Maps loader)
+// only renders at the customer-details step (currentStep === 3) — neither
+// needs to be in this page's initial JS bundle.
+const GameDetailsModal = dynamic(
+  () => import("@/components/games/GameDetailsModal")
+);
+const AddressAutocomplete = dynamic(
+  () => import("@/components/games/AddressAutocomplete"),
+  { ssr: false }
+);
 
 const MAX_RENTAL_DAYS = 7;
 
@@ -99,19 +110,25 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   // content has been set via React state. Also stash the bootstrap
   // namespace so the mobile booking offcanvas can be dismissed
   // programmatically when the booking step advances (see handleSummaryNext).
+  // GameDetailsModal is now code-split (see the `dynamic()` import above),
+  // so its ref may not be attached yet when this resolves — bootstrapRef is
+  // stashed unconditionally, and the Modal instance itself is created here
+  // if possible, falling back to a lazy create-on-first-open in
+  // openGameDetails below if the modal hadn't mounted yet.
   useEffect(() => {
     let cancelled = false;
-    let instance;
     import("bootstrap/dist/js/bootstrap.bundle.min.js").then((mod) => {
-      if (cancelled || !modalRef.current) return;
+      if (cancelled) return;
       const bootstrapNs = mod.default ?? mod;
       bootstrapRef.current = bootstrapNs;
-      instance = new bootstrapNs.Modal(modalRef.current);
-      modalInstanceRef.current = instance;
+      if (modalRef.current && !modalInstanceRef.current) {
+        modalInstanceRef.current = new bootstrapNs.Modal(modalRef.current);
+      }
     });
     return () => {
       cancelled = true;
-      instance?.dispose();
+      modalInstanceRef.current?.dispose();
+      modalInstanceRef.current = null;
     };
   }, []);
 
@@ -266,6 +283,9 @@ export default function GamesPageClient({ games, initialAddSlug }) {
 
   function openGameDetails(slug) {
     setActiveModalSlug(slug);
+    if (!modalInstanceRef.current && bootstrapRef.current && modalRef.current) {
+      modalInstanceRef.current = new bootstrapRef.current.Modal(modalRef.current);
+    }
     modalInstanceRef.current?.show();
     const game = games.find((g) => g.slug === slug);
     trackEvent("view_game_details", {
