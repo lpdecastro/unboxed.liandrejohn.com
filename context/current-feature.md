@@ -1,27 +1,16 @@
-# Current Feature: Google Analytics
+# Current Feature
 
 ## Goals
 
-- Wire up Google Analytics (GA4) page view tracking across the site using `@next/third-parties`'s `GoogleAnalytics` component.
-- Render `<GoogleAnalytics gaId={...} />` once in the root layout (`src/app/layout.jsx`) so it covers both `/` and `/games`.
-- Read the measurement ID from a new `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var; skip rendering entirely when unset (no script injected, no crash).
-- Document the new env var in `README.md` and `.env.example`.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Follows the same degrade-gracefully pattern as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in `AddressAutocomplete.jsx`.
-- Out of scope: custom event tracking, cookie consent banner/gating, other analytics providers, server-side/Measurement Protocol events.
-- Full spec: `context/features/google-analytics-spec.md`.
-- Acceptance criteria (spec):
-  - [ ] `@next/third-parties` added to `package.json` dependencies.
-  - [ ] `NEXT_PUBLIC_GA_MEASUREMENT_ID` added to `.env.example`.
-  - [ ] `GoogleAnalytics` renders once from `src/app/layout.jsx`, conditional on the env var being set.
-  - [ ] With the env var unset, no GA script is injected and the app builds/runs with no errors.
-  - [ ] With the env var set to a real GA4 measurement ID, navigating between `/` and `/games` fires page view events.
-  - [ ] `README.md` documents the new env var.
-  - [ ] Production build passes.
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Added Google Analytics (GA4) page view tracking per `context/features/google-analytics-spec.md`: installed `@next/third-parties` and rendered its `GoogleAnalytics` component once from the root layout (`src/app/layout.jsx`, as a sibling of `<body>` inside `<html>`, the standard Next.js App Router placement), so it covers both `/` and `/games` without per-page code. Gated on a new `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var (added to `.env.example`) — unset/empty skips rendering entirely, matching the existing degrade-gracefully pattern used for `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. Page-view tracking only; no custom events, consent banner, or other providers, per spec's explicit out-of-scope list. Verified: production build passes both with the env var unset (grepped build output — no GA/gtag references at all) and with a test measurement ID set (grepped build output — script and ID present in the client bundle); not independently verified against a live GA4 Realtime report, which needs a real measurement ID and browser, per the spec's own carve-out. README.md documents the new env var under a new "Google Analytics Setup" section.
 
 - Added AEO/GEO/AIO improvements per `context/features/improve-aeo-geo-aio-spec.md`: added a visible `Frequently Asked Questions` accordion to `src/app/page.jsx` (6 Q&As grounded in real pricing/policy rules, between "Rental Policies" and "Final CTA"), plus `FAQPage` JSON-LD generated from the same `faqs` array (no drift between visible copy and schema) and a `HowTo` JSON-LD node mirroring the existing 3-step "How It Works" copy verbatim. Enriched the existing `localBusinessJsonLd` with `description`, `priceRange` (`"₱50–₱150"`), `areaServed` upgraded to `{ "@type": "City", "name": "Metro Manila" }`, and `paymentAccepted: "GCash"`. Added `src/app/llms.txt/route.js`, a plain-text Route Handler summarizing the site (games list, booking/payment/delivery flow, links to `/` and `/games`) for AI agents, following the same `NEXT_PUBLIC_SITE_URL`-driven absolute-URL pattern as `sitemap.js`/`robots.js`. `robots.js` behavior is unchanged (still allows all crawlers) but now has a comment documenting that this is intentional for AI-crawler visibility. Purely additive: no booking-flow, pricing, or existing-section changes; `/games`'s existing `ItemList`/`Product` JSON-LD untouched. Verified: production build passes (`/llms.txt` shows up as a route); a read-only check against another session's already-running dev server confirmed `/llms.txt` serves plain text and `/`'s rendered `<head>` includes the new `FAQPage`/`HowTo` JSON-LD blocks alongside the enriched `LocalBusiness` node.
 
