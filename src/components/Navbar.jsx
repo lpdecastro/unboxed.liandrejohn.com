@@ -70,7 +70,7 @@ export default function Navbar({ active, id }) {
           >
             <Image
               src="/img/logo.png"
-              alt=""
+              alt="Unboxed"
               width={150}
               height={50}
               className="d-block"
