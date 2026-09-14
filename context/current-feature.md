@@ -1,12 +1,19 @@
-# Current Feature
+# Current Feature: Trim Bootstrap SCSS Imports
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Shrink the compiled Bootstrap CSS bundle (currently 320KB, PSI's dominant render-blocking request on `/` and `/games`) by importing only the Bootstrap partials this site actually uses.
+- Replace the single `@import "bootstrap/scss/bootstrap"` in `src/scss/main.scss` with Bootstrap's own import stack, keeping partial order, commenting out (not deleting) confirmed-unused partials.
+- No visible layout/copy/booking-flow behavior change — byte-size reduction only.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/trim-bootstrap-scss-imports-spec.md`.
+- Keep (config/foundation): `functions`, `variables`, `variables-dark`, `maps`, `mixins`, `utilities`, `root`, `reboot`, `type`, `images`, `containers`, `grid`, `helpers`, `utilities/api`.
+- Keep (components in use): `forms`, `buttons`, `transitions`, `nav`, `navbar`, `card`, `accordion`, `badge`, `alert`, `close`, `modal`, `carousel`, `offcanvas`.
+- Drop (comment out, unused): `tables`, `dropdown`, `button-group`, `breadcrumb`, `pagination`, `progress`, `list-group`, `toasts`, `tooltip`, `popover`, `spinners`, `placeholders`.
+- Out of scope: trimming `bootstrap.bundle.min.js`, `react-toastify` CSS, Bootstrap Icons, critical-CSS inlining, any visible regression, or re-adding dropped components preemptively.
+- Verification is manual (no visual regression tooling): check every "keep" component's interactive states on both pages, confirm `npm run build` passes with no new warnings, and compare compiled CSS size before/after (baseline 320KB).
 
 ## History
 

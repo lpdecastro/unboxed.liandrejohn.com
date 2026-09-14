@@ -1,8 +1,60 @@
 // Custom overrides (must come before the Bootstrap import)
 @import "variables";
 
-// Bootstrap
-@import "bootstrap/scss/bootstrap";
+// Bootstrap — imported via individual partials (Bootstrap's own documented
+// customization pattern) instead of the single "bootstrap/scss/bootstrap"
+// bundle, so the compiled CSS only includes components this site actually
+// uses. Partials stay in Bootstrap's original order; unused ones are
+// commented out (not deleted) rather than removed, so re-enabling one is a
+// one-line change if a future feature needs it. See
+// context/features/trim-bootstrap-scss-imports-spec.md for the audit.
+
+// Configuration
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Layout & components
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+// @import "bootstrap/scss/tables"; // unused: no <table> or Bootstrap table classes
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+// @import "bootstrap/scss/dropdown"; // unused: no dropdown menus
+// @import "bootstrap/scss/button-group"; // unused: no btn-group
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/accordion";
+// @import "bootstrap/scss/breadcrumb"; // unused
+// @import "bootstrap/scss/pagination"; // unused
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+// @import "bootstrap/scss/progress"; // unused: no progress bars
+// @import "bootstrap/scss/list-group"; // unused
+@import "bootstrap/scss/close";
+// @import "bootstrap/scss/toasts"; // unused: react-toastify handles toasts, not Bootstrap's .toast
+@import "bootstrap/scss/modal";
+// @import "bootstrap/scss/tooltip"; // unused
+// @import "bootstrap/scss/popover"; // unused
+@import "bootstrap/scss/carousel";
+// @import "bootstrap/scss/spinners"; // unused: no loading spinners
+@import "bootstrap/scss/offcanvas";
+// @import "bootstrap/scss/placeholders"; // unused: no placeholder/skeleton loading state
+
+// Helpers
+@import "bootstrap/scss/helpers";
+
+// Utilities
+@import "bootstrap/scss/utilities/api";
 
 // Bootstrap Icons (fonts are copied to public/fonts via `npm run assets:icons`,
 // run automatically before `next dev`/`next build`)
