@@ -4,7 +4,7 @@ A personal board game rental site for Metro Manila. Browse games, check availabi
 
 ## Status
 
-Early build. A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. The game catalog and availability checks are read from MongoDB via Server Actions; booking submission, auth, and payment integration aren't wired up yet.
+A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. The game catalog, availability checks, and booking submission are all backed by MongoDB via Server Actions — a booking is validated and priced server-side, persisted with `pending` status, and notified by email via Web3Forms. Payment is GCash (QR code + reference number, manually verified) and delivery/returns are coordinated manually through Lalamove; there's no online payment gateway, customer accounts/auth, or admin dashboard yet — booking status changes are made directly in the database.
 
 Pages:
 
@@ -20,11 +20,14 @@ Current:
 - [Bootstrap](https://getbootstrap.com/) + [Bootstrap Icons](https://icons.getbootstrap.com/)
 - [Sass](https://sass-lang.com/) (Dart Sass)
 - [MongoDB](https://www.mongodb.com/) & [Mongoose](https://mongoosejs.com/)
+- [Web3Forms](https://web3forms.com/) — booking notification email
+- [Google Maps Platform](https://developers.google.com/maps) (Places Autocomplete + Maps JavaScript API) — delivery address field, optional
+- [Google Analytics](https://analytics.google.com/) (GA4, via `@next/third-parties`) — optional
+- [react-toastify](https://fkhadra.github.io/react-toastify/) — add-to-booking confirmation toasts
 
 Planned (later phases):
 
-- Web3Forms
-- AWS Amplify
+- AWS Amplify (deployment)
 
 ## Getting Started
 
@@ -100,6 +103,18 @@ To enable it, create a GA4 property and set its measurement ID in `.env`:
 ```sh
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
+
+## Booking Email Notification Setup (optional)
+
+When a booking is submitted, the browser posts the booking details (number, customer info, games, dates, total, GCash reference) to [Web3Forms](https://web3forms.com/), which emails the configured inbox. It's optional — without an access key, the booking still saves to MongoDB normally, just with no email sent.
+
+To enable it, create a Web3Forms account and access key, then set it in `.env`:
+
+```sh
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your-access-key-here
+```
+
+The key is `NEXT_PUBLIC_` (shipped in the client bundle) because the call is made from the browser — Web3Forms' free plan rejects server-to-server requests, and the key itself is guarded by their domain/Origin allowlist rather than secrecy.
 
 ## Project Structure
 

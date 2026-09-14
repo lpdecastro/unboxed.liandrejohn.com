@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/Navbar";
@@ -401,9 +402,9 @@ export default function GamesPageClient({ games, initialAddSlug }) {
 
   function handleGcashNext() {
     const ref = gcashReference.trim();
-    if (!ref) {
+    if (!/^\d{6}$/.test(ref)) {
       setGcashInvalid(true);
-      setGcashError("Please enter your GCash reference number.");
+      setGcashError("Please enter the last 6 digits of your GCash reference number.");
       return;
     }
     setGcashInvalid(false);
@@ -929,12 +930,16 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                               </p>
                             </div>
                           </div>
-                          <div className="border border-2 border-dashed rounded-3 d-flex flex-column align-items-center justify-content-center text-center p-4 mb-3 bg-body-tertiary">
-                            <i className="bi bi-qr-code-scan fs-1 text-body-secondary mb-2"></i>
+                          <div className="border rounded-3 d-flex flex-column align-items-center justify-content-center text-center p-4 mb-3 bg-body-tertiary">
+                            <Image
+                              src="/img/gcash-qr.webp"
+                              alt="GCash QR code"
+                              width={220}
+                              height={220}
+                              className="mb-2"
+                            />
                             <p className="small text-body-secondary mb-0">
                               Scan to Pay
-                              <br />
-                              GCash QR code coming soon
                             </p>
                           </div>
                           <ol className="small text-body-secondary ps-3 mb-3">
@@ -944,28 +949,30 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                               Booking Summary.
                             </li>
                             <li>
-                              Copy the GCash reference number after your
-                              payment goes through.
+                              Copy the last 6 digits of the GCash reference
+                              number after your payment goes through.
                             </li>
                           </ol>
                           <div className="mb-2">
                             <label htmlFor="gcashReference" className="form-label fw-semibold">
-                              GCash Reference Number
+                              GCash Reference Number (last 6 digits)
                             </label>
                             <input
                               type="text"
+                              inputMode="numeric"
                               className={`form-control${gcashInvalid ? " is-invalid" : ""}`}
                               id="gcashReference"
-                              placeholder="Enter your transaction reference number"
+                              placeholder="e.g. 123456"
+                              maxLength={6}
                               required
                               value={gcashReference}
                               onChange={(e) => {
-                                setGcashReference(e.target.value);
+                                setGcashReference(e.target.value.replace(/\D/g, "").slice(0, 6));
                                 setGcashInvalid(false);
                               }}
                             />
                             <div className="invalid-feedback">
-                              Please enter your GCash reference number.
+                              Please enter the last 6 digits of your GCash reference number.
                             </div>
                           </div>
                           <p className="small text-body-secondary mb-3">

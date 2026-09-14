@@ -83,10 +83,10 @@ export async function createBooking(input) {
       error: "Please enter a complete delivery address.",
     };
   }
-  if (!gcashReferenceNumber || !gcashReferenceNumber.trim()) {
+  if (!gcashReferenceNumber || !/^\d{6}$/.test(gcashReferenceNumber.trim())) {
     return {
       success: false,
-      error: "Please enter your GCash reference number.",
+      error: "Please enter the last 6 digits of your GCash reference number.",
     };
   }
 

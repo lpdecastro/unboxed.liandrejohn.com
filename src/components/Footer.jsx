@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import TrackedLink from "@/components/analytics/TrackedLink";
 import TrackedElement from "@/components/analytics/TrackedElement";
 
@@ -11,12 +12,14 @@ export default function Footer() {
       <div className="container">
         <div className="row g-4">
           <div className="col-lg-4">
-            <Link
-              className="d-flex align-items-center gap-2 fw-bold mb-2 text-body text-decoration-none"
-              href="/"
-            >
-              <i className="bi bi-dice-5-fill text-primary fs-4"></i>
-              <span>Unboxed</span>
+            <Link className="d-inline-block mb-2" href="/">
+              <Image
+                src="/img/logo-dark.png"
+                alt="Unboxed"
+                width={150}
+                height={50}
+                className="d-block"
+              />
             </Link>
             <p className="small text-body-secondary mb-0">
               A small personal collection of board games available for rent
@@ -77,9 +80,22 @@ export default function Footer() {
           </div>
           <div className="col-lg-3 col-sm-4">
             <h3 className="h6 fw-semibold mb-3">Contact</h3>
-            <p className="small text-body-secondary mb-0">
-              Contact details coming soon.
-            </p>
+            <ul className="list-unstyled small">
+              <li>
+                <TrackedElement
+                  as="a"
+                  href="https://www.facebook.com/lpdecastro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-secondary link-underline-opacity-0 d-inline-flex align-items-center gap-2"
+                  eventName="cta_click"
+                  eventParams={{ label: "Facebook", location: "footer" }}
+                >
+                  <i className="bi bi-facebook"></i>
+                  Message us on Facebook
+                </TrackedElement>
+              </li>
+            </ul>
           </div>
         </div>
         <hr className="mt-4 mb-3" />
