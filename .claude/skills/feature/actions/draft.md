@@ -15,3 +15,7 @@
 6. Write the new spec to `context/features/{name}-spec.md`.
 
 7. Show the user the generated spec and its file path. Don't modify `current-feature.md` - loading the drafted spec into the active feature is a separate step (`/feature load {name}`).
+
+Notes:
+
+- Dont' forget error handling
