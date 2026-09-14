@@ -13,7 +13,7 @@
 <body class="d-flex flex-column min-vh-100">
 
   <!-- Navbar -->
-  <header class="sticky-top">
+  <header class="sticky-top" id="siteHeader">
     <nav class="navbar navbar-expand-lg bg-body shadow-sm">
       <div class="container">
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
@@ -372,8 +372,8 @@
 
           <!-- Sticky Checkout Sidebar -->
           <div class="col-lg-4">
-            <form id="bookingForm" novalidate>
-              <div class="sticky-top d-flex flex-column gap-4" style="top: 1.5rem;">
+            <form id="bookingForm" class="h-100" novalidate>
+              <div class="sticky-top d-flex flex-column gap-4" id="stickyCheckout">
 
                 <!-- Booking Summary -->
                 <div class="card border-0 shadow-sm p-4" id="summaryCard">
@@ -743,6 +743,20 @@
       var gameFilterSelect = document.getElementById('gameFilterSelect');
       var filterAvailableOption = document.getElementById('filterAvailableOption');
       var noResultsMessage = document.getElementById('noResultsMessage');
+
+      var siteHeader = document.getElementById('siteHeader');
+      var stickyCheckout = document.getElementById('stickyCheckout');
+
+      function updateStickyCheckoutOffset() {
+        var gap = 24;
+        stickyCheckout.style.top = (siteHeader.offsetHeight + gap) + 'px';
+      }
+
+      updateStickyCheckoutOffset();
+      window.addEventListener('resize', updateStickyCheckoutOffset);
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(updateStickyCheckoutOffset).observe(siteHeader);
+      }
 
       var gridColumn = document.getElementById('gridColumn');
       var readonlySummaryColumn = document.getElementById('readonlySummaryColumn');
