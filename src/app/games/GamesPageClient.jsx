@@ -424,7 +424,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     }
     if (addressOutOfArea) {
       errors.push(
-        "Please enter a delivery address within Metro Manila to continue."
+        "Please select a delivery address from the suggestions to confirm it's within Metro Manila."
       );
     }
 

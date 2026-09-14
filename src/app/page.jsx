@@ -99,7 +99,7 @@ const faqJsonLd = {
 const featuredSlugs = [
   "monopoly",
   "exploding-kittens",
-  "monopoly-deal",
+  "piles",
   "herd-mentality",
 ];
 

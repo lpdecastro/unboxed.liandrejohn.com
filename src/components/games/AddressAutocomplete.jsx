@@ -78,6 +78,7 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
   );
   const [placeSelected, setPlaceSelected] = useState(false);
   const [outsideMetroManila, setOutsideMetroManila] = useState(false);
+  const [unconfirmed, setUnconfirmed] = useState(false);
 
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -112,9 +113,9 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
 
         // Manual typing without picking a suggestion: sync on blur, same as
         // the plain-input fallback below. If the text no longer matches the
-        // last confirmed selection, the area check is stale — clear it so a
-        // hand-edited address isn't blocked (or wrongly cleared) based on a
-        // place it no longer represents.
+        // last confirmed selection, we can't know whether it's in Metro
+        // Manila — block submission until they pick a suggestion instead of
+        // trusting unverified free text.
         element.addEventListener("focusout", () => {
           const text = element.value ?? "";
           onChangeRef.current(text);
@@ -122,7 +123,9 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
             lastSelectedValueRef.current = null;
             setPlaceSelected(false);
             setOutsideMetroManila(false);
-            onOutOfAreaRef.current?.(false);
+            const needsSelection = text.trim().length > 0;
+            setUnconfirmed(needsSelection);
+            onOutOfAreaRef.current?.(needsSelection);
           }
         });
 
@@ -139,6 +142,12 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
           element.value = formatted;
           lastSelectedValueRef.current = formatted;
           onChangeRef.current(formatted);
+          setUnconfirmed(false);
+
+          const isOutOfArea = !isMetroManilaPlace(place);
+          setOutsideMetroManila(isOutOfArea);
+          setPlaceSelected(true);
+          onOutOfAreaRef.current?.(isOutOfArea);
 
           if (!place.location) return;
           const coords = {
@@ -162,11 +171,6 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
             mapInstanceRef.current.setCenter(coords);
             markerRef.current?.setPosition(coords);
           }
-
-          const isOutOfArea = !isMetroManilaPlace(place);
-          setOutsideMetroManila(isOutOfArea);
-          setPlaceSelected(true);
-          onOutOfAreaRef.current?.(isOutOfArea);
         });
       })
       .catch(() => {
@@ -229,6 +233,13 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
           This address is outside Metro Manila. Deliveries are only available
           within Metro Manila &mdash; please choose a different address to
           continue.
+        </div>
+      )}
+      {!placeSelected && unconfirmed && (
+        <div className="alert alert-warning small mt-2 mb-0" role="alert">
+          <i className="bi bi-exclamation-triangle-fill me-1"></i>
+          Please select your address from the suggestions list so we can
+          confirm it&apos;s within Metro Manila.
         </div>
       )}
     </div>
