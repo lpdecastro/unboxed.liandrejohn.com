@@ -1,12 +1,27 @@
-# Current Feature
+# Current Feature: Address Autocomplete & Map Pin
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Replace the free-text delivery address `<textarea>` in `GamesPageClient.jsx`'s customer-details step with a new `src/components/games/AddressAutocomplete.jsx` client component wired to Google Places Autocomplete for live suggestions.
+- On selecting a suggestion, fill the input with the formatted address (still driving `customerAddress` via the same `onChange(addressText)` contract, so `createBooking` needs no changes) and drop/move a single marker on a small embedded map (hidden until a place is selected).
+- Bias/restrict Places suggestions to the Philippines (`componentRestrictions: { country: "ph" }`) and toward Metro Manila via a bounds hint.
+- After a selection, soft-check the place's address components against the 16 NCR cities + Pateros; if no match, show a non-blocking inline reminder (existing `text-body-secondary`/warning style) — never block submission.
+- Manual free-text typing without picking a suggestion must still update `customerAddress` and remain submittable, exactly as today.
+- Missing/invalid `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` must degrade gracefully to the current plain textarea — no runtime crash.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/address-autocomplete-map-pin-spec.md`.
+- Add `@googlemaps/js-api-loader` as a dependency; load the Maps JS SDK (Places + Maps libraries) client-side inside `useEffect`, matching the `BootstrapClient` pattern (browser-only SDKs must never touch `window`/`document` during SSR).
+- Add `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to `.env.example` (blank); document in README that the key should be restricted (HTTP referrer + Places API/Maps JavaScript API only) in Google Cloud Console.
+- Use the new `PlaceAutocompleteElement` if available in the pinned loader version, otherwise fall back to the classic `Autocomplete` widget.
+- **Mid-implementation pivot**: the initial build used the classic `google.maps.places.Autocomplete` widget bound to a real `<input class="form-control">` (cleanest fit with native `required`/`checkValidity()` and Bootstrap's `.was-validated` styling). On live testing against the user's real API key, no suggestions ever appeared — the console confirmed the project only has **Places API (New)** enabled, and the classic widget requires the legacy Places API, which new Cloud projects (created after March 2025) can't enable at all. Migrated to `google.maps.places.PlaceAutocompleteElement` (a form-associated custom element, tag `gmp-place-autocomplete`): manual typing without a suggestion is synced to `customerAddress` on `focusout` (blur), matching the spec's explicit "on blur/change" allowance; a suggestion pick is read via the `gmp-select` event → `placePrediction.toPlace()` → `place.fetchFields(...)`, using the new API's `formattedAddress`/`addressComponents` (`longText`)/`location` field names instead of the legacy `formatted_address`/`long_name`/`geometry.location`. Since the custom element's `required`/native-validation participation on this Cloud project couldn't be fully confirmed live, the existing server-side non-empty check in `createBooking` (`bookings.js:80-85`) remains the authoritative backstop — an unconfirmed client-side validation gap fails safe into a clear server error, not a silent bad booking. Styling the shadow-DOM input required one small `::part(input)` CSS rule (no Bootstrap class can reach inside another custom element's shadow root), added as a scoped exception per `coding-standards.md`, same as the pre-existing `ReactToastify.css` exception.
+- Also fixed along the way: an initial version called `setOptions()` from `@googlemaps/js-api-loader` on every effect run, which warned "should only be called once" on the component's second mount (e.g. React Strict Mode's dev double-invoke) — fixed with a module-level `mapsOptionsConfigured` guard so it only configures the SDK once per page load.
+- **Deliberate deviation from the spec's acceptance criteria**: the user explicitly asked, after seeing it live, that an out-of-Metro-Manila selection be a hard block instead of the spec's "non-blocking inline reminder; submission is not blocked by it." `AddressAutocomplete` now takes an `onOutOfArea(boolean)` callback (fired from the `gmp-select` handler's area check, and cleared to `false` on unmount or when the user hand-edits the text away from the last confirmed selection via `focusout`, so a stale flag can't wrongly block/unblock a since-changed address). `GamesPageClient.jsx` tracks this as `addressOutOfArea` state, disables the Submit button when true, and also adds a matching entry to the `handleBookingSubmit` `errors` array as a defensive second layer. The inline message itself was also restyled from a subtle `text-warning-emphasis`/`form-text` note to a full `alert alert-danger`.
+- Marker is not draggable; map is not manually pinnable by click — selection only comes from picking an autocomplete suggestion. Re-selecting moves the existing marker rather than adding a new one.
+- No changes to the `Booking` schema or `createBooking` — stored `customer.address` remains a plain string; coordinates are never persisted.
+- Out of scope: lat/lng persistence anywhere, manual pin dragging/reverse geocoding, server-side Metro Manila validation/rejection, admin map view, any changes to GCash/rental-agreement/submit-booking steps.
+- Automated verification is partial: Places suggestions require a live API key/network and can't be fully scripted — plan for a manual browser check plus a production build pass.
 
 ## History
 

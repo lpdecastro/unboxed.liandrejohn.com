@@ -71,6 +71,16 @@ npm run seed
 
 This drops and repopulates the `games` and `bookings` collections. `connectDB` (`src/lib/mongodb.js`) caches the connection across hot reloads, and `Game`/`Booking` models live in `src/models/`.
 
+## Google Maps Setup (optional)
+
+The delivery address field on `/games` uses Google Places Autocomplete and an embedded map pin. Both are optional — without an API key, the field falls back to a plain text address input with no runtime error.
+
+To enable it, create a browser API key in [Google Cloud Console](https://console.cloud.google.com/) restricted to the **Places API** and **Maps JavaScript API** (and to your site's HTTP referrers), then set it in `.env`:
+
+```sh
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-key-here
+```
+
 ## Project Structure
 
 ```

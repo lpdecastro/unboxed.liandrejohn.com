@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
 import GameCard from "@/components/games/GameCard";
 import GameDetailsModal from "@/components/games/GameDetailsModal";
+import AddressAutocomplete from "@/components/games/AddressAutocomplete";
 import { checkAvailability } from "@/app/actions/games";
 import { createBooking } from "@/app/actions/bookings";
 import { peso, formatDate } from "@/lib/format";
@@ -63,6 +64,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   const [customerName, setCustomerName] = useState("");
   const [customerMobile, setCustomerMobile] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
+  const [addressOutOfArea, setAddressOutOfArea] = useState(false);
   const [formValidated, setFormValidated] = useState(false);
   const [formError, setFormError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -343,6 +345,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     }
     if (!effectivelyChecked) {
       errors.push("Check availability for your rental dates first.");
+    }
+    if (addressOutOfArea) {
+      errors.push(
+        "Please enter a delivery address within Metro Manila to continue."
+      );
     }
 
     const mobileValid =
@@ -927,24 +934,13 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                               Enter a valid Philippine mobile number.
                             </div>
                           </div>
-                          <div className="mb-3">
-                            <label htmlFor="customerAddress" className="form-label fw-semibold">
-                              Complete Delivery Address
-                            </label>
-                            <textarea
-                              className="form-control"
-                              id="customerAddress"
-                              rows={2}
-                              placeholder="House/unit, street, barangay, city, Metro Manila"
-                              required
-                              value={customerAddress}
-                              onChange={(e) => setCustomerAddress(e.target.value)}
-                            ></textarea>
-                            <div className="invalid-feedback">
-                              Please enter a complete Metro Manila delivery
-                              address.
-                            </div>
-                          </div>
+                          <AddressAutocomplete
+                            id="customerAddress"
+                            value={customerAddress}
+                            onChange={setCustomerAddress}
+                            onOutOfArea={setAddressOutOfArea}
+                            required
+                          />
                           <p className="small text-body-secondary mb-3">
                             Rentals are available within Metro Manila only.
                             Lalamove fees are paid directly to the rider.
@@ -973,7 +969,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                             <button
                               type="submit"
                               className="btn btn-primary fw-semibold rounded-pill"
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || addressOutOfArea}
                             >
                               {isSubmitting
                                 ? "Submitting Booking…"
