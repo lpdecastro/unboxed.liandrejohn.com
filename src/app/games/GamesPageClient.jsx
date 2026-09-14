@@ -7,6 +7,7 @@ import RentalPoliciesModal from "@/components/RentalPoliciesModal";
 import GameCard from "@/components/games/GameCard";
 import GameDetailsModal from "@/components/games/GameDetailsModal";
 import { checkAvailability } from "@/app/actions/games";
+import { createBooking } from "@/app/actions/bookings";
 import { peso, formatDate } from "@/lib/format";
 
 function validateDates(start, end) {
@@ -150,8 +151,8 @@ export default function GamesPageClient({ games }) {
   const grandTotal = subtotal - discount + depositTotal;
 
   const visibleGames =
-    filter === "available"
-      ? games.filter((g) => cardStatus[g.slug] === "available")
+    filter === "available" || filter === "unavailable"
+      ? games.filter((g) => cardStatus[g.slug] === filter)
       : games;
 
   function toggleGame(slug) {
@@ -256,7 +257,7 @@ export default function GamesPageClient({ games }) {
     setCurrentStep(3);
   }
 
-  function handleBookingSubmit(e) {
+  async function handleBookingSubmit(e) {
     e.preventDefault();
     if (isSubmitting) return;
 
@@ -288,19 +289,32 @@ export default function GamesPageClient({ games }) {
     setFormError(null);
     setIsSubmitting(true);
 
-    // Recheck availability immediately before creating the booking.
-    setTimeout(() => {
-      setSubmitted({
-        bookingNumber: `BG-${Math.floor(1000 + Math.random() * 9000)}`,
-        gamesText: selectedGames.map((g) => g.name).join(", "),
-        datesText: `${formatDate(startDate)} – ${formatDate(endDate)} (${rentalDays}${
-          rentalDays === 1 ? " day" : " days"
-        })`,
-        amountText: peso(grandTotal),
-        addressText: customerAddress,
-      });
+    const result = await createBooking({
+      slugs: Array.from(selectedSlugs),
+      startDate,
+      endDate,
+      customer: {
+        name: customerName,
+        mobile: customerMobile,
+        address: customerAddress,
+      },
+      gcashReferenceNumber: gcashReference,
+    });
+
+    if (!result.success) {
+      setFormError(result.error);
       setIsSubmitting(false);
-    }, 600);
+      return;
+    }
+
+    setSubmitted({
+      bookingNumber: result.bookingNumber,
+      gamesText: result.gamesText,
+      datesText: result.datesText,
+      amountText: result.amountText,
+      addressText: result.addressText,
+    });
+    setIsSubmitting(false);
   }
 
   const activeGame = games.find((g) => g.slug === activeModalSlug) ?? null;
@@ -371,10 +385,7 @@ export default function GamesPageClient({ games }) {
                   </div>
                   <div className="col-sm-6 col-lg-3">
                     <label htmlFor="gameFilterSelect" className="form-label fw-semibold">
-                      Show{" "}
-                      <span className="text-body-secondary fw-normal">
-                        (optional)
-                      </span>
+                      Show
                     </label>
                     <select
                       className="form-select"
@@ -385,6 +396,9 @@ export default function GamesPageClient({ games }) {
                       <option value="all">All Games</option>
                       <option value="available" disabled={!effectivelyChecked}>
                         Available Only
+                      </option>
+                      <option value="unavailable" disabled={!effectivelyChecked}>
+                        Booked Only
                       </option>
                     </select>
                   </div>

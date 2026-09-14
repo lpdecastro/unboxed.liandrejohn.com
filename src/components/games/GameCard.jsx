@@ -11,6 +11,7 @@ const STATUS_BADGE = {
 
 export default function GameCard({ game, status, isSelected, onToggle, onViewDetails }) {
   const badge = STATUS_BADGE[status];
+  const isDisabled = status === "unavailable" && !isSelected;
 
   return (
     <div className="col">
@@ -92,13 +93,22 @@ export default function GameCard({ game, status, isSelected, onToggle, onViewDet
                 isSelected ? "btn-outline-success" : "btn-primary"
               }`}
               onClick={onToggle}
+              disabled={isDisabled}
             >
               <i
                 className={`bi ${
-                  isSelected ? "bi-check-circle" : "bi-cart-plus"
+                  isSelected
+                    ? "bi-check-circle"
+                    : isDisabled
+                    ? "bi-slash-circle"
+                    : "bi-cart-plus"
                 } me-2`}
               ></i>
-              {isSelected ? "Added" : "Add to Booking"}
+              {isSelected
+                ? "Added"
+                : isDisabled
+                ? "Already Booked"
+                : "Add to Booking"}
             </button>
           </div>
         </div>

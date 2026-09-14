@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Submit Booking
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Replace the client-side fake booking submission on `/games` with a real Server Action that persists a `Booking` document in MongoDB.
+- Add `src/app/actions/bookings.js` (`'use server'`) exporting `createBooking(input)`.
+- Recheck game availability and compute all pricing (subtotal, 10% multi-game discount, deposit total, grand total) authoritatively server-side from DB records — never trust client-submitted totals.
+- Generate a unique `BG-####` booking number server-side and save the `Booking` with `status: "pending"`.
+- Wire `GamesPageClient.jsx`'s `handleBookingSubmit` to call `createBooking` instead of the `setTimeout`/`Math.random()` fake, surfacing server validation errors via the existing `formError` UI and rendering the confirmation state from the server's response.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/submit-booking-spec.md`.
+- Current fake logic lives in `src/app/games/GamesPageClient.jsx:259-304`.
+- Validation rules to reuse (server-authoritative): ≥1 game selected; `startDate` not in the past and `endDate >= startDate`; full name, PH mobile (`^(09|\+639)\d{9}$` after stripping spaces/dashes), and complete address present; GCash reference number present; all selected games still available for the requested dates.
+- Reuse the overlap logic from `checkAvailability` in `src/app/actions/games.js` against `confirmed`/`out-for-delivery`/`rented`/`return-pending` statuses.
+- No `Booking` schema changes needed — all required fields already exist on the model.
+- Out of scope: email notification (Web3Forms not set up yet), GCash verification, SMS, status changes past `pending`, admin dashboard, idempotency keys beyond the existing `isSubmitting` guard.
+- Acceptance criteria include: production build passes, and a booking submitted via the running dev server actually appears in MongoDB.
 
 ## History
 
