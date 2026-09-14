@@ -6,18 +6,8 @@ import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
 import GameCard from "@/components/games/GameCard";
 import GameDetailsModal from "@/components/games/GameDetailsModal";
-import { games, bookedRanges } from "@/data/games";
+import { checkAvailability } from "@/app/actions/games";
 import { peso, formatDate } from "@/lib/format";
-
-function rangesOverlap(aStart, aEnd, bStart, bEnd) {
-  return aStart <= bEnd && bStart <= aEnd;
-}
-
-function isSlugAvailable(slug, start, end) {
-  const ranges = bookedRanges[slug];
-  if (!ranges) return true;
-  return !ranges.some((r) => rangesOverlap(start, end, r.start, r.end));
-}
 
 function validateDates(start, end) {
   const today = new Date().toISOString().slice(0, 10);
@@ -26,11 +16,13 @@ function validateDates(start, end) {
   return { startInvalid, endInvalid };
 }
 
-export default function GamesPageClient() {
+export default function GamesPageClient({ games }) {
   // Rental dates + availability
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [availabilityChecked, setAvailabilityChecked] = useState(false);
+  const [availabilityMap, setAvailabilityMap] = useState({});
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [dateFormErrors, setDateFormErrors] = useState({
     startInvalid: false,
     endInvalid: false,
@@ -137,12 +129,12 @@ export default function GamesPageClient() {
     games.forEach((game) => {
       statuses[game.slug] = !effectivelyChecked
         ? "unknown"
-        : isSlugAvailable(game.slug, startDate, endDate)
+        : availabilityMap[game.slug]
         ? "available"
         : "unavailable";
     });
     return statuses;
-  }, [effectivelyChecked, startDate, endDate]);
+  }, [effectivelyChecked, availabilityMap, games]);
 
   const selectedGames = games.filter((g) => selectedSlugs.has(g.slug));
   const hasUnavailableSelected = selectedGames.some(
@@ -176,7 +168,7 @@ export default function GamesPageClient() {
     modalInstanceRef.current?.show();
   }
 
-  function recheckWithDates(start, end) {
+  async function recheckWithDates(start, end) {
     const v = validateDates(start, end);
     setDateFormErrors(v);
     if (v.startInvalid || v.endInvalid) {
@@ -184,7 +176,11 @@ export default function GamesPageClient() {
       return;
     }
     setSummaryDateError(null);
+    setIsCheckingAvailability(true);
+    const result = await checkAvailability(start, end);
+    setAvailabilityMap(result);
     setAvailabilityChecked(true);
+    setIsCheckingAvailability(false);
   }
 
   function handleStartDateChange(e) {
@@ -199,16 +195,20 @@ export default function GamesPageClient() {
     if (availabilityChecked) recheckWithDates(startDate, value);
   }
 
-  function handleDateFormSubmit(e) {
+  async function handleDateFormSubmit(e) {
     e.preventDefault();
     const v = validateDates(startDate, endDate);
     setDateFormErrors(v);
     if (v.startInvalid || v.endInvalid) return;
     setSummaryDateError(null);
+    setIsCheckingAvailability(true);
+    const result = await checkAvailability(startDate, endDate);
+    setAvailabilityMap(result);
     setAvailabilityChecked(true);
+    setIsCheckingAvailability(false);
   }
 
-  function handleSummaryNext() {
+  async function handleSummaryNext() {
     if (!effectivelyChecked) {
       const v = validateDates(startDate, endDate);
       setDateFormErrors(v);
@@ -217,7 +217,11 @@ export default function GamesPageClient() {
         return;
       }
       setSummaryDateError(null);
+      setIsCheckingAvailability(true);
+      const result = await checkAvailability(startDate, endDate);
+      setAvailabilityMap(result);
       setAvailabilityChecked(true);
+      setIsCheckingAvailability(false);
       return;
     }
 
@@ -386,8 +390,15 @@ export default function GamesPageClient() {
                   </div>
                   <div className="col-sm-6 col-lg-3 d-grid d-lg-block">
                     <label className="form-label d-none d-lg-block">&nbsp;</label>
-                    <button type="submit" className="btn btn-primary fw-semibold rounded-pill px-4">
-                      <i className="bi bi-search me-2"></i>Check Availability
+                    <button
+                      type="submit"
+                      className="btn btn-primary fw-semibold rounded-pill px-4"
+                      disabled={isCheckingAvailability}
+                    >
+                      <i className="bi bi-search me-2"></i>
+                      {isCheckingAvailability
+                        ? "Checking…"
+                        : "Check Availability"}
                     </button>
                   </div>
                 </form>
@@ -642,11 +653,16 @@ export default function GamesPageClient() {
                                 <button
                                   type="button"
                                   className="btn btn-primary rounded-pill fw-semibold"
-                                  disabled={effectivelyChecked && hasUnavailableSelected}
+                                  disabled={
+                                    isCheckingAvailability ||
+                                    (effectivelyChecked && hasUnavailableSelected)
+                                  }
                                   onClick={handleSummaryNext}
                                 >
                                   {effectivelyChecked ? (
                                     "Next"
+                                  ) : isCheckingAvailability ? (
+                                    "Checking…"
                                   ) : (
                                     <>
                                       <i className="bi bi-search me-2"></i>

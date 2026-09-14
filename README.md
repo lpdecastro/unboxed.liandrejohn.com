@@ -4,7 +4,7 @@ A personal board game rental site for Metro Manila. Browse games, check availabi
 
 ## Status
 
-Early build. A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. Mongoose/MongoDB connectivity and models are wired up; no booking API routes, auth, or payment integration yet.
+Early build. A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. The game catalog and availability checks are read from MongoDB via Server Actions; booking submission, auth, and payment integration aren't wired up yet.
 
 Pages:
 
@@ -85,9 +85,9 @@ This drops and repopulates the `games` and `bookings` collections. `connectDB` (
 ├── scripts/
 │   └── seed.mjs              # Seeds MongoDB from src/data/games.json + bookings.json
 ├── src/
-│   ├── app/                 # Next.js App Router pages (home `/`, games `/games`)
+│   ├── app/                 # Next.js App Router pages (home `/`, games `/games`) + actions/ (Server Actions)
 │   ├── components/          # Shared UI (Navbar, Footer, modals, game card)
-│   ├── data/                 # Game catalog (games.js, used by the pages) + MongoDB seed JSON (games.json, bookings.json)
+│   ├── data/                  # MongoDB seed JSON (games.json, bookings.json)
 │   ├── lib/                  # connectDB (MongoDB) + small formatting helpers
 │   ├── models/                # Mongoose models (Game, Booking)
 │   └── scss/                 # Sass source (main.scss imports Bootstrap + overrides in _variables.scss)

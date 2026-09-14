@@ -1,12 +1,21 @@
-# Current Feature
+# Current Feature: Games DB Integration
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Replace `src/data/games.js` as the game catalog source with MongoDB, read via Next.js Server Actions (not a static import, not an API route).
+- Extend the `Game` model and `src/data/games.json` seed data with the fields `games.js` has that the schema is missing: `shortDescription`, `howToPlay`, `icon`, `placeholderBg` (optional), `age`. Migrate real content, not placeholders. Re-seed and confirm no validation errors.
+- Add `src/app/actions/games.js` (`'use server'`) with `getGames()` (all active games, shaped like the current `games.js` export) and `checkAvailability(startDate, endDate)` (per-game availability from `Booking` overlaps against `confirmed`/`out-for-delivery`/`rented`/`return-pending`, replacing hardcoded `bookedRanges`).
+- Convert `src/app/page.js` and `src/app/games/page.js` to async server components calling `getGames()`; pass `games` into `GamesPageClient` as a prop.
+- `GamesPageClient.jsx`: drop the `@/data/games` import, accept `games` as a prop, call `checkAvailability` server action on **Check Availability** instead of the client-side `bookedRanges` lookup.
+- Delete `src/data/games.js` once nothing imports it.
+- Update `README.md` (Status, Project Structure) and `CLAUDE.md` (architecture section) to reflect MongoDB as the live data source and drop the "no API routes reading/writing the database yet" note.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- `GameCard` / `GameDetailsModal` need no shape changes — the extended `Game` schema preserves fields they already consume.
+- Out of scope: booking submission stays a client-side fake (`setTimeout`, random booking number); no admin dashboard, auth, or payment integration.
+- All game reads must go through Server Actions per `context/coding-standards.md` — no new API routes.
+- Full spec: `context/features/games-db-integration-spec.md`.
 
 ## History
 

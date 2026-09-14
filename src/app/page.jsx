@@ -3,7 +3,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
-import { games } from "@/data/games";
+import { getGames } from "@/app/actions/games";
 
 const featuredSlugs = [
   "monopoly",
@@ -11,11 +11,13 @@ const featuredSlugs = [
   "monopoly-deal",
   "herd-mentality",
 ];
-const featuredGames = featuredSlugs.map((slug) =>
-  games.find((game) => game.slug === slug)
-);
 
-export default function HomePage() {
+export default async function HomePage() {
+  const games = await getGames();
+  const featuredGames = featuredSlugs.map((slug) =>
+    games.find((game) => game.slug === slug)
+  );
+
   return (
     <>
       <Navbar active="home" />
