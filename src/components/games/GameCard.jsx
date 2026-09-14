@@ -18,7 +18,7 @@ export default function GameCard({ game, status, isSelected, onToggle, onViewDet
       <div className="card h-100 border-0 shadow-sm">
         <div className="position-relative rounded-top-4 overflow-hidden">
           <div
-            className="ratio ratio-4x3 view-details-trigger"
+            className="ratio ratio-4x3 bg-dark-subtle view-details-trigger"
             role="button"
             tabIndex={0}
             onClick={onViewDetails}
