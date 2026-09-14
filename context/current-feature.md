@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Mobile Booking Bottom Bar
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- On `/games` step 1, below `lg` width, replace the sticky top summary card with a slim fixed bottom bar (game count + running total) once at least one game is selected.
+- Tapping "View Booking" on the bar opens a Bootstrap offcanvas showing the full booking summary (dates, selected games with remove, pricing breakdown, Next/Check Availability button).
+- Extract the existing step-1 summary body into one shared local render function in `GamesPageClient.jsx` used by both the desktop `sticky-top` sidebar and the new mobile offcanvas — no forked logic, no duplicate DOM ids (parameterize the date-input id/htmlFor pairs with a prefix).
+- Desktop (`lg+`) behavior and layout stay completely unchanged.
+- Steps 2 and 3 stay unchanged on all breakpoints.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/mobile-booking-bottom-bar-spec.md`.
+- Bottom bar/offcanvas only render when `currentStep === 1 && hasGames`; before any game is selected, the top-of-page date selector remains the only entry point (untouched by this feature).
+- Bar and offcanvas are `d-lg-none`; desktop sidebar card gated `d-none d-lg-*` so it doesn't also render inline on mobile.
+- Offcanvas: `.offcanvas.offcanvas-bottom`, id `mobileBookingOffcanvas`, opened via `data-bs-toggle="offcanvas" data-bs-target="#mobileBookingOffcanvas"` — self-wired by existing `BootstrapClient`, no new ref/instance plumbing.
+- Add bottom padding to the page while the bar is present so it doesn't overlap the last row of game cards.
+- Bootstrap utility classes only — no new custom CSS, per `context/coding-standards.md`.
+- Out of scope: steps 2/3, desktop layout, the top date selector/availability flow, animations, persisting open state, mini-cart elsewhere.
 
 ## History
 

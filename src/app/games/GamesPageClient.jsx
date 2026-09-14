@@ -79,18 +79,23 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   const gridRef = useRef(null);
   const modalRef = useRef(null);
   const modalInstanceRef = useRef(null);
+  const offcanvasRef = useRef(null);
+  const bootstrapRef = useRef(null);
   const mobileInputRef = useRef(null);
   const confirmationRef = useRef(null);
 
   // Load Bootstrap's JS once on the client and bind a Modal instance to the
   // game details modal so it can be opened programmatically once its
-  // content has been set via React state.
+  // content has been set via React state. Also stash the bootstrap
+  // namespace so the mobile booking offcanvas can be dismissed
+  // programmatically when the booking step advances (see handleSummaryNext).
   useEffect(() => {
     let cancelled = false;
     let instance;
     import("bootstrap/dist/js/bootstrap.bundle.min.js").then((mod) => {
       if (cancelled || !modalRef.current) return;
       const bootstrapNs = mod.default ?? mod;
+      bootstrapRef.current = bootstrapNs;
       instance = new bootstrapNs.Modal(modalRef.current);
       modalInstanceRef.current = instance;
     });
@@ -320,7 +325,30 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     }
 
     setSummaryStepError(null);
+    // Dismiss the mobile offcanvas if it's open — advancing to step 2 hides
+    // the "View Booking" trigger, and calling hide() here (rather than
+    // letting the offcanvas get yanked out from under an in-progress
+    // Bootstrap transition) is what keeps its backdrop from getting stuck.
+    const wasInOffcanvas = Boolean(
+      offcanvasRef.current?.classList.contains("show")
+    );
+    if (offcanvasRef.current) {
+      bootstrapRef.current?.Offcanvas.getInstance(offcanvasRef.current)?.hide();
+    }
     setCurrentStep(2);
+    // The user tapped Next from inside the offcanvas, which could be
+    // anywhere down the game grid — scroll back up to the "Pay with GCash"
+    // box (the same sticky container, now on step 2) so it's in view.
+    if (wasInOffcanvas && stickyRef.current) {
+      const headerHeight =
+        document.getElementById("siteHeader")?.offsetHeight ?? 0;
+      const top =
+        window.scrollY +
+        stickyRef.current.getBoundingClientRect().top -
+        headerHeight -
+        16;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
   }
 
   function handleGcashNext() {
@@ -403,6 +431,188 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   const activeGame = games.find((g) => g.slug === activeModalSlug) ?? null;
   const isBuildingBooking = currentStep === 1;
   const hasGames = selectedSlugs.size > 0;
+
+  // Shared step-1 summary body (rental dates, selected games, pricing,
+  // Next/Check Availability) rendered by both the desktop sticky sidebar
+  // and the mobile offcanvas, so the id prefix avoids duplicate DOM ids.
+  function renderBookingSummaryBody(idPrefix) {
+    return (
+      <>
+        {!hasGames && (
+          <div className="text-center py-4">
+            <i className="bi bi-cart3 fs-1 text-body-secondary d-block mb-3"></i>
+            <p className="fw-semibold mb-1">No games added yet</p>
+            <p className="small text-body-secondary mb-0">
+              Choose your dates and add at least one game to start your
+              booking.
+            </p>
+          </div>
+        )}
+
+        {hasGames && (
+          <div>
+            <p className="small fw-semibold mb-2">
+              Rental Dates{" "}
+              <span className="fw-normal text-body-secondary">
+                (max {MAX_RENTAL_DAYS} days)
+              </span>
+            </p>
+            <div className="row g-2 mb-3">
+              <div className="col-6">
+                <label
+                  htmlFor={`${idPrefix}StartDate`}
+                  className="visually-hidden"
+                >
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  className={`form-control${
+                    summaryDateError ? " is-invalid" : ""
+                  }`}
+                  id={`${idPrefix}StartDate`}
+                  aria-label="Start Date"
+                  required
+                  min={todayISO}
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                />
+                <div className="invalid-feedback">
+                  Start date can&rsquo;t be in the past.
+                </div>
+              </div>
+              <div className="col-6">
+                <label
+                  htmlFor={`${idPrefix}EndDate`}
+                  className="visually-hidden"
+                >
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  className={`form-control${
+                    summaryDateError ? " is-invalid" : ""
+                  }`}
+                  id={`${idPrefix}EndDate`}
+                  aria-label="End Date"
+                  required
+                  min={minEndDate}
+                  max={maxEndDate}
+                  value={endDate}
+                  onChange={handleEndDateChange}
+                />
+                <div className="invalid-feedback">
+                  End date must be on or after the start date.
+                </div>
+              </div>
+            </div>
+            {summaryDateError && (
+              <div className="alert alert-danger small mb-3" role="alert">
+                {summaryDateError}
+              </div>
+            )}
+            <ul className="list-unstyled mb-3">
+              {selectedGames.map((g) => {
+                const isUnavailable = cardStatus[g.slug] === "unavailable";
+                return (
+                  <li
+                    key={g.slug}
+                    className="d-flex justify-content-between align-items-start mb-2"
+                  >
+                    <span>
+                      <span className="d-block fw-semibold small">
+                        {g.name}
+                        {isUnavailable && (
+                          <span className="badge bg-danger-subtle text-danger-emphasis rounded-pill ms-1">
+                            Unavailable
+                          </span>
+                        )}
+                      </span>
+                      {effectivelyChecked && (
+                        <span className="d-block text-body-secondary small">
+                          {peso(g.pricePerDay)} &times; {rentalDays}
+                          {rentalDays === 1 ? " day" : " days"}
+                        </span>
+                      )}
+                    </span>
+                    <span className="d-flex align-items-center gap-2">
+                      {effectivelyChecked && (
+                        <span className="small fw-semibold">
+                          {peso(g.pricePerDay * rentalDays)}
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-link text-danger p-0"
+                        onClick={() => toggleGame(g.slug)}
+                      >
+                        Remove
+                      </button>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            {effectivelyChecked && (
+              <div>
+                <hr />
+                <div className="d-flex justify-content-between small mb-2">
+                  <span className="text-body-secondary">Rental Subtotal</span>
+                  <span>{peso(subtotal)}</span>
+                </div>
+                {discount > 0 && (
+                  <div className="d-flex justify-content-between small mb-2">
+                    <span className="text-body-secondary">
+                      Multi-Game Discount
+                    </span>
+                    <span>&minus;{peso(discount)}</span>
+                  </div>
+                )}
+                <div className="d-flex justify-content-between small mb-3">
+                  <span className="text-body-secondary">
+                    Refundable Deposits
+                  </span>
+                  <span>{peso(depositTotal)}</span>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <span className="fw-semibold">Amount to Pay</span>
+                  <span className="fs-4 fw-bold">{peso(grandTotal)}</span>
+                </div>
+              </div>
+            )}
+            {summaryStepError && (
+              <div className="alert alert-danger small mb-3" role="alert">
+                {summaryStepError}
+              </div>
+            )}
+            <div className="d-grid">
+              <button
+                type="button"
+                className="btn btn-primary rounded-pill fw-semibold"
+                disabled={
+                  isCheckingAvailability ||
+                  (effectivelyChecked && hasUnavailableSelected)
+                }
+                onClick={handleSummaryNext}
+              >
+                {effectivelyChecked ? (
+                  "Next"
+                ) : isCheckingAvailability ? (
+                  "Checking…"
+                ) : (
+                  <>
+                    <i className="bi bi-search me-2"></i>
+                    Check Availability
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   return (
     <>
@@ -614,182 +824,12 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                       className="sticky-top d-flex flex-column gap-4"
                       ref={stickyRef}
                     >
-                      {/* Booking Summary */}
+                      {/* Booking Summary (desktop sidebar; mobile uses the
+                          fixed bottom bar + offcanvas below instead) */}
                       {currentStep === 1 && (
-                        <div className="card border-0 shadow-sm p-4">
+                        <div className="card border-0 shadow-sm p-4 d-none d-lg-block">
                           <h2 className="h5 mb-3">Your Booking</h2>
-
-                          {!hasGames && (
-                            <div className="text-center py-4">
-                              <i className="bi bi-cart3 fs-1 text-body-secondary d-block mb-3"></i>
-                              <p className="fw-semibold mb-1">No games added yet</p>
-                              <p className="small text-body-secondary mb-0">
-                                Choose your dates and add at least one game to
-                                start your booking.
-                              </p>
-                            </div>
-                          )}
-
-                          {hasGames && (
-                            <div>
-                              <p className="small fw-semibold mb-2">
-                                Rental Dates{" "}
-                                <span className="fw-normal text-body-secondary">
-                                  (max {MAX_RENTAL_DAYS} days)
-                                </span>
-                              </p>
-                              <div className="row g-2 mb-3">
-                                <div className="col-6">
-                                  <label htmlFor="summaryEditStartDate" className="visually-hidden">
-                                    Start Date
-                                  </label>
-                                  <input
-                                    type="date"
-                                    className={`form-control${
-                                      summaryDateError ? " is-invalid" : ""
-                                    }`}
-                                    id="summaryEditStartDate"
-                                    aria-label="Start Date"
-                                    required
-                                    min={todayISO}
-                                    value={startDate}
-                                    onChange={handleStartDateChange}
-                                  />
-                                  <div className="invalid-feedback">
-                                    Start date can&rsquo;t be in the past.
-                                  </div>
-                                </div>
-                                <div className="col-6">
-                                  <label htmlFor="summaryEditEndDate" className="visually-hidden">
-                                    End Date
-                                  </label>
-                                  <input
-                                    type="date"
-                                    className={`form-control${
-                                      summaryDateError ? " is-invalid" : ""
-                                    }`}
-                                    id="summaryEditEndDate"
-                                    aria-label="End Date"
-                                    required
-                                    min={minEndDate}
-                                    max={maxEndDate}
-                                    value={endDate}
-                                    onChange={handleEndDateChange}
-                                  />
-                                  <div className="invalid-feedback">
-                                    End date must be on or after the start date.
-                                  </div>
-                                </div>
-                              </div>
-                              {summaryDateError && (
-                                <div className="alert alert-danger small mb-3" role="alert">
-                                  {summaryDateError}
-                                </div>
-                              )}
-                              <ul className="list-unstyled mb-3">
-                                {selectedGames.map((g) => {
-                                  const isUnavailable =
-                                    cardStatus[g.slug] === "unavailable";
-                                  return (
-                                    <li
-                                      key={g.slug}
-                                      className="d-flex justify-content-between align-items-start mb-2"
-                                    >
-                                      <span>
-                                        <span className="d-block fw-semibold small">
-                                          {g.name}
-                                          {isUnavailable && (
-                                            <span className="badge bg-danger-subtle text-danger-emphasis rounded-pill ms-1">
-                                              Unavailable
-                                            </span>
-                                          )}
-                                        </span>
-                                        {effectivelyChecked && (
-                                          <span className="d-block text-body-secondary small">
-                                            {peso(g.pricePerDay)} &times; {rentalDays}
-                                            {rentalDays === 1 ? " day" : " days"}
-                                          </span>
-                                        )}
-                                      </span>
-                                      <span className="d-flex align-items-center gap-2">
-                                        {effectivelyChecked && (
-                                          <span className="small fw-semibold">
-                                            {peso(g.pricePerDay * rentalDays)}
-                                          </span>
-                                        )}
-                                        <button
-                                          type="button"
-                                          className="btn btn-sm btn-link text-danger p-0"
-                                          onClick={() => toggleGame(g.slug)}
-                                        >
-                                          Remove
-                                        </button>
-                                      </span>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                              {effectivelyChecked && (
-                                <div>
-                                  <hr />
-                                  <div className="d-flex justify-content-between small mb-2">
-                                    <span className="text-body-secondary">
-                                      Rental Subtotal
-                                    </span>
-                                    <span>{peso(subtotal)}</span>
-                                  </div>
-                                  {discount > 0 && (
-                                    <div className="d-flex justify-content-between small mb-2">
-                                      <span className="text-body-secondary">
-                                        Multi-Game Discount
-                                      </span>
-                                      <span>&minus;{peso(discount)}</span>
-                                    </div>
-                                  )}
-                                  <div className="d-flex justify-content-between small mb-3">
-                                    <span className="text-body-secondary">
-                                      Refundable Deposits
-                                    </span>
-                                    <span>{peso(depositTotal)}</span>
-                                  </div>
-                                  <hr />
-                                  <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <span className="fw-semibold">Amount to Pay</span>
-                                    <span className="fs-4 fw-bold">
-                                      {peso(grandTotal)}
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-                              {summaryStepError && (
-                                <div className="alert alert-danger small mb-3" role="alert">
-                                  {summaryStepError}
-                                </div>
-                              )}
-                              <div className="d-grid">
-                                <button
-                                  type="button"
-                                  className="btn btn-primary rounded-pill fw-semibold"
-                                  disabled={
-                                    isCheckingAvailability ||
-                                    (effectivelyChecked && hasUnavailableSelected)
-                                  }
-                                  onClick={handleSummaryNext}
-                                >
-                                  {effectivelyChecked ? (
-                                    "Next"
-                                  ) : isCheckingAvailability ? (
-                                    "Checking…"
-                                  ) : (
-                                    <>
-                                      <i className="bi bi-search me-2"></i>
-                                      Check Availability
-                                    </>
-                                  )}
-                                </button>
-                              </div>
-                            </div>
-                          )}
+                          {renderBookingSummaryBody("summaryEdit")}
                         </div>
                       )}
 
@@ -982,8 +1022,74 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                   </form>
                 </div>
               </div>
+
+              {/* Reserve space below the grid so the mobile bottom bar never
+                  overlaps the last row of game cards. */}
+              {currentStep === 1 && hasGames && (
+                <div className="d-lg-none" style={{ height: "6rem" }} aria-hidden="true"></div>
+              )}
             </div>
           </section>
+        )}
+
+        {/* Mobile Booking Bottom Bar (step 1 only) */}
+        {!submitted && currentStep === 1 && hasGames && (
+          <div className="fixed-bottom d-lg-none bg-body border-top shadow p-3 d-flex align-items-center justify-content-between">
+            <span>
+              <span className="fw-semibold">
+                {selectedGames.length}{" "}
+                {selectedGames.length === 1 ? "game" : "games"}
+              </span>
+              {effectivelyChecked && (
+                <span className="text-body-secondary">
+                  {" "}
+                  &middot; {peso(grandTotal)}
+                </span>
+              )}
+            </span>
+            <button
+              type="button"
+              className="btn btn-primary rounded-pill fw-semibold"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#mobileBookingOffcanvas"
+              aria-controls="mobileBookingOffcanvas"
+            >
+              View Booking
+              <i className="bi bi-chevron-up ms-2"></i>
+            </button>
+          </div>
+        )}
+
+        {/* Mobile Booking Offcanvas. Stays mounted (off-screen, closed) for
+            as long as games are selected rather than unmounting the instant
+            the user leaves step 1 — the "Next" button inside dismisses it
+            via handleSummaryNext, and letting Bootstrap's own hide
+            transition run against a still-attached node is what keeps the
+            offcanvas backdrop/body classes from getting stuck. */}
+        {!submitted && hasGames && (
+          <div
+            ref={offcanvasRef}
+            className="offcanvas offcanvas-bottom d-lg-none"
+            tabIndex={-1}
+            id="mobileBookingOffcanvas"
+            aria-labelledby="mobileBookingOffcanvasLabel"
+            style={{ "--bs-offcanvas-height": "85vh" }}
+          >
+            <div className="offcanvas-header">
+              <h2 className="offcanvas-title h5" id="mobileBookingOffcanvasLabel">
+                Your Booking
+              </h2>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="offcanvas-body">
+              {renderBookingSummaryBody("mobileSummaryEdit")}
+            </div>
+          </div>
         )}
 
         {/* Booking Confirmation State */}
