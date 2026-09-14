@@ -1,23 +1,16 @@
-# Current Feature: Improve AEO/GEO/AIO
+# Current Feature
 
 ## Goals
 
-- Add a visible, real FAQ accordion section to the homepage (5–7 Q&As grounded in actual pricing/policy rules), placed between "Rental Policies" and "Final CTA".
-- Emit `FAQPage` JSON-LD on `/`, generated from the exact same Q&A data used for the visible accordion (no drift).
-- Enrich the existing `localBusinessJsonLd` on `/` with `description`, `priceRange` (`"₱50–₱150"`), `areaServed` as `{ "@type": "City", "name": "Metro Manila" }`, and `paymentAccepted: "GCash"`.
-- Emit a `HowTo` JSON-LD node on `/` mirroring the existing 3-step "How It Works" copy verbatim.
-- Add `src/app/llms.txt/route.js` serving a short plain-text/Markdown summary of Unboxed at `/llms.txt`, absolute-URL'd via `NEXT_PUBLIC_SITE_URL`.
-- Confirm `robots.js` still allows all crawlers (including AI bots like GPTBot/ClaudeBot/PerplexityBot/Google-Extended) and add a comment documenting that this is intentional.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Spec: `context/features/improve-aeo-geo-aio-spec.md`.
-- Additive on top of `context/features/seo-homepage-games-page-spec.md` — that spec already covers metadata/OG/Twitter/sitemap/robots/`ItemList` JSON-LD on `/games`; don't redo it.
-- FAQ answers are short (1–3 sentences), self-contained, and use `h3` headers inside the accordion (same pattern as the existing `#policyAccordion`) — no new custom CSS.
-- Out of scope: any booking-flow/pricing/layout changes outside the new FAQ section, FAQ on `/games`, a dedicated `/faq` page, fake `Review`/`AggregateRating` data, AI-referrer analytics, and changes to `/games`'s existing `ItemList`/`Product` JSON-LD.
-- Acceptance includes: production build passes; dev-server check confirms `/llms.txt` responds with plain text and `/`'s rendered `<head>` includes the new `FAQPage`/`HowTo` JSON-LD blocks.
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Added AEO/GEO/AIO improvements per `context/features/improve-aeo-geo-aio-spec.md`: added a visible `Frequently Asked Questions` accordion to `src/app/page.jsx` (6 Q&As grounded in real pricing/policy rules, between "Rental Policies" and "Final CTA"), plus `FAQPage` JSON-LD generated from the same `faqs` array (no drift between visible copy and schema) and a `HowTo` JSON-LD node mirroring the existing 3-step "How It Works" copy verbatim. Enriched the existing `localBusinessJsonLd` with `description`, `priceRange` (`"₱50–₱150"`), `areaServed` upgraded to `{ "@type": "City", "name": "Metro Manila" }`, and `paymentAccepted: "GCash"`. Added `src/app/llms.txt/route.js`, a plain-text Route Handler summarizing the site (games list, booking/payment/delivery flow, links to `/` and `/games`) for AI agents, following the same `NEXT_PUBLIC_SITE_URL`-driven absolute-URL pattern as `sitemap.js`/`robots.js`. `robots.js` behavior is unchanged (still allows all crawlers) but now has a comment documenting that this is intentional for AI-crawler visibility. Purely additive: no booking-flow, pricing, or existing-section changes; `/games`'s existing `ItemList`/`Product` JSON-LD untouched. Verified: production build passes (`/llms.txt` shows up as a route); a read-only check against another session's already-running dev server confirmed `/llms.txt` serves plain text and `/`'s rendered `<head>` includes the new `FAQPage`/`HowTo` JSON-LD blocks alongside the enriched `LocalBusiness` node.
 
 - Added SEO metadata, JSON-LD, and sitemap/robots for `/` and `/games` per `context/features/seo-homepage-games-page-spec.md`: `src/app/layout.jsx` now sets `metadataBase` from a new `NEXT_PUBLIC_SITE_URL` env var (falls back to `http://localhost:3000`), a `title.template`/`default` (`%s — Unboxed`), and root `openGraph`/`twitter`/`alternates.canonical`/`robots`; `src/app/games/page.jsx` extends metadata with the same shape and games-specific copy. Reused `public/img/logo.png` as the OG/Twitter image. Added `src/components/JsonLd.jsx` (a plain server component rendering a `<script type="application/ld+json">` tag) — the homepage emits a `LocalBusiness` node, `/games` emits an `ItemList`/`Product` node built from the page's existing `getGames()` result, no new data fetching. Added `src/app/sitemap.js` and `src/app/robots.js`, both env-driven, serving `/sitemap.xml` and `/robots.txt`. Purely additive: no visible copy/layout/booking-flow changes, each page still has exactly one `<h1>`. Verified: production build passes; a dev-server check confirmed `/sitemap.xml`, `/robots.txt`, and the rendered `<head>`/JSON-LD `<script>` blocks on both pages. README/CLAUDE.md updated with the new env var.
 
