@@ -1,24 +1,16 @@
-# Current Feature: Home Add to Booking
+# Current Feature
 
 ## Goals
 
-- Featured game cards on the homepage link to `/games?add={slug}` instead of a plain `/games` link.
-- Landing on `/games?add={validSlug}` sets both rental dates to today, runs the availability check automatically, and adds that game to the booking selection — regardless of whether it's available.
-- If the game turns out unavailable for today, it stays selected but tagged `Unavailable`, and the existing `hasUnavailableSelected` check disables the Next button until the user changes dates or removes it.
-- Page auto-scrolls to the sticky booking summary (or game grid on mobile) so the result is visible without hunting.
-- An unrecognized `add` slug, or no `add` param, leaves `/games` behaving exactly as it does today.
+<!-- Goals for the active feature go here -->
 
 ## Notes
 
-- Spec: `context/features/home-add-to-booking-spec.md`.
-- Homepage (`src/app/page.jsx`) is a server component — just change the featured card's `Link href`.
-- `src/app/games/page.jsx` reads `add` from `searchParams` and passes it to `GamesPageClient` (e.g. `initialAddSlug`).
-- `GamesPageClient.jsx` already has `startDate`/`endDate`/`selectedSlugs`/`availabilityChecked` state and a `recheckWithDates(start, end)` helper — reuse it in a mount-only `useEffect` instead of duplicating availability-check logic.
-- Today's date must be computed the same way `validateDates` does (`new Date().toISOString().slice(0, 10)`).
-- Runs once per page load only; no special-casing after the initial pre-fill.
-- Out of scope: custom (non-today) dates via URL, auto-adding more than one game, changes to `GameCard`'s own toggle behavior on the games page.
+<!-- Additional context, constraints, or details from spec go here -->
 
 ## History
+
+- Added a homepage "Add to Booking" quick-add per `context/features/home-add-to-booking-spec.md`: each featured game card on the homepage now links to `/games?add={slug}` instead of a plain `/games` link. Landing on `/games` with a valid `add` slug pre-fills both rental dates to today, runs the existing `checkAvailability`/`recheckWithDates` flow automatically, and adds that game to `selectedSlugs` regardless of availability — an unavailable game stays selected but shows the `Unavailable` badge and blocks the Next button via the existing `hasUnavailableSelected` guard, reusing pre-existing logic rather than duplicating it. Also reordered the games page layout so the sticky "Your Booking" summary renders above the game grid on mobile (Bootstrap `order-first`/`order-lg-last` utilities, desktop untouched), and pointed the auto-add scroll at the top of that summary box, offset below the sticky navbar via a manual `getBoundingClientRect`/`scrollTo` calculation. An unrecognized `add` slug or no param leaves `/games` behaving exactly as before. Verified with Playwright against the real dev server and MongoDB (including a temporary test booking to confirm the unavailable-tag/disabled-Next path); production build passes.
 
 - Replaced the client-side fake booking submission with a real Server Action per `context/features/submit-booking-spec.md`: added `createBooking` in `src/app/actions/bookings.js` (`'use server'`), which validates games/dates/customer fields/GCash reference, rechecks availability against the same blocking statuses as `checkAvailability`, computes rental subtotal/10% multi-game discount/deposit total/grand total entirely server-side from DB records, generates a unique `BG-####` booking number, and persists a `Booking` with `status: "pending"`. `GamesPageClient.jsx`'s `handleBookingSubmit` now awaits `createBooking`, surfaces server validation errors through the existing `formError` UI, and renders the confirmation state from the server's response — no client-computed totals or random booking numbers remain. Verified directly against MongoDB (a standalone Node script with a `@/` alias loader, since the dev server already running on port 3000 belonged to another session): a successful booking persists with correct pricing math and is retrievable/cleanable via the `Booking` model; overlap, invalid-mobile, and past-start-date inputs each correctly return `{ success: false, error }` without writing anything. Production build passes. Email notification to `liandrejohn88@gmail.com` remains out of scope (drafted separately as `context/features/email-notification-spec.md`, pending Web3Forms setup).
 
