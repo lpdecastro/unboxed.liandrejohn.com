@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import GameCard from "@/components/games/GameCard";
 import GameDetailsModal from "@/components/games/GameDetailsModal";
 import AddressAutocomplete from "@/components/games/AddressAutocomplete";
@@ -1214,6 +1215,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       />
       <RentalPoliciesModal />
       <ToastContainer position="bottom-right" autoClose={3000} theme="light" />
+      <ScrollToTopButton raised={!submitted && currentStep === 1 && hasGames} />
     </>
   );
 }

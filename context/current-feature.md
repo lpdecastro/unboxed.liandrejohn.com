@@ -1,12 +1,19 @@
-# Current Feature
+# Current Feature: Scroll-to-Top and Auto-Hiding Navbar
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Navbar (`sticky-top`) hides on scroll-down past a small threshold and reappears immediately on scroll-up, on both `/` and `/games`; always visible at the very top of the page.
+- A fixed bottom-right scroll-to-top button (`bi-arrow-up`) appears past that same threshold and smooth-scrolls to top on click, on both pages.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/scroll-to-top-and-auto-hiding-navbar-spec.md`.
+- Hide the navbar via CSS `transform: translateY(-100%)` + transition, not `display`/`visibility` — `page.jsx` and `GamesPageClient.jsx` both read `document.getElementById("siteHeader"/"mainNav").offsetHeight` for scroll-offset math, and that must keep working while the header is translated off-screen.
+- `Navbar.jsx` becomes a client component (`"use client"`) to own the scroll listener; used identically from both a server component (`page.jsx`) and a client component (`GamesPageClient.jsx`).
+- Don't hide the navbar while the mobile `#mainNav` collapse menu is open.
+- Scroll-to-top button: new component (e.g. `src/components/ScrollToTopButton.jsx`), rendered once on each page. On `/games`, must not overlap the mobile `fixed-bottom` booking bar.
+- Small scoped custom CSS exceptions needed in `src/scss/main.scss` for the transform/transition and fixed positioning (no Bootstrap utility covers either) — follow the existing pattern of commented, scoped exceptions already in that file.
+- Out of scope: the mobile booking bottom bar/offcanvas, and any navbar content/link changes beyond show/hide.
 
 ## History
 

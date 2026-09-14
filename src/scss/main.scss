@@ -80,3 +80,46 @@ $bootstrap-icons-font-dir: "/fonts";
     margin: 1rem 0 0;
   }
 }
+
+// Bootstrap's sticky-top has no built-in hide-on-scroll-down behavior, so
+// the slide is a small transform transition layered on top of it (Navbar
+// toggles this modifier class based on scroll direction).
+.site-navbar {
+  transition: transform 0.25s ease-in-out;
+
+  &--hidden {
+    transform: translateY(-100%);
+  }
+}
+
+// Bootstrap has no "scroll to top" component. Fixed-position circular
+// button, faded/scaled in once the page has scrolled past the same
+// threshold Navbar uses to hide.
+.scroll-to-top-btn {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 1030;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out,
+    visibility 0.2s ease-in-out, bottom 0.2s ease-in-out;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  // Clears the games page's mobile fixed-bottom booking bar so the two
+  // never overlap.
+  @include media-breakpoint-down(lg) {
+    &--raised {
+      bottom: 6rem;
+    }
+  }
+}

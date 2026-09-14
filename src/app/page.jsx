@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { getGames } from "@/app/actions/games";
 
 const featuredSlugs = [
@@ -692,6 +693,7 @@ export default async function HomePage() {
 
       <Footer />
       <RentalPoliciesModal />
+      <ScrollToTopButton />
     </>
   );
 }
