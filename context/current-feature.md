@@ -1,12 +1,21 @@
-# Current Feature
+# Current Feature: Improve AEO/GEO/AIO
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Add a visible, real FAQ accordion section to the homepage (5–7 Q&As grounded in actual pricing/policy rules), placed between "Rental Policies" and "Final CTA".
+- Emit `FAQPage` JSON-LD on `/`, generated from the exact same Q&A data used for the visible accordion (no drift).
+- Enrich the existing `localBusinessJsonLd` on `/` with `description`, `priceRange` (`"₱50–₱150"`), `areaServed` as `{ "@type": "City", "name": "Metro Manila" }`, and `paymentAccepted: "GCash"`.
+- Emit a `HowTo` JSON-LD node on `/` mirroring the existing 3-step "How It Works" copy verbatim.
+- Add `src/app/llms.txt/route.js` serving a short plain-text/Markdown summary of Unboxed at `/llms.txt`, absolute-URL'd via `NEXT_PUBLIC_SITE_URL`.
+- Confirm `robots.js` still allows all crawlers (including AI bots like GPTBot/ClaudeBot/PerplexityBot/Google-Extended) and add a comment documenting that this is intentional.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/improve-aeo-geo-aio-spec.md`.
+- Additive on top of `context/features/seo-homepage-games-page-spec.md` — that spec already covers metadata/OG/Twitter/sitemap/robots/`ItemList` JSON-LD on `/games`; don't redo it.
+- FAQ answers are short (1–3 sentences), self-contained, and use `h3` headers inside the accordion (same pattern as the existing `#policyAccordion`) — no new custom CSS.
+- Out of scope: any booking-flow/pricing/layout changes outside the new FAQ section, FAQ on `/games`, a dedicated `/faq` page, fake `Review`/`AggregateRating` data, AI-referrer analytics, and changes to `/games`'s existing `ItemList`/`Product` JSON-LD.
+- Acceptance includes: production build passes; dev-server check confirms `/llms.txt` responds with plain text and `/`'s rendered `<head>` includes the new `FAQPage`/`HowTo` JSON-LD blocks.
 
 ## History
 

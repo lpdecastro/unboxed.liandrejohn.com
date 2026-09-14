@@ -13,9 +13,86 @@ const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "Unboxed",
-  areaServed: "Metro Manila",
+  description:
+    "Personal board game rental service in Metro Manila. Pay via GCash, delivery and returns via Lalamove.",
+  areaServed: { "@type": "City", name: "Metro Manila" },
+  priceRange: "₱50–₱150",
+  paymentAccepted: "GCash",
   url: siteUrl,
   image: `${siteUrl}/img/logo.png`,
+};
+
+const howToSteps = [
+  {
+    name: "Pick your games",
+    text: "Choose your preferred rental dates, then browse the collection and add the games you'd like to book.",
+  },
+  {
+    name: "Pay through GCash",
+    text: "Pay the rental total and refundable security deposit, then enter your GCash reference number.",
+  },
+  {
+    name: "Receive via Lalamove",
+    text: "Once the booking is verified and confirmed, delivery is coordinated through Lalamove.",
+  },
+];
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to rent a board game from Unboxed",
+  step: howToSteps.map((step, index) => ({
+    "@type": "HowToStep",
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+};
+
+const faqs = [
+  {
+    question: "How much does it cost to rent a board game in Metro Manila?",
+    answer:
+      "Rental prices range from ₱50 to ₱150 per day depending on the game, plus a refundable security deposit.",
+  },
+  {
+    question: "How do I pay for a rental?",
+    answer:
+      "Payment is through GCash only. The full rental fee and security deposit are paid before the booking is confirmed.",
+  },
+  {
+    question: "How are the games delivered and returned?",
+    answer:
+      "Delivery and returns are handled through Lalamove. The renter pays the Lalamove fees, and this service is available within Metro Manila only.",
+  },
+  {
+    question: "Can I rent more than one game at a time?",
+    answer:
+      "Yes. Booking 2 or more games gets you a 10% discount on the rental fees (the discount doesn't apply to security deposits).",
+  },
+  {
+    question: "Is the security deposit refundable?",
+    answer:
+      "Yes. The deposit is returned after the games are returned and inspected, minus any late fees, damage fees, or missing-item charges.",
+  },
+  {
+    question: "How far in advance do I need to book?",
+    answer:
+      "Bookings are confirmed manually after your GCash payment is verified, so it helps to book as early as you can. Availability depends on whether the games you want are already booked for those dates.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
 };
 
 const featuredSlugs = [
@@ -74,6 +151,8 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={localBusinessJsonLd} />
+      <JsonLd data={howToJsonLd} />
+      <JsonLd data={faqJsonLd} />
       <Navbar active="home" />
 
       <main className="flex-grow-1">
@@ -653,6 +732,50 @@ export default async function HomePage() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Frequently Asked Questions */}
+        <section className="py-5 py-lg-6" id="faq">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-7">
+                <p className="text-uppercase text-primary fw-semibold small ls-wide mb-2">
+                  Questions
+                </p>
+                <h2 className="fs-1 mb-3">Frequently Asked Questions</h2>
+              </div>
+            </div>
+
+            <div className="row mt-3">
+              <div className="col-lg-9">
+                <div className="accordion accordion-flush" id="faqAccordion">
+                  {faqs.map((faq, index) => (
+                    <div className="accordion-item" key={faq.question}>
+                      <h3 className="accordion-header">
+                        <button
+                          className="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target={`#faq${index}`}
+                        >
+                          {faq.question}
+                        </button>
+                      </h3>
+                      <div
+                        id={`faq${index}`}
+                        className="accordion-collapse collapse"
+                        data-bs-parent="#faqAccordion"
+                      >
+                        <div className="accordion-body text-body-secondary">
+                          {faq.answer}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
