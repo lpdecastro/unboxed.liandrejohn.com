@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
@@ -72,6 +74,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   const [activeModalSlug, setActiveModalSlug] = useState(null);
 
   const stickyRef = useRef(null);
+  const gridRef = useRef(null);
   const modalRef = useRef(null);
   const modalInstanceRef = useRef(null);
   const mobileInputRef = useRef(null);
@@ -143,11 +146,14 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     recheckWithDates(today, today).then(() => {
       if (cancelled || !stickyRef.current) return;
       const headerHeight = document.getElementById("siteHeader")?.offsetHeight ?? 0;
-      const top =
-        window.scrollY +
-        stickyRef.current.getBoundingClientRect().top -
-        headerHeight -
-        16;
+      // On mobile the booking box sits above the grid; on desktop they sit
+      // side by side in the same row. Anchor on whichever is closer to the
+      // top of the page so the other one can't end up scrolled past it and
+      // tucked under the sticky header.
+      const stickyTop = stickyRef.current.getBoundingClientRect().top;
+      const gridTop = gridRef.current?.getBoundingClientRect().top;
+      const anchorTop = gridTop == null ? stickyTop : Math.min(stickyTop, gridTop);
+      const top = window.scrollY + anchorTop - headerHeight - 16;
       window.scrollTo({ top, behavior: "smooth" });
     });
 
@@ -208,12 +214,22 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       : games;
 
   function toggleGame(slug) {
+    const isAdding = !selectedSlugs.has(slug);
     setSelectedSlugs((prev) => {
       const next = new Set(prev);
       if (next.has(slug)) next.delete(slug);
       else next.add(slug);
       return next;
     });
+    if (isAdding) {
+      const game = games.find((g) => g.slug === slug);
+      if (game) {
+        toast(`${game.name} added to your booking.`, {
+          toastId: slug,
+          icon: <i className="bi bi-check-circle text-success"></i>,
+        });
+      }
+    }
   }
 
   function openGameDetails(slug) {
@@ -490,7 +506,10 @@ export default function GamesPageClient({ games, initialAddSlug }) {
               <div className="row g-4">
                 {/* Game Filters + Grid */}
                 <div className={`col-lg-8${isBuildingBooking ? "" : " d-none"}`}>
-                  <div className="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4">
+                  <div
+                    ref={gridRef}
+                    className="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4"
+                  >
                     {visibleGames.map((game) => (
                       <GameCard
                         key={game.slug}
@@ -1092,6 +1111,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
         onToggle={() => activeModalSlug && toggleGame(activeModalSlug)}
       />
       <RentalPoliciesModal />
+      <ToastContainer position="bottom-right" autoClose={3000} theme="light" />
     </>
   );
 }

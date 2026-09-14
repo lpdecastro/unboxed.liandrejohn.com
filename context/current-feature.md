@@ -1,12 +1,21 @@
-# Current Feature
+# Current Feature: Add to Booking Toast
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Show a toast notification confirming a game was added to the booking, on both the games page grid (`GameCard`) and the game details modal (`GameDetailsModal`), using `react-toastify`.
+- Fire only on the add transition (not-selected → selected) inside `toggleGame` in `src/app/games/GamesPageClient.jsx` — not on remove, and not on the `?add={slug}` homepage quick-add pre-fill (that flow already auto-scrolls as its own confirmation).
+- Toast content: game name + short confirmation (e.g. "{Game Name} added to your booking."), with a `bi-check-circle` Bootstrap Icon.
+- Re-adding the same game while its toast is still visible updates/replaces it rather than stacking a duplicate (`toastId` per game slug).
+- Removing a game never shows a toast.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/add-to-booking-toast-spec.md`.
+- **Coding standards exception**: `context/coding-standards.md` mandates Bootstrap-only CSS; `react-toastify` (new dependency, own CSS) is a deliberate, scoped exception for this feature only — not a precedent for future UI work.
+- `npm install react-toastify`; render a single `<ToastContainer />` once in `GamesPageClient.jsx` (already `"use client"`); import `react-toastify/dist/ReactToastify.css` once (e.g. in `GamesPageClient.jsx` or `src/app/layout.js`) — no additional hand-written CSS beyond `ToastContainer`/`toast()` options.
+- `toggleGame(slug)` must check `prev.has(slug)` before mutating to know add vs. remove, and only call `toast(...)` on add; look up the game's name from the `games` prop.
+- No Bootstrap `Modal`-style ref/instance plumbing needed for this — `toast()` calls replace that pattern here.
+- Out of scope: toasts for remove/submit/availability/form-error actions, the `?add=` pre-fill's own toast, migrating other UI off Bootstrap onto `react-toastify`.
 
 ## History
 
