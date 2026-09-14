@@ -71,11 +71,10 @@ export default function Navbar({ active, id }) {
             <Image
               src="/img/logo.png"
               alt=""
-              width={42}
-              height={32}
+              width={180}
+              height={60}
               className="d-block"
             />
-            <span>Unboxed</span>
           </Link>
           <button
             className="navbar-toggler"

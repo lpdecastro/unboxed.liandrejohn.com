@@ -195,18 +195,15 @@ export default async function HomePage() {
                 </p>
               </div>
               <div className="col-lg-6">
-                <div className="position-relative">
-                  <div className="ratio ratio-4x3 rounded-4 shadow overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="https://images.unsplash.com/photo-1640461470346-c8b56497850a?auto=format&fit=crop&w=900&q=80"
-                      alt="Board game set up on a table for game night"
-                      className="object-fit-cover w-100 h-100"
-                    />
-                  </div>
-                  <span className="badge bg-accent text-dark rounded-pill fs-6 fw-semibold px-3 py-2 shadow position-absolute bottom-0 start-0 m-3">
-                    From &#8369;50/day
-                  </span>
+                <div className="ratio ratio-4x3 rounded-4 shadow overflow-hidden">
+                  <Image
+                    src="/img/hero.webp"
+                    alt="Board game set up on a table for game night"
+                    fill
+                    sizes="(min-width: 992px) 50vw, 100vw"
+                    priority
+                    className="object-fit-cover"
+                  />
                 </div>
               </div>
             </div>

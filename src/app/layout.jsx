@@ -15,6 +15,10 @@ export const metadata = {
     default: title,
   },
   description,
+  icons: {
+    icon: "/img/favicon.png",
+    apple: "/img/favicon.png",
+  },
   alternates: {
     canonical: "/",
   },
