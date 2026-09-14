@@ -7,6 +7,8 @@ local/
 # Dependencies
 node_modules/
 
-# Generated build output (run `npm run build` to regenerate)
-css/
-js/
+# Next.js build output
+.next/
+
+# Generated build output (run `npm run build`/`npm run dev` to regenerate)
+public/fonts/

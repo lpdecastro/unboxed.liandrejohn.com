@@ -33,6 +33,8 @@ I have 8 personal board games that I want to rent out to others. I want to build
 - [x] Content
 - [x] Setup Claude Code. Initialize Bootstrap and Sass project. Put all context in `local/`. Ask Claude to generate `README.md`. Init Claude using `/init`. Review `CLAUDE.md`. Setup Claude context and skills. From here, I can build out the static site using feature files. Then, I can ask Claude later to convert it into a Next.js project.
 - [x] Feature - Homepage Spec
+- [x] Feature - Game Listing Page Spec
+- [ ] Feature - Convert to Nextjs Spec
 
 
 ## Rental Model

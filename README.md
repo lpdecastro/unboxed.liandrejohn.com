@@ -4,24 +4,24 @@ A personal board game rental site for Metro Manila. Browse games, check availabi
 
 ## Status
 
-Early build. Currently a static HTML site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. No backend, database, or payment integration yet.
+Early build. A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. No backend, database, or payment integration yet.
 
-Planned pages:
+Pages:
 
-- **Home** — introduces Unboxed, highlights featured games, explains how renting works
-- **Games** — full game catalog, availability checker, booking summary, and checkout in one page
+- **Home** (`/`) — introduces Unboxed, highlights featured games, explains how renting works
+- **Games** (`/games`) — full game catalog, availability checker, booking summary, and checkout in one page
 
 ## Tech Stack
 
 Current:
 
-- HTML
+- [Next.js](https://nextjs.org/) (App Router, JavaScript)
+- [React](https://react.dev/)
 - [Bootstrap](https://getbootstrap.com/) + [Bootstrap Icons](https://icons.getbootstrap.com/)
 - [Sass](https://sass-lang.com/) (Dart Sass)
 
 Planned (later phases):
 
-- Next.js
 - MongoDB & Mongoose
 - Web3Forms
 - AWS Amplify
@@ -34,19 +34,20 @@ Install dependencies:
 npm install
 ```
 
-Build CSS/JS assets once:
+Start the dev server:
+
+```sh
+npm run dev
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
+Build and run a production build:
 
 ```sh
 npm run build
+npm start
 ```
-
-Rebuild Sass on save while developing:
-
-```sh
-npm run sass:watch
-```
-
-Then open `index.html` in a browser (or serve the folder with any static file server).
 
 ## Project Structure
 
@@ -59,20 +60,25 @@ Then open `index.html` in a browser (or serve the folder with any static file se
 │   ├── current-feature.md   # Active feature spec + completed feature history
 │   ├── contents/            # Page copy (Home, Game Listing)
 │   └── features/            # Per-feature specs
-├── src/scss/                # Sass source (main.scss imports Bootstrap + overrides in _variables.scss)
-├── css/                     # Compiled CSS (generated, gitignored)
-├── js/                      # Bootstrap's JS bundle (copied, gitignored)
-├── img/                     # Site images
-└── index.html               # Static pages
+├── src/
+│   ├── app/                 # Next.js App Router pages (home `/`, games `/games`)
+│   ├── components/          # Shared UI (Navbar, Footer, modals, game card)
+│   ├── data/                 # Game catalog data shared across pages
+│   ├── lib/                  # Small formatting helpers
+│   └── scss/                 # Sass source (main.scss imports Bootstrap + overrides in _variables.scss)
+├── public/
+│   ├── img/                  # Site images (committed)
+│   └── fonts/                # Bootstrap Icons fonts (generated, gitignored)
+└── next.config.mjs
 ```
 
-`css/` and `js/` are build output, not committed — run `npm run build` to regenerate them. A CI/CD pipeline will run this build step before deployment once it's set up.
+`public/fonts/` and `.next/` are build output, not committed — `npm run dev`/`npm run build` regenerate `public/fonts/` automatically, and Next.js regenerates `.next/`.
 
 ## npm Scripts
 
-| Script                | Description                                              |
-| ---------------------- | --------------------------------------------------------- |
-| `npm run build`        | Copies Bootstrap Icons fonts + JS bundle, compiles Sass    |
-| `npm run sass:watch`   | Recompiles CSS on file changes                             |
-| `npm run sass:build`   | Compiles Sass to `css/main.css` once                       |
-| `npm run assets`       | Re-syncs icon fonts and the JS bundle from `node_modules`  |
+| Script                 | Description                                                |
+| ---------------------- | ----------------------------------------------------------- |
+| `npm run dev`          | Starts the Next.js dev server (syncs icon fonts first)       |
+| `npm run build`        | Production build (syncs icon fonts first)                    |
+| `npm start`            | Serves the production build                                  |
+| `npm run assets:icons` | Re-syncs Bootstrap Icons fonts into `public/fonts/`           |

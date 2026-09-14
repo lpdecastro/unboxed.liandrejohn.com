@@ -1,6 +1,6 @@
 # Unboxed Board Game Rentals
 
-Unboxed — a personal board game rental site for Metro Manila (own 8 games, rent them out; GCash payment, Lalamove delivery/returns). Currently a static Bootstrap + Sass site, no backend yet. See `README.md` for tech stack and current status.
+Unboxed — a personal board game rental site for Metro Manila (own 8 games, rent them out; GCash payment, Lalamove delivery/returns). A Next.js (App Router) + Bootstrap/Sass site, no backend yet. See `README.md` for tech stack and current status.
 
 ## Context Files
 
@@ -15,16 +15,19 @@ Read the following to get the full context of the project:
 
 ```sh
 npm install          # install dependencies
-npm run build         # copy Bootstrap Icons fonts + JS bundle, compile Sass (one-off)
-npm run sass:watch    # recompile css/main.css on save while developing
-npm run sass:build    # compile Sass once, without touching copied assets
-npm run assets        # re-sync icon fonts + JS bundle from node_modules (after a Bootstrap/icon version bump)
+npm run dev           # start the Next.js dev server (also syncs Bootstrap Icons fonts first)
+npm run build          # production build (also syncs Bootstrap Icons fonts first)
+npm start              # serve the production build
+npm run assets:icons  # re-sync Bootstrap Icons fonts into public/fonts (after an icon version bump)
 ```
 
-There is no test suite, linter, or dev server script configured. Preview by opening `index.html` directly or serving the repo root with any static file server.
+There is no test suite or linter configured. `npm run dev` starts a local dev server (default `http://localhost:3000`).
 
 ## Architecture
 
-- **Sass entry point is `src/scss/main.scss`.** It imports `_variables.scss` (Bootstrap variable overrides) *before* `@import "bootstrap/scss/bootstrap"`, so Bootstrap picks up the overrides — new variable overrides must go in `_variables.scss`, not after the Bootstrap import. Bootstrap Icons is imported last, with `$bootstrap-icons-font-dir` set to `"fonts"` so compiled CSS finds the font files at `css/fonts/`.
-- **`css/` and `js/` are build output, not source** — both are gitignored (see `.gitignore`). `css/main.css` and `css/fonts/` come from the Sass build; `js/bootstrap.bundle.min.js` is copied verbatim from `node_modules/bootstrap/dist/js/`. Never hand-edit files in these directories — edit `src/scss/` instead and rerun `npm run build`. A future CI/CD pipeline is expected to run this build before deploy.
-- **Roadmap**: the plan calls for converting this static site to Next.js later, adding MongoDB/Mongoose for bookings, Web3Forms, and deploying via AWS Amplify. None of that exists yet — don't assume a framework or backend beyond plain HTML/Bootstrap/Sass unless it's actually present in the repo.
+- **Next.js App Router**, plain JavaScript (no TypeScript). Pages live under `src/app/`: `src/app/page.js` is the homepage (`/`), `src/app/games/page.js` + `src/app/games/GamesPageClient.jsx` is the game listing/booking page (`/games`). `src/app/layout.js` is the root layout (loads global Sass, Google Fonts links, and `BootstrapClient`).
+- **Shared UI lives in `src/components/`**: `Navbar`, `Footer`, `RentalPoliciesModal` are used on both pages; `games/GameCard` and `games/GameDetailsModal` are used on the game listing page. `BootstrapClient` is a client-only component that dynamically imports `bootstrap/dist/js/bootstrap.bundle.min.js` inside a `useEffect` (Bootstrap's JS touches `window`/`document` at import time, so it must never load during server rendering) — once loaded it self-wires every `data-bs-toggle`/`data-bs-dismiss` element (navbar collapse, accordions, modals). The one exception is the game details modal on `/games`, which is opened programmatically (`Modal` instance via a ref) because its content depends on React state.
+- **Game data lives in `src/data/games.js`** — a single array of the 8 games (matching the `Game` model in `context/project-overview.md`) shared between the homepage's featured games and the full listing page, plus a hardcoded `bookedRanges` map used to demo the "unavailable" state (no backend/database yet).
+- **Sass entry point is `src/scss/main.scss`**, imported once from `src/app/layout.js`. It imports `_variables.scss` (Bootstrap variable overrides) *before* `@import "bootstrap/scss/bootstrap"`, so Bootstrap picks up the overrides — new variable overrides must go in `_variables.scss`, not after the Bootstrap import. Bootstrap Icons is imported last, with `$bootstrap-icons-font-dir` set to `"/fonts"` (absolute, since Next serves `public/` at the site root) so compiled CSS finds the font files at `public/fonts/`. Next's built-in Sass support is configured in `next.config.mjs` (`sassOptions.includePaths` points at `node_modules` so `@import "bootstrap/scss/..."` resolves).
+- **`public/` holds static assets**: `public/img/` (site images, committed) and `public/fonts/` (Bootstrap Icons font files, gitignored — regenerated by `npm run assets:icons`, which runs automatically before `dev`/`build` via `predev`/`prebuild`). Never hand-edit `public/fonts/`. `.next/` (Next's build output) is also gitignored.
+- **Roadmap**: the plan calls for adding MongoDB/Mongoose for bookings, Web3Forms, and deploying via AWS Amplify. None of that exists yet — don't assume a database or backend beyond the Next.js app itself unless it's actually present in the repo.

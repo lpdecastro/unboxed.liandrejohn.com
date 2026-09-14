@@ -4,8 +4,9 @@
 // Bootstrap
 @import "bootstrap/scss/bootstrap";
 
-// Bootstrap Icons (fonts are copied to css/fonts via `npm run assets:icons`)
-$bootstrap-icons-font-dir: "fonts";
+// Bootstrap Icons (fonts are copied to public/fonts via `npm run assets:icons`,
+// run automatically before `next dev`/`next build`)
+$bootstrap-icons-font-dir: "/fonts";
 @import "bootstrap-icons/font/bootstrap-icons";
 
 // Bootstrap has no letter-spacing utility, so this is a small hand-written

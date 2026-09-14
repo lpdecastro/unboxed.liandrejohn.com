@@ -2,23 +2,24 @@
   "name": "unboxed.liandrejohn.com",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "assets:icons": "mkdir -p css/fonts && cp node_modules/bootstrap-icons/font/fonts/* css/fonts/",
-    "assets:js": "mkdir -p js && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js js/bootstrap.bundle.min.js",
-    "assets": "npm run assets:icons && npm run assets:js",
-    "sass:build": "sass --load-path=node_modules --quiet-deps --no-source-map --style=compressed src/scss/main.scss css/main.css",
-    "sass:watch": "sass --load-path=node_modules --quiet-deps --no-source-map --watch src/scss/main.scss css/main.css",
-    "build": "npm run assets && npm run sass:build"
+    "predev": "npm run assets:icons",
+    "dev": "next dev",
+    "prebuild": "npm run assets:icons",
+    "build": "next build",
+    "start": "next start",
+    "assets:icons": "mkdir -p public/fonts && cp node_modules/bootstrap-icons/font/fonts/* public/fonts/"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.3.8",
-    "bootstrap-icons": "^1.13.1"
-  },
-  "devDependencies": {
+    "bootstrap-icons": "^1.13.1",
+    "next": "^16.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "sass": "^1.104.0"
   }
 }
