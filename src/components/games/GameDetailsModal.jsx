@@ -30,7 +30,7 @@ const GameDetailsModal = forwardRef(function GameDetailsModal(
           </div>
           <div className="modal-body">
             {game?.imageSrc && (
-              <div className="ratio ratio-16x9 rounded-3 overflow-hidden mb-4 position-relative bg-dark-subtle">
+              <div className="ratio ratio-16x9 rounded-3 overflow-hidden mb-4 position-relative bg-body-tertiary">
                 <Image
                   src={game.imageSrc}
                   alt={game.imageAlt}

@@ -111,7 +111,7 @@ export default async function HomePage() {
 
   const renderFeaturedCard = (game) => (
     <div className="card border-0 shadow-sm">
-      <div className="ratio ratio-4x3 rounded-top-4 overflow-hidden position-relative bg-dark-subtle">
+      <div className="ratio ratio-4x3 rounded-top-4 overflow-hidden position-relative bg-body-tertiary">
         <Image
           src={game.imageSrc}
           alt={game.imageAlt}
