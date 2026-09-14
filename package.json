@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "type": "module",
   "scripts": {
     "predev": "npm run assets:icons",
     "dev": "next dev",
     "prebuild": "npm run assets:icons",
     "build": "next build",
     "start": "next start",
-    "assets:icons": "mkdir -p public/fonts && cp node_modules/bootstrap-icons/font/fonts/* public/fonts/"
+    "assets:icons": "mkdir -p public/fonts && cp node_modules/bootstrap-icons/font/fonts/* public/fonts/",
+    "seed": "node scripts/seed.mjs"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
   "dependencies": {
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+    "mongoose": "^9.10.0",
     "next": "^16.3.5",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

@@ -1,12 +1,20 @@
-# Current Feature
+# Current Feature: Setup Mongoose
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Set up Mongoose and MongoDB connectivity for the project (URI: `mongodb://localhost:27017/unboxed`).
+- Create a reusable `connectDB` utility.
+- Create Mongoose schemas/models for `Game` and `Booking` matching `context/project-overview.md` → `#data-model`.
+- Create accurate seed JSON for all 8 games and 2 realistic sample bookings under `context/local/mongodb/`, compatible with the schemas.
+- Update `README.md` with MongoDB setup/local usage instructions.
+- Update `CLAUDE.md` with the database structure and relevant development guidance.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Source spec: `context/features/setup-mongoose-spec.md`.
+- Data model source of truth: `context/project-overview.md` (`Game`, `Booking`, booking status values).
+- Acceptance criteria: app connects to local MongoDB; schemas/models match data model; seed JSON has all 8 games + 2 valid sample bookings; seed data imports without schema validation errors; project builds/runs without DB-related errors.
+- No backend/database exists yet in the repo — this is the first feature introducing MongoDB/Mongoose per the roadmap in `CLAUDE.md`.
 
 ## History
 

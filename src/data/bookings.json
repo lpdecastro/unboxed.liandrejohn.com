@@ -1,0 +1,44 @@
+[
+  {
+    "bookingNumber": "BG-1024",
+    "customer": {
+      "name": "Alex Rivera",
+      "mobile": "+639171234567",
+      "address": "12 Kalayaan St., Brgy. Pinagkaisahan, Makati City, Metro Manila"
+    },
+    "startDate": "2026-09-20",
+    "endDate": "2026-09-22",
+    "games": ["66aa00000000000000000002", "66aa00000000000000000005"],
+    "rentalSubtotal": 900,
+    "discountAmount": 90,
+    "depositTotal": 1000,
+    "grandTotal": 1810,
+    "gcashReferenceNumber": "1234567890123",
+    "status": "confirmed",
+    "damageFee": 0,
+    "depositReturned": 0,
+    "createdAt": "2026-09-18T10:15:00.000Z",
+    "updatedAt": "2026-09-18T14:30:00.000Z"
+  },
+  {
+    "bookingNumber": "BG-1031",
+    "customer": {
+      "name": "Maria Santos",
+      "mobile": "+639175558888",
+      "address": "45 Mabini corner Rizal St., Brgy. San Antonio, Pasig City, Metro Manila"
+    },
+    "startDate": "2026-10-05",
+    "endDate": "2026-10-07",
+    "games": ["66aa00000000000000000006"],
+    "rentalSubtotal": 450,
+    "discountAmount": 0,
+    "depositTotal": 500,
+    "grandTotal": 950,
+    "gcashReferenceNumber": "9988776655443",
+    "status": "pending",
+    "damageFee": 0,
+    "depositReturned": 0,
+    "createdAt": "2026-09-30T09:05:00.000Z",
+    "updatedAt": "2026-09-30T09:05:00.000Z"
+  }
+]

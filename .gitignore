@@ -1,6 +1,10 @@
 # Local Files
 local/
 
+# Environment variables
+.env*.local
+.env
+
 # MacOS Files
 .DS_Store
 

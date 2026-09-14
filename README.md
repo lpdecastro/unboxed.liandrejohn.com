@@ -4,7 +4,7 @@ A personal board game rental site for Metro Manila. Browse games, check availabi
 
 ## Status
 
-Early build. A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. No backend, database, or payment integration yet.
+Early build. A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. Mongoose/MongoDB connectivity and models are wired up; no booking API routes, auth, or payment integration yet.
 
 Pages:
 
@@ -19,10 +19,10 @@ Current:
 - [React](https://react.dev/)
 - [Bootstrap](https://getbootstrap.com/) + [Bootstrap Icons](https://icons.getbootstrap.com/)
 - [Sass](https://sass-lang.com/) (Dart Sass)
+- [MongoDB](https://www.mongodb.com/) & [Mongoose](https://mongoosejs.com/)
 
 Planned (later phases):
 
-- MongoDB & Mongoose
 - Web3Forms
 - AWS Amplify
 
@@ -49,6 +49,28 @@ npm run build
 npm start
 ```
 
+## MongoDB Setup
+
+The app expects a local MongoDB instance. Install it (e.g. `brew install mongodb-community`) and start it, or run it via Docker:
+
+```sh
+docker run -d -p 27017:27017 --name unboxed-mongo mongo
+```
+
+By default the app connects to `mongodb://localhost:27017/unboxed`. To point at a different URI, copy `.env.example` to `.env` and set `MONGODB_URI`:
+
+```sh
+cp .env.example .env
+```
+
+Seed the database with the 8 games and 2 sample bookings from `src/data/games.json` / `src/data/bookings.json`:
+
+```sh
+npm run seed
+```
+
+This drops and repopulates the `games` and `bookings` collections. `connectDB` (`src/lib/mongodb.js`) caches the connection across hot reloads, and `Game`/`Booking` models live in `src/models/`.
+
 ## Project Structure
 
 ```
@@ -60,11 +82,14 @@ npm start
 │   ├── current-feature.md   # Active feature spec + completed feature history
 │   ├── contents/            # Page copy (Home, Game Listing)
 │   └── features/            # Per-feature specs
+├── scripts/
+│   └── seed.mjs              # Seeds MongoDB from src/data/games.json + bookings.json
 ├── src/
 │   ├── app/                 # Next.js App Router pages (home `/`, games `/games`)
 │   ├── components/          # Shared UI (Navbar, Footer, modals, game card)
-│   ├── data/                 # Game catalog data shared across pages
-│   ├── lib/                  # Small formatting helpers
+│   ├── data/                 # Game catalog (games.js, used by the pages) + MongoDB seed JSON (games.json, bookings.json)
+│   ├── lib/                  # connectDB (MongoDB) + small formatting helpers
+│   ├── models/                # Mongoose models (Game, Booking)
 │   └── scss/                 # Sass source (main.scss imports Bootstrap + overrides in _variables.scss)
 ├── public/
 │   ├── img/                  # Site images (committed)
@@ -82,3 +107,4 @@ npm start
 | `npm run build`        | Production build (syncs icon fonts first)                    |
 | `npm start`            | Serves the production build                                  |
 | `npm run assets:icons` | Re-syncs Bootstrap Icons fonts into `public/fonts/`           |
+| `npm run seed`         | Seeds local MongoDB from `src/data/games.json` + `bookings.json` |
