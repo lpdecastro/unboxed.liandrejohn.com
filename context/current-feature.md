@@ -1,12 +1,25 @@
-# Current Feature
+# Current Feature: Google Analytics
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Wire up Google Analytics (GA4) page view tracking across the site using `@next/third-parties`'s `GoogleAnalytics` component.
+- Render `<GoogleAnalytics gaId={...} />` once in the root layout (`src/app/layout.jsx`) so it covers both `/` and `/games`.
+- Read the measurement ID from a new `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var; skip rendering entirely when unset (no script injected, no crash).
+- Document the new env var in `README.md` and `.env.example`.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Follows the same degrade-gracefully pattern as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in `AddressAutocomplete.jsx`.
+- Out of scope: custom event tracking, cookie consent banner/gating, other analytics providers, server-side/Measurement Protocol events.
+- Full spec: `context/features/google-analytics-spec.md`.
+- Acceptance criteria (spec):
+  - [ ] `@next/third-parties` added to `package.json` dependencies.
+  - [ ] `NEXT_PUBLIC_GA_MEASUREMENT_ID` added to `.env.example`.
+  - [ ] `GoogleAnalytics` renders once from `src/app/layout.jsx`, conditional on the env var being set.
+  - [ ] With the env var unset, no GA script is injected and the app builds/runs with no errors.
+  - [ ] With the env var set to a real GA4 measurement ID, navigating between `/` and `/games` fires page view events.
+  - [ ] `README.md` documents the new env var.
+  - [ ] Production build passes.
 
 ## History
 

@@ -1,7 +1,9 @@
 import "../scss/main.scss";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import BootstrapClient from "@/components/BootstrapClient";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const title = "Unboxed — Board Game Rentals in Metro Manila";
 const description =
   "Rent board games from a small personal collection in Metro Manila. Pick your dates, pay via GCash, and get games delivered and returned through Lalamove.";
@@ -56,6 +58,7 @@ export default function RootLayout({ children }) {
         {children}
         <BootstrapClient />
       </body>
+      {gaMeasurementId && <GoogleAnalytics gaId={gaMeasurementId} />}
     </html>
   );
 }

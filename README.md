@@ -91,6 +91,16 @@ NEXT_PUBLIC_SITE_URL=https://unboxed.example.com
 
 Without it, everything falls back to `http://localhost:3000` for local dev.
 
+## Google Analytics Setup (optional)
+
+Page view tracking (GA4) is wired up via `@next/third-parties`'s `GoogleAnalytics` component, rendered once from the root layout so it covers both `/` and `/games`. It's optional — without a measurement ID, no GA script is loaded and nothing breaks.
+
+To enable it, create a GA4 property and set its measurement ID in `.env`:
+
+```sh
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
 ## Project Structure
 
 ```
