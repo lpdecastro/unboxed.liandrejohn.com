@@ -4,7 +4,19 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import JsonLd from "@/components/JsonLd";
 import { getGames } from "@/app/actions/games";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Unboxed",
+  areaServed: "Metro Manila",
+  url: siteUrl,
+  image: `${siteUrl}/img/logo.png`,
+};
 
 const featuredSlugs = [
   "monopoly",
@@ -61,6 +73,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={localBusinessJsonLd} />
       <Navbar active="home" />
 
       <main className="flex-grow-1">

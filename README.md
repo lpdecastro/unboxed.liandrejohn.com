@@ -81,6 +81,16 @@ To enable it, create a browser API key in [Google Cloud Console](https://console
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-key-here
 ```
 
+## SEO Setup
+
+Metadata (Open Graph/Twitter cards, canonical URLs), the JSON-LD structured data, and `sitemap.xml`/`robots.txt` all resolve absolute URLs from `NEXT_PUBLIC_SITE_URL`. Set it in `.env` once a production domain exists (e.g. AWS Amplify):
+
+```sh
+NEXT_PUBLIC_SITE_URL=https://unboxed.example.com
+```
+
+Without it, everything falls back to `http://localhost:3000` for local dev.
+
 ## Project Structure
 
 ```

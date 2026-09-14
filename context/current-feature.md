@@ -1,12 +1,21 @@
-# Current Feature
+# Current Feature: SEO for Homepage & Games Page
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Add `NEXT_PUBLIC_SITE_URL` (`.env.example` + README/CLAUDE.md docs) and set `metadataBase` in `src/app/layout.jsx` from it (fallback `http://localhost:3000`).
+- Expand root layout metadata: `openGraph`, `twitter` (`summary_large_image`), `alternates.canonical: "/"`, explicit `robots: { index: true, follow: true }`, and `title.template`/`title.default` (e.g. `%s — Unboxed`).
+- Give `/games` its own extended metadata (`openGraph`/`twitter`/`alternates.canonical: "/games"`), copy specific to browsing/booking (Monopoly, Exploding Kittens, GCash, Lalamove, Metro Manila).
+- Reuse `public/img/logo.png` as the OG/Twitter image (absolute via `metadataBase`) — no new design asset.
+- Add `src/components/JsonLd.jsx` (server component) and emit `LocalBusiness` JSON-LD on `/`, `ItemList`/`Product` JSON-LD on `/games` from the existing `getGames()` result (no new data fetching).
+- Add `src/app/sitemap.js` and `src/app/robots.js`, both resolving via `NEXT_PUBLIC_SITE_URL`; verify `/sitemap.xml` and `/robots.txt` serve correctly in dev.
+- Confirm each page still has exactly one `<h1>`; no visible content/layout/booking-flow changes.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/seo-homepage-games-page-spec.md`.
+- Metadata/structured-data only — do not touch visible copy, layout, or booking behavior.
+- Out of scope: real 1200×630 OG image design, per-game `/games/[slug]` pages, analytics/Search Console/backlinks, Core Web Vitals/perf work, blog/content pages.
+- Acceptance includes: production build passes; a view-source/dev-server check confirms the rendered `<head>` contains the new OG/Twitter/canonical tags and JSON-LD `<script>` blocks on both `/` and `/games`.
 
 ## History
 
