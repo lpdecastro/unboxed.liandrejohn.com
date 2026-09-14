@@ -1,7 +1,5 @@
 # Complete Action
 
-**Important:** Do not add "Generated With Claude" in the commit message.
-
 1. Stage all changes and commit with a descriptive message.
 2. Switch to main and merge the feature branch (no push yet)
 3. Delete the local feature branch
