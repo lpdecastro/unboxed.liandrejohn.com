@@ -10,11 +10,24 @@ import { checkAvailability } from "@/app/actions/games";
 import { createBooking } from "@/app/actions/bookings";
 import { peso, formatDate } from "@/lib/format";
 
+const MAX_RENTAL_DAYS = 7;
+
+function addDaysISO(dateStr, days) {
+  const ms = new Date(dateStr).getTime() + days * 24 * 60 * 60 * 1000;
+  return new Date(ms).toISOString().slice(0, 10);
+}
+
 function validateDates(start, end) {
   const today = new Date().toISOString().slice(0, 10);
   const startInvalid = !start || start < today;
   const endInvalid = !end || end < start;
-  return { startInvalid, endInvalid };
+  const rangeInvalid =
+    !startInvalid &&
+    !endInvalid &&
+    Math.round((new Date(end) - new Date(start)) / (24 * 60 * 60 * 1000)) +
+      1 >
+      MAX_RENTAL_DAYS;
+  return { startInvalid, endInvalid, rangeInvalid };
 }
 
 export default function GamesPageClient({ games, initialAddSlug }) {
@@ -27,6 +40,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   const [dateFormErrors, setDateFormErrors] = useState({
     startInvalid: false,
     endInvalid: false,
+    rangeInvalid: false,
   });
   const [summaryDateError, setSummaryDateError] = useState(null);
 
@@ -147,8 +161,15 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     Boolean(startDate) &&
     Boolean(endDate) &&
     !validateDates(startDate, endDate).startInvalid &&
-    !validateDates(startDate, endDate).endInvalid;
+    !validateDates(startDate, endDate).endInvalid &&
+    !validateDates(startDate, endDate).rangeInvalid;
   const effectivelyChecked = availabilityChecked && datesAreValid;
+
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const minEndDate = startDate || todayISO;
+  const maxEndDate = startDate
+    ? addDaysISO(startDate, MAX_RENTAL_DAYS - 1)
+    : undefined;
 
   const rentalDays = effectivelyChecked
     ? Math.round(
@@ -203,8 +224,12 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   async function recheckWithDates(start, end) {
     const v = validateDates(start, end);
     setDateFormErrors(v);
-    if (v.startInvalid || v.endInvalid) {
-      setSummaryDateError("Please choose a valid rental date range.");
+    if (v.startInvalid || v.endInvalid || v.rangeInvalid) {
+      setSummaryDateError(
+        v.rangeInvalid
+          ? `Rentals are limited to ${MAX_RENTAL_DAYS} days.`
+          : "Please choose a valid rental date range."
+      );
       return;
     }
     setSummaryDateError(null);
@@ -231,7 +256,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     e.preventDefault();
     const v = validateDates(startDate, endDate);
     setDateFormErrors(v);
-    if (v.startInvalid || v.endInvalid) return;
+    if (v.startInvalid || v.endInvalid || v.rangeInvalid) return;
     setSummaryDateError(null);
     setIsCheckingAvailability(true);
     const result = await checkAvailability(startDate, endDate);
@@ -244,8 +269,12 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     if (!effectivelyChecked) {
       const v = validateDates(startDate, endDate);
       setDateFormErrors(v);
-      if (v.startInvalid || v.endInvalid) {
-        setSummaryDateError("Please choose a valid rental date range.");
+      if (v.startInvalid || v.endInvalid || v.rangeInvalid) {
+        setSummaryDateError(
+          v.rangeInvalid
+            ? `Rentals are limited to ${MAX_RENTAL_DAYS} days.`
+            : "Please choose a valid rental date range."
+        );
         return;
       }
       setSummaryDateError(null);
@@ -387,6 +416,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                       }`}
                       id="startDate"
                       required
+                      min={todayISO}
                       value={startDate}
                       onChange={handleStartDateChange}
                     />
@@ -396,22 +426,30 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                   </div>
                   <div className="col-sm-6 col-lg-3">
                     <label htmlFor="endDate" className="form-label fw-semibold">
-                      End Date
+                      End Date{" "}
+                      <span className="fw-normal text-body-secondary">
+                        (max {MAX_RENTAL_DAYS} days)
+                      </span>
                     </label>
                     <input
                       type="date"
                       className={`form-control${
-                        !dateFormErrors.startInvalid && dateFormErrors.endInvalid
+                        !dateFormErrors.startInvalid &&
+                        (dateFormErrors.endInvalid || dateFormErrors.rangeInvalid)
                           ? " is-invalid"
                           : ""
                       }`}
                       id="endDate"
                       required
+                      min={minEndDate}
+                      max={maxEndDate}
                       value={endDate}
                       onChange={handleEndDateChange}
                     />
                     <div className="invalid-feedback">
-                      End date must be on or after the start date.
+                      {dateFormErrors.rangeInvalid
+                        ? `Rentals are limited to ${MAX_RENTAL_DAYS} days — choose an end date within a week of the start date.`
+                        : "End date must be on or after the start date."}
                     </div>
                   </div>
                   <div className="col-sm-6 col-lg-3">
@@ -568,7 +606,12 @@ export default function GamesPageClient({ games, initialAddSlug }) {
 
                           {hasGames && (
                             <div>
-                              <p className="small fw-semibold mb-2">Rental Dates</p>
+                              <p className="small fw-semibold mb-2">
+                                Rental Dates{" "}
+                                <span className="fw-normal text-body-secondary">
+                                  (max {MAX_RENTAL_DAYS} days)
+                                </span>
+                              </p>
                               <div className="row g-2 mb-3">
                                 <div className="col-6">
                                   <label htmlFor="summaryEditStartDate" className="visually-hidden">
@@ -582,6 +625,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                                     id="summaryEditStartDate"
                                     aria-label="Start Date"
                                     required
+                                    min={todayISO}
                                     value={startDate}
                                     onChange={handleStartDateChange}
                                   />
@@ -601,6 +645,8 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                                     id="summaryEditEndDate"
                                     aria-label="End Date"
                                     required
+                                    min={minEndDate}
+                                    max={maxEndDate}
                                     value={endDate}
                                     onChange={handleEndDateChange}
                                   />

@@ -1,12 +1,16 @@
-# Current Feature
+# Current Feature: Max Rental Days
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Cap the games page rental date range at 7 days (inclusive) so customers can't book beyond a week, validated both client- and server-side.
+- `validateDates` in `GamesPageClient.jsx` gains a `rangeInvalid` check (end more than 6 days after start) wired into `datesAreValid`, `recheckWithDates`, `handleDateFormSubmit`, and `handleSummaryNext`, plus an `is-invalid`/`invalid-feedback` message on the end date input.
+- `createBooking` (`src/app/actions/bookings.js`) mirrors the same 7-day cap server-side, rejecting a >7-day range even if the client check is bypassed.
+- Existing date validations (past start date, end before start date) keep working unchanged; no change to pricing/discount math or the `Booking` schema.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/max-rental-days-spec.md`.
+- Out of scope: a configurable/admin-editable day cap; changes to minimum rental length; the `?add={slug}` auto-fill flow (always a 1-day range, unaffected).
 
 ## History
 

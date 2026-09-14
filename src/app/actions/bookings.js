@@ -16,6 +16,8 @@ const BLOCKING_STATUSES = [
 
 const MOBILE_REGEX = /^(09|\+639)\d{9}$/;
 
+const MAX_RENTAL_DAYS = 7;
+
 function todayISODate() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -57,6 +59,12 @@ export async function createBooking(input) {
     return {
       success: false,
       error: "End date must be on or after the start date.",
+    };
+  }
+  if (rentalDaysBetween(startDate, endDate) > MAX_RENTAL_DAYS) {
+    return {
+      success: false,
+      error: `Rentals are limited to a maximum of ${MAX_RENTAL_DAYS} days.`,
     };
   }
   if (!name || !name.trim()) {
