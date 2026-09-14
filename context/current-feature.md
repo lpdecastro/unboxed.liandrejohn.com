@@ -1,24 +1,16 @@
-# Current Feature: Submit Booking
+# Current Feature
 
 ## Goals
 
-- Replace the client-side fake booking submission on `/games` with a real Server Action that persists a `Booking` document in MongoDB.
-- Add `src/app/actions/bookings.js` (`'use server'`) exporting `createBooking(input)`.
-- Recheck game availability and compute all pricing (subtotal, 10% multi-game discount, deposit total, grand total) authoritatively server-side from DB records — never trust client-submitted totals.
-- Generate a unique `BG-####` booking number server-side and save the `Booking` with `status: "pending"`.
-- Wire `GamesPageClient.jsx`'s `handleBookingSubmit` to call `createBooking` instead of the `setTimeout`/`Math.random()` fake, surfacing server validation errors via the existing `formError` UI and rendering the confirmation state from the server's response.
+<!-- Goals for the active feature go here -->
 
 ## Notes
 
-- Spec: `context/features/submit-booking-spec.md`.
-- Current fake logic lives in `src/app/games/GamesPageClient.jsx:259-304`.
-- Validation rules to reuse (server-authoritative): ≥1 game selected; `startDate` not in the past and `endDate >= startDate`; full name, PH mobile (`^(09|\+639)\d{9}$` after stripping spaces/dashes), and complete address present; GCash reference number present; all selected games still available for the requested dates.
-- Reuse the overlap logic from `checkAvailability` in `src/app/actions/games.js` against `confirmed`/`out-for-delivery`/`rented`/`return-pending` statuses.
-- No `Booking` schema changes needed — all required fields already exist on the model.
-- Out of scope: email notification (Web3Forms not set up yet), GCash verification, SMS, status changes past `pending`, admin dashboard, idempotency keys beyond the existing `isSubmitting` guard.
-- Acceptance criteria include: production build passes, and a booking submitted via the running dev server actually appears in MongoDB.
+<!-- Additional context, constraints, or details from spec go here -->
 
 ## History
+
+- Replaced the client-side fake booking submission with a real Server Action per `context/features/submit-booking-spec.md`: added `createBooking` in `src/app/actions/bookings.js` (`'use server'`), which validates games/dates/customer fields/GCash reference, rechecks availability against the same blocking statuses as `checkAvailability`, computes rental subtotal/10% multi-game discount/deposit total/grand total entirely server-side from DB records, generates a unique `BG-####` booking number, and persists a `Booking` with `status: "pending"`. `GamesPageClient.jsx`'s `handleBookingSubmit` now awaits `createBooking`, surfaces server validation errors through the existing `formError` UI, and renders the confirmation state from the server's response — no client-computed totals or random booking numbers remain. Verified directly against MongoDB (a standalone Node script with a `@/` alias loader, since the dev server already running on port 3000 belonged to another session): a successful booking persists with correct pricing math and is retrievable/cleanable via the `Booking` model; overlap, invalid-mobile, and past-start-date inputs each correctly return `{ success: false, error }` without writing anything. Production build passes. Email notification to `liandrejohn88@gmail.com` remains out of scope (drafted separately as `context/features/email-notification-spec.md`, pending Web3Forms setup).
 
 - Replaced the static `src/data/games.js` catalog with MongoDB reads per `context/features/games-db-integration-spec.md`: extended the `Game` model and `src/data/games.json` seed data with `shortDescription`, `howToPlay`, `icon`, `placeholderBg`, `age`; added `src/app/actions/games.js` (`'use server'`) with `getGames()` and `checkAvailability(startDate, endDate)` (overlap-checks `Booking` against `confirmed`/`out-for-delivery`/`rented`/`return-pending`, `pending` doesn't block); converted `src/app/page.jsx` and `src/app/games/page.jsx` to async server components calling `getGames()`; `GamesPageClient` now takes `games` as a prop and calls `checkAvailability` on **Check Availability** instead of the old hardcoded `bookedRanges` map. Deleted `src/data/games.js`. Verified: `npm run seed` runs clean against the extended schema, production build passes, and `/` and `/games` render real DB content (including placeholder-art games and their icons) via a `next dev` smoke test; availability logic double-checked directly against the seeded bookings (confirmed booking blocks, pending booking doesn't). README/CLAUDE.md updated to describe the new data flow. Booking submission is still a client-side fake — a separate future spec.
 - Built the homepage per `context/features/homepage-spec.md`: Navbar, Hero, Featured Games, How It Works, Why Rent From Unboxed, Pricing/Rental Highlights, Rental Policies Preview, Final CTA, and Footer, with theme variable overrides for a fun, trustworthy, board-game-friendly look. Responsive on desktop and mobile.
