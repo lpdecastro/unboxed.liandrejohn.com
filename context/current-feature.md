@@ -1,12 +1,20 @@
-# Current Feature
+# Current Feature: Analytics Event Tracking
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Add a `trackEvent` helper (`src/lib/analytics.js`) wrapping `sendGAEvent` from `@next/third-parties/google`, safe to call whether or not `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set.
+- Track link/CTA clicks across the navbar, footer, and homepage (`cta_click`, `mobile_menu_toggle`, `open_rental_policies`, `policy_preview_expand`, `faq_expand`, `homepage_quick_add_click`).
+- Track game discovery and the full booking funnel in `GamesPageClient.jsx`: filters, view details, quick-add from URL, check availability, add/remove game, mobile summary open, booking summary next, GCash step next, submit attempt, and success/error outcomes.
+- Purely additive: no visible UI/behavior change to any interaction.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Full spec: `context/features/analytics-event-tracking-spec.md`.
+- Builds on GA4 page-view tracking already wired up in `context/features/google-analytics-spec.md` (root layout, gated on `NEXT_PUBLIC_GA_MEASUREMENT_ID`).
+- `Navbar.jsx` and `GamesPageClient.jsx` are already `"use client"` — add `trackEvent` calls directly into their existing handlers.
+- `Footer.jsx`, `RentalPoliciesModal.jsx`, and `src/app/page.jsx` are server components — use two new small client wrappers (`src/components/analytics/TrackedLink.jsx`, `TrackedElement.jsx`) only where a click needs tracking, instead of converting those files to client components.
+- Out of scope: server-side/Measurement Protocol events, GA4 Enhanced Ecommerce schema, cookie consent gating, GA4 auto-collected events (scroll depth, outbound clicks), other analytics providers, GA4 property-side config (conversions/funnel reports).
+- Event names are `snake_case`, flat primitive params, no GA-reserved prefixes.
 
 ## History
 

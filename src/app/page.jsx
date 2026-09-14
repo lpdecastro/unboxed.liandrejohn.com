@@ -1,10 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RentalPoliciesModal from "@/components/RentalPoliciesModal";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import JsonLd from "@/components/JsonLd";
+import TrackedLink from "@/components/analytics/TrackedLink";
+import TrackedElement from "@/components/analytics/TrackedElement";
 import { getGames } from "@/app/actions/games";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -138,12 +139,14 @@ export default async function HomePage() {
             {game.playTime}
           </li>
         </ul>
-        <Link
+        <TrackedLink
           href={`/games?add=${game.slug}`}
           className="btn btn-primary rounded-pill mt-auto"
+          eventName="homepage_quick_add_click"
+          eventParams={{ game_slug: game.slug, game_name: game.name }}
         >
           <i className="bi bi-plus-circle me-2"></i>Add to Booking
-        </Link>
+        </TrackedLink>
       </div>
     </div>
   );
@@ -175,12 +178,14 @@ export default async function HomePage() {
                   delivered through Lalamove.
                 </p>
                 <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
-                  <Link
+                  <TrackedLink
                     href="/games"
                     className="btn btn-primary btn-lg fw-semibold rounded-pill px-4"
+                    eventName="cta_click"
+                    eventParams={{ label: "Browse Games", location: "hero" }}
                   >
                     Browse Games
-                  </Link>
+                  </TrackedLink>
                 </div>
                 <p className="small text-body-secondary mb-0">
                   Rentals from &#8369;50/day{" "}
@@ -295,12 +300,17 @@ export default async function HomePage() {
             </div>
 
             <div className="text-center mt-5">
-              <Link
+              <TrackedLink
                 href="/games"
                 className="btn btn-outline-primary rounded-pill px-4"
+                eventName="cta_click"
+                eventParams={{
+                  label: "View All 8 Games",
+                  location: "homepage_featured",
+                }}
               >
                 View All 8 Games
-              </Link>
+              </TrackedLink>
               <p className="small text-body-secondary mt-3 mb-0">
                 Also available: Game of Life, Piles, RC Plane, and
                 Jackstones.
@@ -396,12 +406,17 @@ export default async function HomePage() {
                     Check which games are free for your dates and start your
                     booking in minutes.
                   </p>
-                  <Link
+                  <TrackedLink
                     href="/games"
                     className="btn btn-primary fw-semibold rounded-pill px-4"
+                    eventName="cta_click"
+                    eventParams={{
+                      label: "Check Game Availability",
+                      location: "homepage_how_it_works",
+                    }}
                   >
                     Check Game Availability
-                  </Link>
+                  </TrackedLink>
                 </div>
               </div>
             </div>
@@ -558,12 +573,17 @@ export default async function HomePage() {
               20&ndash;22 is a 3-day rental.
             </p>
             <div className="text-center">
-              <Link
+              <TrackedLink
                 href="/games"
                 className="btn btn-outline-primary rounded-pill px-4"
+                eventName="cta_click"
+                eventParams={{
+                  label: "Check Prices & Availability",
+                  location: "homepage_pricing",
+                }}
               >
                 Check Prices &amp; Availability
-              </Link>
+              </TrackedLink>
             </div>
           </div>
         </section>
@@ -581,28 +601,33 @@ export default async function HomePage() {
                   I want the process to be straightforward for both of us.
                   Here are the main things to know before booking.
                 </p>
-                <a
+                <TrackedElement
+                  as="a"
                   href="#rentalPoliciesModal"
                   data-bs-toggle="modal"
                   className="link-primary fw-semibold"
+                  eventName="open_rental_policies"
+                  eventParams={{ location: "homepage" }}
                 >
                   View Full Rental Policies{" "}
                   <i className="bi bi-arrow-up-right ms-1"></i>
-                </a>
+                </TrackedElement>
               </div>
               <div className="col-lg-7">
                 <div className="accordion accordion-flush" id="policyAccordion">
                   <div className="accordion-item">
                     <h3 className="accordion-header">
-                      <button
+                      <TrackedElement
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#policy1"
+                        eventName="policy_preview_expand"
+                        eventParams={{ policy_id: "policy1" }}
                       >
                         <i className="bi bi-credit-card me-2"></i>Payment
                         &amp; confirmation
-                      </button>
+                      </TrackedElement>
                     </h3>
                     <div
                       id="policy1"
@@ -618,14 +643,16 @@ export default async function HomePage() {
                   </div>
                   <div className="accordion-item">
                     <h3 className="accordion-header">
-                      <button
+                      <TrackedElement
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#policy2"
+                        eventName="policy_preview_expand"
+                        eventParams={{ policy_id: "policy2" }}
                       >
                         <i className="bi bi-x-circle me-2"></i>Cancellations
-                      </button>
+                      </TrackedElement>
                     </h3>
                     <div
                       id="policy2"
@@ -641,15 +668,17 @@ export default async function HomePage() {
                   </div>
                   <div className="accordion-item">
                     <h3 className="accordion-header">
-                      <button
+                      <TrackedElement
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#policy3"
+                        eventName="policy_preview_expand"
+                        eventParams={{ policy_id: "policy3" }}
                       >
                         <i className="bi bi-shield-check me-2"></i>Security
                         deposit
-                      </button>
+                      </TrackedElement>
                     </h3>
                     <div
                       id="policy3"
@@ -664,15 +693,17 @@ export default async function HomePage() {
                   </div>
                   <div className="accordion-item">
                     <h3 className="accordion-header">
-                      <button
+                      <TrackedElement
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#policy4"
+                        eventName="policy_preview_expand"
+                        eventParams={{ policy_id: "policy4" }}
                       >
                         <i className="bi bi-clock-history me-2"></i>Late
                         returns
-                      </button>
+                      </TrackedElement>
                     </h3>
                     <div
                       id="policy4"
@@ -687,15 +718,17 @@ export default async function HomePage() {
                   </div>
                   <div className="accordion-item">
                     <h3 className="accordion-header">
-                      <button
+                      <TrackedElement
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#policy5"
+                        eventName="policy_preview_expand"
+                        eventParams={{ policy_id: "policy5" }}
                       >
                         <i className="bi bi-tools me-2"></i>Damage or
                         missing pieces
-                      </button>
+                      </TrackedElement>
                     </h3>
                     <div
                       id="policy5"
@@ -710,15 +743,17 @@ export default async function HomePage() {
                   </div>
                   <div className="accordion-item">
                     <h3 className="accordion-header">
-                      <button
+                      <TrackedElement
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#policy6"
+                        eventName="policy_preview_expand"
+                        eventParams={{ policy_id: "policy6" }}
                       >
                         <i className="bi bi-truck me-2"></i>Delivery &amp;
                         return
-                      </button>
+                      </TrackedElement>
                     </h3>
                     <div
                       id="policy6"
@@ -756,14 +791,16 @@ export default async function HomePage() {
                   {faqs.map((faq, index) => (
                     <div className="accordion-item" key={faq.question}>
                       <h3 className="accordion-header">
-                        <button
+                        <TrackedElement
                           className="accordion-button collapsed"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target={`#faq${index}`}
+                          eventName="faq_expand"
+                          eventParams={{ faq_id: `faq${index}` }}
                         >
                           {faq.question}
-                        </button>
+                        </TrackedElement>
                       </h3>
                       <div
                         id={`faq${index}`}
@@ -808,12 +845,17 @@ export default async function HomePage() {
                     Pick your dates and I&rsquo;ll show you which games are
                     available.
                   </p>
-                  <Link
+                  <TrackedLink
                     href="/games"
                     className="btn btn-primary btn-lg rounded-pill w-100 mb-4"
+                    eventName="cta_click"
+                    eventParams={{
+                      label: "Check Game Availability",
+                      location: "homepage_final_cta",
+                    }}
                   >
                     Check Game Availability
-                  </Link>
+                  </TrackedLink>
                   <hr />
                   <ul className="list-unstyled small text-body-secondary mb-0">
                     <li className="mb-2">Metro Manila only</li>

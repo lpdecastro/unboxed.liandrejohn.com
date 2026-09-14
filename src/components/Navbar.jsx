@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 
 // Ignore scroll jitter (rubber-banding, tiny nudges) near the top before
 // deciding to hide the navbar. Kept in sync with ScrollToTopButton's own
@@ -41,9 +42,11 @@ export default function Navbar({ active, id }) {
     function handleShow() {
       collapseOpenRef.current = true;
       setHidden(false);
+      trackEvent("mobile_menu_toggle", { state: "open" });
     }
     function handleHidden() {
       collapseOpenRef.current = false;
+      trackEvent("mobile_menu_toggle", { state: "close" });
     }
 
     collapseEl.addEventListener("show.bs.collapse", handleShow);
@@ -92,6 +95,9 @@ export default function Navbar({ active, id }) {
                   className={`nav-link${active === "home" ? " active" : ""}`}
                   aria-current={active === "home" ? "page" : undefined}
                   href="/"
+                  onClick={() =>
+                    trackEvent("cta_click", { label: "Home", location: "navbar" })
+                  }
                 >
                   Home
                 </Link>
@@ -100,6 +106,12 @@ export default function Navbar({ active, id }) {
                 <Link
                   className="nav-link"
                   href={active === "home" ? "#how-it-works" : "/#how-it-works"}
+                  onClick={() =>
+                    trackEvent("cta_click", {
+                      label: "How It Works",
+                      location: "navbar",
+                    })
+                  }
                 >
                   How It Works
                 </Link>
@@ -111,6 +123,12 @@ export default function Navbar({ active, id }) {
                   }`}
                   aria-current={active === "games" ? "page" : undefined}
                   href="/games"
+                  onClick={() =>
+                    trackEvent("cta_click", {
+                      label: "Browse Games",
+                      location: "navbar",
+                    })
+                  }
                 >
                   Browse Games
                 </Link>

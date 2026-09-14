@@ -13,12 +13,19 @@ import AddressAutocomplete from "@/components/games/AddressAutocomplete";
 import { checkAvailability } from "@/app/actions/games";
 import { createBooking } from "@/app/actions/bookings";
 import { peso, formatDate } from "@/lib/format";
+import { trackEvent } from "@/lib/analytics";
 
 const MAX_RENTAL_DAYS = 7;
 
 function addDaysISO(dateStr, days) {
   const ms = new Date(dateStr).getTime() + days * 24 * 60 * 60 * 1000;
   return new Date(ms).toISOString().slice(0, 10);
+}
+
+function inclusiveDays(start, end) {
+  return (
+    Math.round((new Date(end) - new Date(start)) / (24 * 60 * 60 * 1000)) + 1
+  );
 }
 
 function validateDates(start, end) {
@@ -153,6 +160,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       toastId: game.slug,
       icon: <i className="bi bi-check-circle text-success"></i>,
     });
+    trackEvent("quick_add_from_url", { game_slug: game.slug });
 
     let cancelled = false;
     recheckWithDates(today, today).then(() => {
@@ -233,20 +241,35 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       else next.add(slug);
       return next;
     });
+    const game = games.find((g) => g.slug === slug);
     if (isAdding) {
-      const game = games.find((g) => g.slug === slug);
       if (game) {
         toast(`${game.name} added to your booking.`, {
           toastId: slug,
           icon: <i className="bi bi-check-circle text-success"></i>,
         });
       }
+      trackEvent("add_to_booking", {
+        game_slug: slug,
+        game_name: game?.name,
+        price_per_day: game?.pricePerDay,
+      });
+    } else {
+      trackEvent("remove_from_booking", {
+        game_slug: slug,
+        game_name: game?.name,
+      });
     }
   }
 
   function openGameDetails(slug) {
     setActiveModalSlug(slug);
     modalInstanceRef.current?.show();
+    const game = games.find((g) => g.slug === slug);
+    trackEvent("view_game_details", {
+      game_slug: slug,
+      game_name: game?.name,
+    });
   }
 
   async function recheckWithDates(start, end) {
@@ -266,6 +289,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     setAvailabilityMap(result);
     setAvailabilityChecked(true);
     setIsCheckingAvailability(false);
+    trackEvent("check_availability", {
+      start_date: start,
+      end_date: end,
+      rental_days: inclusiveDays(start, end),
+    });
   }
 
   function handleStartDateChange(e) {
@@ -291,6 +319,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     setAvailabilityMap(result);
     setAvailabilityChecked(true);
     setIsCheckingAvailability(false);
+    trackEvent("check_availability", {
+      start_date: startDate,
+      end_date: endDate,
+      rental_days: inclusiveDays(startDate, endDate),
+    });
   }
 
   async function handleSummaryNext() {
@@ -311,6 +344,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       setAvailabilityMap(result);
       setAvailabilityChecked(true);
       setIsCheckingAvailability(false);
+      trackEvent("check_availability", {
+        start_date: startDate,
+        end_date: endDate,
+        rental_days: inclusiveDays(startDate, endDate),
+      });
       return;
     }
 
@@ -340,6 +378,10 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     if (offcanvasRef.current) {
       bootstrapRef.current?.Offcanvas.getInstance(offcanvasRef.current)?.hide();
     }
+    trackEvent("booking_summary_next", {
+      num_games: selectedGames.length,
+      grand_total: grandTotal,
+    });
     setCurrentStep(2);
     // The user tapped Next from inside the offcanvas, which could be
     // anywhere down the game grid — scroll back up to the "Pay with GCash"
@@ -365,6 +407,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     }
     setGcashInvalid(false);
     setGcashError(null);
+    trackEvent("gcash_step_next", { grand_total: grandTotal });
     setCurrentStep(3);
   }
 
@@ -404,6 +447,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
 
     setFormError(null);
     setIsSubmitting(true);
+    trackEvent("submit_booking_attempt", {
+      num_games: selectedSlugs.size,
+      rental_days: rentalDays,
+      grand_total: grandTotal,
+    });
 
     const result = await createBooking({
       slugs: Array.from(selectedSlugs),
@@ -418,10 +466,17 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     });
 
     if (!result.success) {
+      trackEvent("booking_error", { error_message: result.error });
       setFormError(result.error);
       setIsSubmitting(false);
       return;
     }
+
+    trackEvent("booking_success", {
+      booking_number: result.bookingNumber,
+      grand_total: grandTotal,
+      num_games: selectedGames.length,
+    });
 
     setSubmitted({
       bookingNumber: result.bookingNumber,
@@ -698,7 +753,10 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                       className="form-select"
                       id="gameFilterSelect"
                       value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
+                      onChange={(e) => {
+                        setFilter(e.target.value);
+                        trackEvent("apply_filter", { filter: e.target.value });
+                      }}
                     >
                       <option value="all">All Games</option>
                       <option value="available" disabled={!effectivelyChecked}>
@@ -997,6 +1055,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                               href="#rentalPoliciesModal"
                               data-bs-toggle="modal"
                               className="link-primary fw-semibold"
+                              onClick={() =>
+                                trackEvent("open_rental_policies", {
+                                  location: "games_page",
+                                })
+                              }
                             >
                               rental policies
                             </a>
@@ -1058,6 +1121,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
               data-bs-toggle="offcanvas"
               data-bs-target="#mobileBookingOffcanvas"
               aria-controls="mobileBookingOffcanvas"
+              onClick={() => trackEvent("mobile_booking_summary_open")}
             >
               View Booking
               <i className="bi bi-chevron-up ms-2"></i>
@@ -1199,7 +1263,16 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                   >
                     Back to Games
                   </button>
-                  <a href="/" className="btn btn-outline-primary rounded-pill px-4">
+                  <a
+                    href="/"
+                    className="btn btn-outline-primary rounded-pill px-4"
+                    onClick={() =>
+                      trackEvent("cta_click", {
+                        label: "Back to Home",
+                        location: "booking_confirmation",
+                      })
+                    }
+                  >
                     Back to Home
                   </a>
                 </div>

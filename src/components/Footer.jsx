@@ -1,4 +1,6 @@
 import Link from "next/link";
+import TrackedLink from "@/components/analytics/TrackedLink";
+import TrackedElement from "@/components/analytics/TrackedElement";
 
 export default function Footer() {
   return (
@@ -25,29 +27,36 @@ export default function Footer() {
             <h3 className="h6 fw-semibold mb-3">Explore</h3>
             <ul className="list-unstyled small">
               <li className="mb-2">
-                <Link
+                <TrackedLink
                   href="/"
                   className="link-secondary link-underline-opacity-0"
+                  eventName="cta_click"
+                  eventParams={{ label: "Home", location: "footer" }}
                 >
                   Home
-                </Link>
+                </TrackedLink>
               </li>
               <li className="mb-2">
-                <Link
+                <TrackedLink
                   href="/games"
                   className="link-secondary link-underline-opacity-0"
+                  eventName="cta_click"
+                  eventParams={{ label: "Browse Games", location: "footer" }}
                 >
                   Browse Games
-                </Link>
+                </TrackedLink>
               </li>
               <li className="mb-2">
-                <a
+                <TrackedElement
+                  as="a"
                   href="#rentalPoliciesModal"
                   data-bs-toggle="modal"
                   className="link-secondary link-underline-opacity-0"
+                  eventName="open_rental_policies"
+                  eventParams={{ location: "footer" }}
                 >
                   Rental Policies
-                </a>
+                </TrackedElement>
               </li>
             </ul>
           </div>
