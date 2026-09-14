@@ -32,7 +32,7 @@ export default function Footer() {
               <li className="mb-2">
                 <TrackedLink
                   href="/"
-                  className="link-secondary link-underline-opacity-0"
+                  className="link-secondary link-underline-opacity-0 text-body-secondary"
                   eventName="cta_click"
                   eventParams={{ label: "Home", location: "footer" }}
                 >
@@ -42,7 +42,7 @@ export default function Footer() {
               <li className="mb-2">
                 <TrackedLink
                   href="/games"
-                  className="link-secondary link-underline-opacity-0"
+                  className="link-secondary link-underline-opacity-0 text-body-secondary"
                   eventName="cta_click"
                   eventParams={{ label: "Browse Games", location: "footer" }}
                 >
@@ -54,7 +54,7 @@ export default function Footer() {
                   as="a"
                   href="#rentalPoliciesModal"
                   data-bs-toggle="modal"
-                  className="link-secondary link-underline-opacity-0"
+                  className="link-secondary link-underline-opacity-0 text-body-secondary"
                   eventName="open_rental_policies"
                   eventParams={{ location: "footer" }}
                 >
@@ -87,7 +87,7 @@ export default function Footer() {
                   href="https://www.facebook.com/lpdecastro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="link-secondary link-underline-opacity-0 d-inline-flex align-items-center gap-2"
+                  className="link-secondary link-underline-opacity-0 d-inline-flex align-items-center gap-2 text-body-secondary"
                   eventName="cta_click"
                   eventParams={{ label: "Facebook", location: "footer" }}
                 >

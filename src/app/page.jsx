@@ -828,7 +828,7 @@ export default async function HomePage() {
                   Find the games that fit your dates.
                 </h2>
                 <p
-                  className="lead text-white-50 mb-0"
+                  className="lead text-opacity-75 mb-0"
                   style={{ maxWidth: "40rem" }}
                 >
                   Choose your rental dates, see what&rsquo;s available, and
