@@ -45,9 +45,9 @@
 @import "bootstrap/scss/modal";
 // @import "bootstrap/scss/tooltip"; // unused
 // @import "bootstrap/scss/popover"; // unused
-@import "bootstrap/scss/carousel";
+// @import "bootstrap/scss/carousel"; // moved to deferred.scss (never above the fold, non-blocking load — see LCP feature notes)
 // @import "bootstrap/scss/spinners"; // unused: no loading spinners
-@import "bootstrap/scss/offcanvas";
+// @import "bootstrap/scss/offcanvas"; // moved to deferred.scss (mounts after user interaction, non-blocking load)
 // @import "bootstrap/scss/placeholders"; // unused: no placeholder/skeleton loading state
 
 // Helpers
@@ -57,7 +57,10 @@
 @import "bootstrap/scss/utilities/api";
 
 // Bootstrap Icons (fonts are copied to public/fonts via `npm run assets:icons`,
-// run automatically before `next dev`/`next build`)
+// run automatically before `next dev`/`next build`). Kept here (blocking),
+// not in deferred.scss: /games renders icons above the fold on initial load
+// (the empty-booking-summary cart icon and the "Check Availability" button's
+// search icon), so deferring the font would show a visible icon flash there.
 $bootstrap-icons-font-dir: "/fonts";
 @import "bootstrap-icons/font/bootstrap-icons";
 
@@ -114,21 +117,8 @@ $bootstrap-icons-font-dir: "/fonts";
   cursor: pointer;
 }
 
-// Bootstrap's carousel indicators are absolutely positioned over the bottom
-// of the slide, which assumes a full-bleed image — the Featured Games mobile
-// carousel wraps a white card instead, so indicators are moved into normal
-// flow below the slide (would otherwise cover the card's "Add to Booking"
-// button) and recolored via Bootstrap's own CSS variables since the default
-// white dots wash out against the section's light background.
-.featured-games-carousel {
-  --bs-carousel-indicator-bg: var(--bs-primary);
-  --bs-carousel-indicator-active-bg: var(--bs-primary);
-
-  .carousel-indicators {
-    position: static;
-    margin: 1rem 0 0;
-  }
-}
+// .featured-games-carousel styling moved to deferred.scss, alongside the
+// carousel component partial it depends on.
 
 // Bootstrap's sticky-top has no built-in hide-on-scroll-down behavior, so
 // the slide is a small transform transition layered on top of it (Navbar

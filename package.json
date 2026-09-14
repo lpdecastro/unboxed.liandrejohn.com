@@ -5,12 +5,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "npm run assets:icons",
+    "predev": "npm run assets:icons && npm run assets:css:deferred",
     "dev": "next dev",
-    "prebuild": "npm run assets:icons",
+    "prebuild": "npm run assets:icons && npm run assets:css:deferred",
     "build": "next build",
     "start": "next start",
     "assets:icons": "mkdir -p public/fonts && cp node_modules/bootstrap-icons/font/fonts/* public/fonts/",
+    "assets:css:deferred": "mkdir -p public/css && sass src/scss/deferred.scss public/css/deferred.css --style=compressed --load-path=node_modules --quiet-deps --no-source-map",
     "seed": "node --env-file-if-exists=.env scripts/seed.mjs"
   },
   "keywords": [],

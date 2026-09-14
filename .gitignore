@@ -16,3 +16,4 @@ node_modules/
 
 # Generated build output (run `npm run build`/`npm run dev` to regenerate)
 public/fonts/
+public/css/

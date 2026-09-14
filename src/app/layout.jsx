@@ -1,7 +1,8 @@
 import { Inter, Poppins } from "next/font/google";
 import "../scss/main.scss";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import BootstrapClient from "@/components/BootstrapClient";
+import DeferredStylesheet from "@/components/DeferredStylesheet";
+import DeferredGoogleAnalytics from "@/components/analytics/DeferredGoogleAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,8 +65,9 @@ export default function RootLayout({ children }) {
       <body className="d-flex flex-column min-vh-100">
         {children}
         <BootstrapClient />
+        <DeferredStylesheet href="/css/deferred.css" />
       </body>
-      {gaMeasurementId && <GoogleAnalytics gaId={gaMeasurementId} />}
+      {gaMeasurementId && <DeferredGoogleAnalytics gaId={gaMeasurementId} />}
     </html>
   );
 }

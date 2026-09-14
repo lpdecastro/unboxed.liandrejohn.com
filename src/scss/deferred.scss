@@ -1,0 +1,48 @@
+// Non-critical CSS, compiled separately from main.scss and loaded
+// non-blocking (see src/components/DeferredStylesheet.jsx) so it never
+// delays first paint / LCP. Everything here is provably not needed for the
+// initial viewport on either page:
+//   - carousel: only the homepage's mobile Featured Games carousel, itself
+//     below the hero.
+//   - offcanvas: the mobile booking summary, whose markup isn't even mounted
+//     in the DOM until a game is selected (see GamesPageClient.jsx's
+//     `hasGames` guard) — always well after first paint.
+// Bootstrap Icons stays in main.scss (blocking), NOT here: /games renders
+// icons above the fold on initial load (empty-summary cart icon, "Check
+// Availability" button's search icon), so deferring the font would cause a
+// visible icon flash there.
+// `modal` stays in main.scss on purpose: Bootstrap's base `.modal` rule sets
+// `display: none`, so a modal's (currently off-DOM-position) markup would
+// render inline and visible without it — not a safe thing to defer sight
+// unseen without a live browser to confirm no flash.
+//
+// Needs its own copy of the config partials (functions/variables/mixins/
+// maps/utilities) since this is a separate Sass entry point compiled to its
+// own CSS file, not part of main.scss's build.
+
+@import "variables";
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+
+@import "bootstrap/scss/carousel";
+@import "bootstrap/scss/offcanvas";
+
+// Moved from main.scss: only applies inside the (deferred) carousel markup.
+// Bootstrap's carousel indicators default to absolute positioning meant for
+// full-bleed images, which would have covered each card's "Add to Booking"
+// button — moved to static flow below the slide and recolored via
+// Bootstrap's own CSS variables since the default white dots wash out
+// against the section's light background.
+.featured-games-carousel {
+  --bs-carousel-indicator-bg: var(--bs-primary);
+  --bs-carousel-indicator-active-bg: var(--bs-primary);
+
+  .carousel-indicators {
+    position: static;
+    margin: 1rem 0 0;
+  }
+}
