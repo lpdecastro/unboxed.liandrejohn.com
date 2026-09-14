@@ -134,9 +134,17 @@ export async function createBooking(input) {
 
   const bookingNumber = await generateBookingNumber();
 
+  const customerRecord = {
+    name: name.trim(),
+    mobile: normalizedMobile,
+    address: address.trim(),
+  };
+  const trimmedGcashReference = gcashReferenceNumber.trim();
+  const gamesText = games.map((g) => g.name).join(", ");
+
   await Booking.create({
     bookingNumber,
-    customer: { name: name.trim(), mobile: normalizedMobile, address: address.trim() },
+    customer: customerRecord,
     startDate: start,
     endDate: end,
     games: games.map((g) => g._id),
@@ -144,19 +152,19 @@ export async function createBooking(input) {
     discountAmount,
     depositTotal,
     grandTotal,
-    gcashReferenceNumber: gcashReferenceNumber.trim(),
+    gcashReferenceNumber: trimmedGcashReference,
     status: "pending",
   });
 
   return {
     success: true,
     bookingNumber,
-    gamesText: games.map((g) => g.name).join(", "),
+    gamesText,
     datesText: `${formatDate(startDate)} – ${formatDate(endDate)} (${rentalDays}${
       rentalDays === 1 ? " day" : " days"
     })`,
     rentalDays,
     amountText: peso(grandTotal),
-    addressText: address.trim(),
+    addressText: customerRecord.address,
   };
 }

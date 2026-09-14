@@ -14,6 +14,7 @@ import { checkAvailability } from "@/app/actions/games";
 import { createBooking } from "@/app/actions/bookings";
 import { peso, formatDate } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
+import { sendBookingNotificationEmail } from "@/lib/notifications";
 
 const MAX_RENTAL_DAYS = 7;
 
@@ -486,6 +487,17 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       addressText: result.addressText,
     });
     setIsSubmitting(false);
+
+    sendBookingNotificationEmail({
+      bookingNumber: result.bookingNumber,
+      customerName: customerName.trim(),
+      customerMobile,
+      customerAddress: result.addressText,
+      gamesText: result.gamesText,
+      datesText: result.datesText,
+      amountText: result.amountText,
+      gcashReferenceNumber: gcashReference.trim(),
+    });
   }
 
   const activeGame = games.find((g) => g.slug === activeModalSlug) ?? null;

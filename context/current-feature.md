@@ -1,12 +1,29 @@
-# Current Feature
+# Current Feature: Email Notification on Booking
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Send an email to `liandrejohn88@gmail.com` via Web3Forms whenever a booking is created, so the admin knows to verify GCash payment without polling the database.
+- `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` is read from env and documented in `.env.example`.
+- A new booking triggers a POST to Web3Forms containing booking number, customer name, mobile, address, games, dates, rental days, grand total, and GCash reference number.
+- The email send happens only after the `Booking` document is successfully saved.
+- A Web3Forms failure (bad key, network error, non-2xx response) is caught and logged, and does not affect the booking's success response to the client.
+- Production build passes; a booking submitted through the running dev server results in an email arriving at `liandrejohn88@gmail.com`.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/email-notification-spec.md`. **Deviated from spec** — see below.
+- Dependency: `createBooking` in `src/app/actions/bookings.js` (per `context/features/submit-booking-spec.md`) already exists and persists the `Booking` document — this feature hooks into its success path.
+- **Spec called for calling Web3Forms from inside the `createBooking` Server Action (server-to-server). That does not work**: Web3Forms' free plan hard-blocks non-browser calls — confirmed via `curl` returning `{"success":false,"message":"This method is not allowed. Use our API in client side or contact support with server IP address (Pro plan is required)"}` (403), and via their own docs (`docs.web3forms.com/getting-started/troubleshooting`): server-side calls need a **paid plan** + the server's IP added to their Safelist by their support team. No header (`Origin`, `Referer`, `User-Agent`) works around it.
+- Fixed by moving the call to the browser instead: `src/lib/notifications.js` exports `sendBookingNotificationEmail(...)`, called from `GamesPageClient.jsx`'s `handleBookingSubmit` right after `createBooking` succeeds and `setSubmitted(...)` runs (not awaited — fire-and-forget so it can't delay the confirmation UI).
+- Env var is therefore `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` (not `WEB3FORMS_ACCESS_KEY`) since it must ship in the client bundle — this matches Web3Forms' own intended usage (keys are meant to be embedded in client-side HTML forms; abuse is guarded by their own domain/Origin allowlist and Cloudflare bot protection, not by keeping the key secret).
+- POST JSON to `https://api.web3forms.com/submit`, no new dependency, plain `fetch`.
+  - `access_key`: `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`
+  - `subject`: e.g. `New Booking BG-1024 - Pending Verification`
+  - `from_name`: `Unboxed`
+  - Body fields: booking number, customer name, mobile, delivery address, game names, rental dates (already formatted, includes day count), grand total, GCash reference number — all already available client-side (form state + `createBooking`'s return value), no extra server round-trip needed.
+- Free Web3Forms plan doesn't support a per-request `to` override — delivery inbox is whatever the access key's account is registered with (`liandrejohn88@gmail.com`).
+- Treat email delivery as best-effort: wrapped in `try/catch`, `console.error` on failure, never touches the booking success response (booking is already persisted server-side before this fires).
+- Out of scope: SMS to customer, any email to the customer, retry/delivery-status tracking, emails for status transitions other than creation.
 
 ## History
 
