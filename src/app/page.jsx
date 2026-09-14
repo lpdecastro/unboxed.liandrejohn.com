@@ -18,6 +18,46 @@ export default async function HomePage() {
     games.find((game) => game.slug === slug)
   );
 
+  const renderFeaturedCard = (game) => (
+    <div className="card border-0 shadow-sm">
+      <div className="ratio ratio-1x1 rounded-top-4 overflow-hidden position-relative">
+        <Image
+          src={game.imageSrc}
+          alt={game.imageAlt}
+          fill
+          sizes="(min-width: 992px) 25vw, (min-width: 576px) 50vw, 100vw"
+          className="object-fit-cover"
+        />
+      </div>
+      <div className="card-body d-flex flex-column h-100 p-4">
+        <h3 className="h4 card-title mb-2">{game.name}</h3>
+        <p className="text-body-secondary card-desc-clamp mb-3">
+          {game.shortDescription}
+        </p>
+        <p className="mb-2">
+          <span className="fs-4 fw-bold">&#8369;{game.pricePerDay}</span>
+          <span className="text-body-secondary">/day</span>
+        </p>
+        <ul className="list-unstyled small text-body-secondary mb-4">
+          <li className="mb-1">
+            <i className="bi bi-people me-2"></i>
+            {game.players}
+          </li>
+          <li>
+            <i className="bi bi-clock me-2"></i>
+            {game.playTime}
+          </li>
+        </ul>
+        <Link
+          href={`/games?add=${game.slug}`}
+          className="btn btn-primary rounded-pill mt-auto"
+        >
+          <i className="bi bi-plus-circle me-2"></i>Add to Booking
+        </Link>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Navbar active="home" />
@@ -92,49 +132,71 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 mt-3">
+            {/* Mobile: swipeable carousel, one game per slide */}
+            <div className="d-sm-none mt-3">
+              <div
+                id="featuredGamesCarousel"
+                className="carousel slide carousel-dark featured-games-carousel"
+              >
+                <div className="position-relative">
+                  <div className="carousel-inner">
+                    {featuredGames.map((game, index) => (
+                      <div
+                        className={`carousel-item${
+                          index === 0 ? " active" : ""
+                        }`}
+                        key={game.slug}
+                      >
+                        <div className="px-5">{renderFeaturedCard(game)}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#featuredGamesCarousel"
+                    data-bs-slide="prev"
+                  >
+                    <span
+                      className="carousel-control-prev-icon"
+                      aria-hidden="true"
+                    ></span>
+                    <span className="visually-hidden">Previous</span>
+                  </button>
+                  <button
+                    className="carousel-control-next"
+                    type="button"
+                    data-bs-target="#featuredGamesCarousel"
+                    data-bs-slide="next"
+                  >
+                    <span
+                      className="carousel-control-next-icon"
+                      aria-hidden="true"
+                    ></span>
+                    <span className="visually-hidden">Next</span>
+                  </button>
+                </div>
+                <div className="carousel-indicators">
+                  {featuredGames.map((game, index) => (
+                    <button
+                      key={game.slug}
+                      type="button"
+                      data-bs-target="#featuredGamesCarousel"
+                      data-bs-slide-to={index}
+                      className={index === 0 ? "active" : ""}
+                      aria-current={index === 0 ? "true" : undefined}
+                      aria-label={`Show ${game.name}`}
+                    ></button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tablet and up: grid, unchanged */}
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 mt-3 d-none d-sm-flex">
               {featuredGames.map((game) => (
                 <div className="col" key={game.slug}>
-                  <div className="card border-0 shadow-sm">
-                    <div className="ratio ratio-1x1 rounded-top-4 overflow-hidden position-relative">
-                      <Image
-                        src={game.imageSrc}
-                        alt={game.imageAlt}
-                        fill
-                        sizes="(min-width: 992px) 25vw, (min-width: 576px) 50vw, 100vw"
-                        className="object-fit-cover"
-                      />
-                    </div>
-                    <div className="card-body d-flex flex-column h-100 p-4">
-                      <h3 className="h4 card-title mb-2">{game.name}</h3>
-                      <p className="text-body-secondary card-desc-clamp mb-3">
-                        {game.shortDescription}
-                      </p>
-                      <p className="mb-2">
-                        <span className="fs-4 fw-bold">
-                          &#8369;{game.pricePerDay}
-                        </span>
-                        <span className="text-body-secondary">/day</span>
-                      </p>
-                      <ul className="list-unstyled small text-body-secondary mb-4">
-                        <li className="mb-1">
-                          <i className="bi bi-people me-2"></i>
-                          {game.players}
-                        </li>
-                        <li>
-                          <i className="bi bi-clock me-2"></i>
-                          {game.playTime}
-                        </li>
-                      </ul>
-                      <Link
-                        href={`/games?add=${game.slug}`}
-                        className="btn btn-primary rounded-pill mt-auto"
-                      >
-                        <i className="bi bi-plus-circle me-2"></i>Add to
-                        Booking
-                      </Link>
-                    </div>
-                  </div>
+                  {renderFeaturedCard(game)}
                 </div>
               ))}
             </div>

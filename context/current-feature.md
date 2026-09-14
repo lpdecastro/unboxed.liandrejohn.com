@@ -1,12 +1,18 @@
-# Current Feature
+# Current Feature: Featured Games Mobile Carousel
 
 ## Goals
 
-<!-- Goals for the active feature go here -->
+- Below 576px, show the homepage Featured Games section as a swipeable Bootstrap carousel (one game per slide, prev/next controls, indicators, no autoplay).
+- At `sm` and up, keep today's `row row-cols-1 row-cols-sm-2 row-cols-lg-4` grid exactly as-is, gated to not also render on mobile.
+- Both layouts render the same 4 featured games with identical card content from a single shared render helper, so they can't drift apart.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec go here -->
+- Spec: `context/features/featured-games-mobile-carousel-spec.md`.
+- Scope is only the `id="games"` Featured Games section in `src/app/page.jsx` — the `/games` listing grid (`GameCard.jsx`) is untouched.
+- Bootstrap's carousel JS is already loaded globally via `BootstrapClient`, so no new client JS is needed beyond markup.
+- Use a fixed/`h-100` wrapper inside each `carousel-item` so slide height doesn't jump between games with different description lengths (reuse `card-desc-clamp`).
+- Bootstrap components/classes only per coding standards — no custom carousel CSS beyond the existing scoped exceptions.
 
 ## History
 

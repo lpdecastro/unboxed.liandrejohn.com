@@ -64,3 +64,19 @@ $bootstrap-icons-font-dir: "/fonts";
 .view-details-trigger {
   cursor: pointer;
 }
+
+// Bootstrap's carousel indicators are absolutely positioned over the bottom
+// of the slide, which assumes a full-bleed image — the Featured Games mobile
+// carousel wraps a white card instead, so indicators are moved into normal
+// flow below the slide (would otherwise cover the card's "Add to Booking"
+// button) and recolored via Bootstrap's own CSS variables since the default
+// white dots wash out against the section's light background.
+.featured-games-carousel {
+  --bs-carousel-indicator-bg: var(--bs-primary);
+  --bs-carousel-indicator-active-bg: var(--bs-primary);
+
+  .carousel-indicators {
+    position: static;
+    margin: 1rem 0 0;
+  }
+}
