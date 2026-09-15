@@ -1071,7 +1071,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                           </div>
                           <div className="mb-3">
                             <label htmlFor="customerName" className="form-label fw-semibold">
-                              Full Name
+                              Name
                             </label>
                             <input
                               type="text"

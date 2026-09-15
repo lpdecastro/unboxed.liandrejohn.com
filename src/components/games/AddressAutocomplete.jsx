@@ -111,6 +111,29 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
         elementRef.current = element;
         containerRef.current.appendChild(element);
 
+        // Focusing the field is what activates the Google widget and its
+        // suggestions dropdown. On mobile the on-screen keyboard can leave
+        // little room below the field for that dropdown, so scroll the
+        // field up to just under the sticky navbar first — same header-
+        // offset math GamesPageClient.jsx uses elsewhere for scrollTo.
+        // `focusin` (unlike `focus`) bubbles and crosses the element's
+        // shadow DOM boundary, matching the `focusout` listener below.
+        element.addEventListener("focusin", () => {
+          window.requestAnimationFrame(() => {
+            if (!containerRef.current) return;
+            const headerHeight =
+              document.getElementById("siteHeader")?.offsetHeight ?? 0;
+            const targetTop = headerHeight + 16;
+            const currentTop = containerRef.current.getBoundingClientRect().top;
+            if (Math.abs(currentTop - targetTop) > 8) {
+              window.scrollTo({
+                top: window.scrollY + currentTop - targetTop,
+                behavior: "smooth",
+              });
+            }
+          });
+        });
+
         // Manual typing without picking a suggestion: sync on blur, same as
         // the plain-input fallback below. If the text no longer matches the
         // last confirmed selection, we can't know whether it's in Metro
