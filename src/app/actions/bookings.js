@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import Game from "@/models/Game";
 import Booking from "@/models/Booking";
 import { peso, formatDate } from "@/lib/format";
+import { sendBookingNotificationEmail } from "@/lib/notifications";
 
 // Bookings in these statuses hold a game unavailable for its dates.
 // `pending` bookings don't block availability until manually confirmed.
@@ -141,6 +142,10 @@ export async function createBooking(input) {
   };
   const trimmedGcashReference = gcashReferenceNumber.trim();
   const gamesText = games.map((g) => g.name).join(", ");
+  const datesText = `${formatDate(startDate)} – ${formatDate(endDate)} (${rentalDays}${
+    rentalDays === 1 ? " day" : " days"
+  })`;
+  const amountText = peso(grandTotal);
 
   await Booking.create({
     bookingNumber,
@@ -156,15 +161,28 @@ export async function createBooking(input) {
     status: "pending",
   });
 
+  try {
+    await sendBookingNotificationEmail({
+      bookingNumber,
+      customerName: customerRecord.name,
+      customerMobile: customerRecord.mobile,
+      customerAddress: customerRecord.address,
+      gamesText,
+      datesText,
+      amountText,
+      gcashReferenceNumber: trimmedGcashReference,
+    });
+  } catch (error) {
+    console.error("Booking notification email failed:", error);
+  }
+
   return {
     success: true,
     bookingNumber,
     gamesText,
-    datesText: `${formatDate(startDate)} – ${formatDate(endDate)} (${rentalDays}${
-      rentalDays === 1 ? " day" : " days"
-    })`,
+    datesText,
     rentalDays,
-    amountText: peso(grandTotal),
+    amountText,
     addressText: customerRecord.address,
   };
 }

@@ -1,12 +1,27 @@
-# Current Feature
+# Current Feature: Reliable Booking Notification
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Send the admin booking-notification email server-side via Resend from inside `createBooking`, instead of the current fire-and-forget client-side Web3Forms call.
+- Guarantee the booking write itself never depends on the email send succeeding.
+- Remove the now-unused client-side Web3Forms notification path entirely.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Background: `src/lib/notifications.js`'s `sendBookingNotificationEmail` currently POSTs to Web3Forms from the browser, fired (not awaited) from `GamesPageClient.jsx`'s `handleBookingSubmit`. Failures only `console.error` — invisible to customer and admin. Built this way originally because Web3Forms' free plan 403s server-to-server calls. Confirmed real failure: a booking saved to MongoDB but the admin email never arrived.
+- Requirements:
+  - Add `resend` package dependency.
+  - Add server-only `RESEND_API_KEY` to `.env.example` (no `NEXT_PUBLIC_` prefix), with a comment noting server-side-only use.
+  - Rewrite `sendBookingNotificationEmail` to use Resend's Node SDK instead of `fetch`; module becomes server-only.
+  - Call it from `createBooking` (`src/app/actions/bookings.js`), awaited, right after `Booking.create(...)`, wrapped in try/catch so email failure never fails the booking response — log server-side instead.
+  - Sender: Resend's shared `onboarding@resend.dev`. Recipient: `liandrejohn88@gmail.com`.
+  - Same email fields as before: booking number, customer name/mobile/address, games, rental dates, grand total, GCash reference number.
+  - Remove the client-side call/import from `GamesPageClient.jsx`; `handleBookingSubmit` no longer passes notification data after `setSubmitted(...)`.
+  - Remove `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` from `.env.example`.
+  - Update `README.md`'s "Email Notification" section and tech-stack line to describe Resend + server-side sending.
+- Out of scope: retry queues/background jobs/guaranteed delivery beyond one server-side attempt, admin dashboard fallback, SMS, custom Resend sending-domain verification.
+- Acceptance criteria include: production build passes; verify (without a live key) that booking still succeeds/persists when the email send throws.
+- Full spec: `context/features/reliable-booking-notification-spec.md`.
 
 ## History
 

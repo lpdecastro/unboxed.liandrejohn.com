@@ -8,6 +8,7 @@ frontend:
       commands:
         # Make selected environment variables available to the Next.js server runtime.
         - env | grep -e MONGODB_URI >> .env.production
+        - env | grep -e RESEND_API_KEY >> .env.production
 
         # Include all public Next.js variables.
         - env | grep -e NEXT_PUBLIC_ >> .env.production

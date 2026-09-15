@@ -4,7 +4,7 @@ A personal board game rental site for Metro Manila. Browse games, check availabi
 
 ## Status
 
-A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. The game catalog, availability checks, and booking submission are all backed by MongoDB via Server Actions — a booking is validated and priced server-side, persisted with `pending` status, and notified by email via Web3Forms. Payment is GCash (QR code + reference number, manually verified) and delivery/returns are coordinated manually through Lalamove; there's no online payment gateway, customer accounts/auth, or admin dashboard yet — booking status changes are made directly in the database.
+A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. The game catalog, availability checks, and booking submission are all backed by MongoDB via Server Actions — a booking is validated and priced server-side, persisted with `pending` status, and notified by email server-side via Resend. Payment is GCash (QR code + reference number, manually verified) and delivery/returns are coordinated manually through Lalamove; there's no online payment gateway, customer accounts/auth, or admin dashboard yet — booking status changes are made directly in the database.
 
 Pages:
 
@@ -20,7 +20,7 @@ Current:
 - [Bootstrap](https://getbootstrap.com/) + [Bootstrap Icons](https://icons.getbootstrap.com/)
 - [Sass](https://sass-lang.com/) (Dart Sass)
 - [MongoDB](https://www.mongodb.com/) & [Mongoose](https://mongoosejs.com/)
-- [Web3Forms](https://web3forms.com/) — booking notification email
+- [Resend](https://resend.com/) — booking notification email (server-side)
 - [Google Maps Platform](https://developers.google.com/maps) (Places Autocomplete + Maps JavaScript API) — delivery address field, optional
 - [Google Analytics](https://analytics.google.com/) (GA4, via `@next/third-parties`) — optional
 - [react-toastify](https://fkhadra.github.io/react-toastify/) — add-to-booking confirmation toasts
@@ -106,15 +106,15 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 
 ## Booking Email Notification Setup (optional)
 
-When a booking is submitted, the browser posts the booking details (number, customer info, games, dates, total, GCash reference) to [Web3Forms](https://web3forms.com/), which emails the configured inbox. It's optional — without an access key, the booking still saves to MongoDB normally, just with no email sent.
+When a booking is submitted, the `createBooking` Server Action sends the booking details (number, customer info, games, dates, total, GCash reference) server-side via [Resend](https://resend.com/) to the admin inbox, awaited right after the booking is saved and wrapped in try/catch so a send failure never affects the booking response. It's optional — without an API key, the booking still saves to MongoDB normally, just with no email sent.
 
-To enable it, create a Web3Forms account and access key, then set it in `.env`:
+To enable it, create a Resend account and API key, then set it in `.env`:
 
 ```sh
-NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your-access-key-here
+RESEND_API_KEY=your-api-key-here
 ```
 
-The key is `NEXT_PUBLIC_` (shipped in the client bundle) because the call is made from the browser — Web3Forms' free plan rejects server-to-server requests, and the key itself is guarded by their domain/Origin allowlist rather than secrecy.
+The key is server-only (no `NEXT_PUBLIC_` prefix) and never reaches the client bundle. Emails send from Resend's shared `onboarding@resend.dev` address — no custom domain verification is needed since the only recipient is the account owner's own address.
 
 ## Project Structure
 
