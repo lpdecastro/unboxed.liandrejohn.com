@@ -97,6 +97,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
   const [activeModalSlug, setActiveModalSlug] = useState(null);
 
   const stickyRef = useRef(null);
+  const scrollStickyIntoViewRef = useRef(false);
   const gridRef = useRef(null);
   const modalRef = useRef(null);
   const modalInstanceRef = useRef(null);
@@ -162,6 +163,26 @@ export default function GamesPageClient({ games, initialAddSlug }) {
       confirmationRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [submitted]);
+
+  // Scroll the sticky box into view after advancing a booking step, once
+  // React has actually committed the new step's DOM. Measuring/scrolling
+  // synchronously inside the click handler reads the *old* step's layout —
+  // on mobile, stepping off step 1 also hides the (often very tall) game
+  // grid, so a position computed against the stale, still-tall document can
+  // land short once that grid disappears mid-scroll.
+  useEffect(() => {
+    if (!scrollStickyIntoViewRef.current) return;
+    scrollStickyIntoViewRef.current = false;
+    if (!stickyRef.current) return;
+    const headerHeight =
+      document.getElementById("siteHeader")?.offsetHeight ?? 0;
+    const top =
+      window.scrollY +
+      stickyRef.current.getBoundingClientRect().top -
+      headerHeight -
+      16;
+    window.scrollTo({ top, behavior: "smooth" });
+  }, [currentStep]);
 
   // Coming from a homepage "Add to Booking" link (?add={slug}): default the
   // rental dates to today, check availability, and add that game to the
@@ -407,16 +428,11 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     setCurrentStep(2);
     // The user tapped Next from inside the offcanvas, which could be
     // anywhere down the game grid — scroll back up to the "Pay with GCash"
-    // box (the same sticky container, now on step 2) so it's in view.
-    if (wasInOffcanvas && stickyRef.current) {
-      const headerHeight =
-        document.getElementById("siteHeader")?.offsetHeight ?? 0;
-      const top =
-        window.scrollY +
-        stickyRef.current.getBoundingClientRect().top -
-        headerHeight -
-        16;
-      window.scrollTo({ top, behavior: "smooth" });
+    // box (the same sticky container, now on step 2) so it's in view. See
+    // the currentStep effect above for why this is deferred rather than
+    // computed here.
+    if (wasInOffcanvas) {
+      scrollStickyIntoViewRef.current = true;
     }
   }
 
@@ -431,6 +447,10 @@ export default function GamesPageClient({ games, initialAddSlug }) {
     setGcashError(null);
     trackEvent("gcash_step_next", { grand_total: grandTotal });
     setCurrentStep(3);
+    // Scroll the sticky box (now showing Customer Details) into view — on
+    // mobile the user may have scrolled down while filling in the GCash
+    // reference number. See the currentStep effect above.
+    scrollStickyIntoViewRef.current = true;
   }
 
   async function handleBookingSubmit(e) {
@@ -718,6 +738,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
               <h1 className="visually-hidden">Choose Your Games</h1>
 
               {/* Rental Date Selector */}
+              {isBuildingBooking && (
               <div className="card border shadow-sm p-3 p-lg-4 mb-5">
                 <h2 className="h4 mb-1">When do you need the games?</h2>
                 <p className="small text-body-secondary mb-4">
@@ -815,6 +836,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                   </div>
                 </form>
               </div>
+              )}
 
               <div className="row g-4">
                 {/* Game Filters + Grid */}
