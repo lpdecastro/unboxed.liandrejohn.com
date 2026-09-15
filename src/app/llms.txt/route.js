@@ -3,9 +3,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export async function GET() {
   const body = `# Unboxed
 
-> Personal board game rental service in Metro Manila. Rent from a small
-> collection of 8 games, pay via GCash, and get delivery/returns via
-> Lalamove.
+> Unboxed is a personal board game rental service in Metro Manila. Rent from
+> a small collection of 8 games, pay via GCash, and get delivery/returns via
+> Lalamove anywhere in Metro Manila (Quezon City, Manila, Makati, Taguig,
+> Pasig, Mandaluyong, and more).
 
 ## Games
 

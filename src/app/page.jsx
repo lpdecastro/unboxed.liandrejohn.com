@@ -14,9 +14,18 @@ const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "Unboxed",
+  alternateName: "Unboxed Board Game Rentals",
   description:
     "Personal board game rental service in Metro Manila. Pay via GCash, delivery and returns via Lalamove.",
-  areaServed: { "@type": "City", name: "Metro Manila" },
+  areaServed: [
+    { "@type": "City", name: "Metro Manila" },
+    { "@type": "City", name: "Quezon City" },
+    { "@type": "City", name: "Manila" },
+    { "@type": "City", name: "Makati" },
+    { "@type": "City", name: "Taguig" },
+    { "@type": "City", name: "Pasig" },
+    { "@type": "City", name: "Mandaluyong" },
+  ],
   priceRange: "₱50–₱150",
   paymentAccepted: "GCash",
   url: siteUrl,
@@ -80,6 +89,21 @@ const faqs = [
     question: "How far in advance do I need to book?",
     answer:
       "Bookings are confirmed manually after your GCash payment is verified, so it helps to book as early as you can. Availability depends on whether the games you want are already booked for those dates.",
+  },
+  {
+    question: "Where can I rent board games in Metro Manila?",
+    answer:
+      "Right here on Unboxed. Browse the collection online, pick your rental dates, pay via GCash, and the games are delivered to you anywhere in Metro Manila through Lalamove.",
+  },
+  {
+    question: "Can I rent board games for a party or event?",
+    answer:
+      "Yes. You can book multiple games in one order, and booking 2 or more gets you a 10% discount on the rental fees. Since it's a small personal collection with one copy of each game, availability for your dates is confirmed at booking.",
+  },
+  {
+    question: "Do you deliver board game rentals near me?",
+    answer:
+      "Delivery and returns through Lalamove are available anywhere in Metro Manila, including Quezon City, Manila, Makati, Taguig, Pasig, and Mandaluyong.",
   },
 ];
 
@@ -172,10 +196,11 @@ export default async function HomePage() {
                   <span className="text-primary">buying the game.</span>
                 </h1>
                 <p className="lead text-body-secondary mb-4">
-                  I&rsquo;m sharing my small personal collection of 8 games
-                  for family nights, dates, parties, and weekend hangouts.
-                  Pick your dates, pay through GCash, and have your games
-                  delivered through Lalamove.
+                  Unboxed is a personal board game rental service in Metro
+                  Manila, sharing my small collection of 8 games for family
+                  nights, dates, parties, and weekend hangouts. Pick your
+                  dates, pay through GCash, and have your games delivered
+                  through Lalamove.
                 </p>
                 <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
                   <TrackedLink

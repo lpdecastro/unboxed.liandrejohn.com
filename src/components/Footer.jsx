@@ -72,9 +72,14 @@ export default function Footer() {
               <li className="mb-2">
                 <i className="bi bi-wallet2 me-2"></i>Payment via GCash
               </li>
-              <li>
+              <li className="mb-2">
                 <i className="bi bi-truck me-2"></i>Delivery &amp; return via
                 Lalamove
+              </li>
+              <li>
+                <i className="bi bi-pin-map me-2"></i>Serving Quezon City,
+                Manila, Makati, Taguig, Pasig, Mandaluyong &amp; the rest of
+                Metro Manila
               </li>
             </ul>
           </div>

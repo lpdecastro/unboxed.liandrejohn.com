@@ -2,9 +2,9 @@ import GamesPageClient from "./GamesPageClient";
 import JsonLd from "@/components/JsonLd";
 import { getGames } from "@/app/actions/games";
 
-const title = "Choose Your Games";
+const title = "Rent Board Games in Metro Manila";
 const description =
-  "Browse Monopoly, Exploding Kittens, Monopoly Deal, and more. Pick your rental dates, check availability, and book your games — pay via GCash, delivered and returned through Lalamove, Metro Manila only.";
+  "Rent Monopoly, Exploding Kittens, Monopoly Deal, and more board games in Metro Manila. Pick your rental dates, check availability, and book online — pay via GCash, delivered and returned through Lalamove.";
 
 export const metadata = {
   title,

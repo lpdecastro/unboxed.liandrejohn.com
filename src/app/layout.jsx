@@ -22,7 +22,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const title = "Unboxed — Board Game Rentals in Metro Manila";
 const description =
-  "Rent board games from a small personal collection in Metro Manila. Pick your dates, pay via GCash, and get games delivered and returned through Lalamove.";
+  "Unboxed is a personal board game rental service in Metro Manila. Browse the collection, pick your dates, pay via GCash, and get games delivered and returned through Lalamove.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),

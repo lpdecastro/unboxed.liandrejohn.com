@@ -1,12 +1,22 @@
-# Current Feature
+# Current Feature: Target Board Game Rental Keywords
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- Rank/get cited for "board game rentals", "board game rental service in Metro Manila", "where to rent board games", and similar natural-language queries.
+- `/games` metadata title/description explicitly reference "Rent Board Games" and "Metro Manila".
+- Homepage meta description reads as a rental-service description; hero copy naturally includes "board game rental service" once.
+- `faqs` array in `src/app/page.jsx` gains 3 new Q&As ("where to rent", party/event rentals, delivery near me), flowing into the existing `FAQPage` JSON-LD automatically.
+- `localBusinessJsonLd` gains `alternateName: "Unboxed Board Game Rentals"` and `areaServed` as an array of named Metro Manila cities (plus "Metro Manila" itself).
+- Footer gains a truthful "Areas We Serve" line naming a few real Metro Manila cities.
+- `llms.txt` opening line uses "board game rental service in Metro Manila".
+- No changes to booking flow, pricing, or `/games`'s existing `ItemList`/`Product` JSON-LD.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- Full spec: `context/features/target-board-game-rental-keywords-spec.md`.
+- Builds on `context/features/seo-homepage-games-page-spec.md` (metadata/OG/JSON-LD/sitemap fundamentals) and `context/features/improve-aeo-geo-aio-spec.md` (FAQ accordion + FAQPage/HowTo JSON-LD + llms.txt) — this spec re-tunes existing copy/metadata and extends the existing FAQ array rather than building new mechanisms.
+- No unverifiable "best"/"#1"/"top-rated" claims — reads as spammy to search engines and AI answer engines, and isn't verifiable for a small personal operation.
+- No new pages/routes (no `/faq`, no `/areas`, no city landing pages); no visible brand/logo change (`alternateName` is structured-data only); don't invent delivery coverage outside Metro Manila.
 
 ## History
 
