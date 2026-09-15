@@ -6,8 +6,8 @@ A personal board game rental site for Metro Manila — browse games, check avail
 
 Blog posts about this project:
 
-- [Why I Built Unboxed](http://localhost:5173/blog/why-i-built-unboxed)
-- [How I Built Unboxed](http://localhost:5173/blog/how-i-built-unboxed)
+- [Why I Built Unboxed](https://liandrejohn.com/blog/why-i-built-unboxed)
+- [How I Built Unboxed](https://liandrejohn.com/blog/how-i-built-unboxed)
 
 ## Screenshot
 
