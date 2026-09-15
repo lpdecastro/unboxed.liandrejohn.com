@@ -61,7 +61,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${poppins.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="d-flex flex-column min-vh-100">
         {children}
         <BootstrapClient />

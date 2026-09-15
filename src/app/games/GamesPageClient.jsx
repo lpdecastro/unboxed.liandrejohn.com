@@ -1141,14 +1141,14 @@ export default function GamesPageClient({ games, initialAddSlug }) {
 
         {/* Mobile Booking Bottom Bar (step 1 only) */}
         {!submitted && currentStep === 1 && hasGames && (
-          <div className="fixed-bottom d-lg-none bg-body border-top shadow p-3 d-flex align-items-center justify-content-between">
+          <div className="fixed-bottom d-lg-none bg-dark text-white shadow p-3 d-flex align-items-center justify-content-between">
             <span>
               <span className="fw-semibold">
                 {selectedGames.length}{" "}
                 {selectedGames.length === 1 ? "game" : "games"}
               </span>
               {effectivelyChecked && (
-                <span className="text-body-secondary">
+                <span className="text-white-50">
                   {" "}
                   &middot; {peso(grandTotal)}
                 </span>
@@ -1156,7 +1156,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
             </span>
             <button
               type="button"
-              className="btn btn-primary rounded-pill fw-semibold"
+              className="btn btn-light rounded-pill fw-semibold"
               data-bs-toggle="offcanvas"
               data-bs-target="#mobileBookingOffcanvas"
               aria-controls="mobileBookingOffcanvas"
@@ -1330,7 +1330,7 @@ export default function GamesPageClient({ games, initialAddSlug }) {
         onToggle={() => activeModalSlug && toggleGame(activeModalSlug)}
       />
       <RentalPoliciesModal />
-      <ToastContainer position="bottom-right" autoClose={3000} theme="light" />
+      <ToastContainer position="top-center" autoClose={3000} theme="light" />
       <ScrollToTopButton raised={!submitted && currentStep === 1 && hasGames} />
     </>
   );
