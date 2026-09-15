@@ -112,26 +112,58 @@ export default function AddressAutocomplete({ value, onChange, id, required, onO
         containerRef.current.appendChild(element);
 
         // Focusing the field is what activates the Google widget and its
-        // suggestions dropdown. On mobile the on-screen keyboard can leave
-        // little room below the field for that dropdown, so scroll the
-        // field up to just under the sticky navbar first — same header-
-        // offset math GamesPageClient.jsx uses elsewhere for scrollTo.
-        // `focusin` (unlike `focus`) bubbles and crosses the element's
-        // shadow DOM boundary, matching the `focusout` listener below.
+        // suggestions dropdown. Scrolling right away (on `focusin`) is too
+        // early on mobile: the on-screen keyboard hasn't opened yet, so the
+        // pre-keyboard layout says there's plenty of room below the field
+        // and no scroll happens — then the keyboard slides up afterwards
+        // and covers the field/dropdown anyway. Instead, wait for the
+        // `visualViewport` "resize" event, which fires once the keyboard
+        // has actually finished changing the visible area, then use its
+        // shrunk `height`/`offsetTop` (rather than `window.innerHeight`,
+        // which iOS Safari doesn't shrink for the keyboard) to figure out
+        // how much is really visible above it. `focusin` (unlike `focus`)
+        // bubbles and crosses the element's shadow DOM boundary, matching
+        // the `focusout` listener below.
         element.addEventListener("focusin", () => {
-          window.requestAnimationFrame(() => {
+          const viewport = window.visualViewport;
+          let adjusted = false;
+
+          const adjust = () => {
+            if (adjusted) return;
+            adjusted = true;
             if (!containerRef.current) return;
             const headerHeight =
               document.getElementById("siteHeader")?.offsetHeight ?? 0;
-            const targetTop = headerHeight + 16;
-            const currentTop = containerRef.current.getBoundingClientRect().top;
-            if (Math.abs(currentTop - targetTop) > 8) {
-              window.scrollTo({
-                top: window.scrollY + currentTop - targetTop,
-                behavior: "smooth",
-              });
+            const visibleTop = headerHeight + 16;
+            const visibleBottom = viewport
+              ? viewport.height + viewport.offsetTop
+              : window.innerHeight;
+            const rect = containerRef.current.getBoundingClientRect();
+            // Reserve room below the field for the suggestions dropdown.
+            const desiredBottom = rect.bottom + 260;
+
+            let delta = 0;
+            if (rect.top < visibleTop) {
+              delta = rect.top - visibleTop;
+            } else if (desiredBottom > visibleBottom) {
+              delta = Math.min(desiredBottom - visibleBottom, rect.top - visibleTop);
             }
-          });
+            if (Math.abs(delta) > 8) {
+              window.scrollBy({ top: delta, behavior: "smooth" });
+            }
+          };
+
+          const handleViewportResize = () => {
+            viewport.removeEventListener("resize", handleViewportResize);
+            adjust();
+          };
+          viewport?.addEventListener("resize", handleViewportResize);
+          // Fallback for browsers without visualViewport, or if the
+          // keyboard was already open so no resize event fires.
+          window.setTimeout(() => {
+            viewport?.removeEventListener("resize", handleViewportResize);
+            adjust();
+          }, 400);
         });
 
         // Manual typing without picking a suggestion: sync on blur, same as
