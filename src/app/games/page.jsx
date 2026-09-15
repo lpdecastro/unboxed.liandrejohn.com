@@ -50,6 +50,7 @@ export default async function GamesPage({ searchParams }) {
           "@type": "Offer",
           price: game.pricePerDay,
           priceCurrency: "PHP",
+          availability: "https://schema.org/InStock",
         },
       },
     })),
