@@ -945,10 +945,31 @@ export default function GamesPageClient({ games, initialAddSlug }) {
                             <div>
                               <h2 className="h5 mb-1">Pay with GCash</h2>
                               <p className="small text-body-secondary mb-0">
-                                Send the Amount to Pay shown in your Booking
-                                Summary before submitting.
+                                Send the Amount to Pay shown below before
+                                submitting.
                               </p>
                             </div>
+                          </div>
+                          <div className="d-flex justify-content-between align-items-center rounded-3 bg-body-tertiary p-3 mb-3">
+                            <div>
+                              <span className="d-block fw-semibold">
+                                Amount to Pay
+                              </span>
+                              <span className="d-block text-body-secondary small">
+                                {selectedGames.length}{" "}
+                                {selectedGames.length === 1 ? "game" : "games"}
+                                {rentalDays > 0 && (
+                                  <>
+                                    {" "}
+                                    &middot; {rentalDays}{" "}
+                                    {rentalDays === 1 ? "day" : "days"}
+                                  </>
+                                )}
+                                {" "}
+                                &middot; {peso(depositTotal)} refundable
+                              </span>
+                            </div>
+                            <span className="fs-4 fw-bold">{peso(grandTotal)}</span>
                           </div>
                           <div className="border rounded-3 d-flex flex-column align-items-center justify-content-center text-center p-4 mb-3 bg-body-tertiary">
                             <Image
