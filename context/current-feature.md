@@ -1,29 +1,16 @@
-# Current Feature: Reliable Booking Notification
+# Current Feature
 
 ## Goals
 
-- Send the admin booking-notification email server-side via Resend from inside `createBooking`, instead of the current fire-and-forget client-side Web3Forms call.
-- Guarantee the booking write itself never depends on the email send succeeding.
-- Remove the now-unused client-side Web3Forms notification path entirely.
+<!-- Bullet points of what success looks like -->
 
 ## Notes
 
-- Background: `src/lib/notifications.js`'s `sendBookingNotificationEmail` currently POSTs to Web3Forms from the browser, fired (not awaited) from `GamesPageClient.jsx`'s `handleBookingSubmit`. Failures only `console.error` — invisible to customer and admin. Built this way originally because Web3Forms' free plan 403s server-to-server calls. Confirmed real failure: a booking saved to MongoDB but the admin email never arrived.
-- Requirements:
-  - Add `resend` package dependency.
-  - Add server-only `RESEND_API_KEY` to `.env.example` (no `NEXT_PUBLIC_` prefix), with a comment noting server-side-only use.
-  - Rewrite `sendBookingNotificationEmail` to use Resend's Node SDK instead of `fetch`; module becomes server-only.
-  - Call it from `createBooking` (`src/app/actions/bookings.js`), awaited, right after `Booking.create(...)`, wrapped in try/catch so email failure never fails the booking response — log server-side instead.
-  - Sender: Resend's shared `onboarding@resend.dev`. Recipient: `liandrejohn88@gmail.com`.
-  - Same email fields as before: booking number, customer name/mobile/address, games, rental dates, grand total, GCash reference number.
-  - Remove the client-side call/import from `GamesPageClient.jsx`; `handleBookingSubmit` no longer passes notification data after `setSubmitted(...)`.
-  - Remove `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` from `.env.example`.
-  - Update `README.md`'s "Email Notification" section and tech-stack line to describe Resend + server-side sending.
-- Out of scope: retry queues/background jobs/guaranteed delivery beyond one server-side attempt, admin dashboard fallback, SMS, custom Resend sending-domain verification.
-- Acceptance criteria include: production build passes; verify (without a live key) that booking still succeeds/persists when the email send throws.
-- Full spec: `context/features/reliable-booking-notification-spec.md`.
+<!-- Additional context, constraints, or details from spec -->
 
 ## History
+
+- Made the admin booking-notification email reliable per `context/features/reliable-booking-notification-spec.md`: replaced the fire-and-forget client-side Web3Forms call (fired from the browser after the confirmation UI was already shown, failures only `console.error`'d and invisible to both customer and admin — confirmed by a real booking that saved to MongoDB but never generated an email) with a server-side send via Resend. `src/lib/notifications.js`'s `sendBookingNotificationEmail` now uses Resend's Node SDK instead of `fetch`-ing Web3Forms, making the module server-only; it's called from `createBooking` (`src/app/actions/bookings.js`), awaited immediately after `Booking.create(...)`, wrapped in try/catch so an email failure never fails the booking response. One subtlety found during verification: the Resend SDK resolves `{ data, error }` instead of throwing on API errors (e.g. a bad key), so `sendBookingNotificationEmail` now explicitly throws when `error` is present — otherwise `createBooking`'s catch would never fire and failures would go unlogged. Sends from Resend's shared `onboarding@resend.dev` (no custom domain needed, only recipient is the account owner) to `liandrejohn88@gmail.com`, with the same fields as before (booking number, customer name/mobile/address, games, dates, grand total, GCash reference). Removed the client-side call/import from `GamesPageClient.jsx`, `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` from `.env.example` (replaced with server-only `RESEND_API_KEY`), and updated README's tech-stack line and "Email Notification Setup" section. Also updated `amplify.yml` to forward `RESEND_API_KEY` into the Amplify build's `.env.production`, needed now that the send happens server-side in production. Verified: production build passes; a standalone script against local MongoDB (via a `@/`-alias ESM loader) confirmed `createBooking` still succeeds and persists correctly both with `RESEND_API_KEY` unset (no-op) and with an invalid key (Resend returns a 401, caught and logged, booking unaffected) — the invalid-key case is what surfaced the throw-on-error fix above.
 
 - Targeted board game rental keywords for SEO/AEO/AIO/GEO per `context/features/target-board-game-rental-keywords-spec.md`, building on the prior fundamentals (`seo-homepage-games-page-spec.md`, `improve-aeo-geo-aio-spec.md`) by re-tuning existing copy/metadata rather than adding new mechanisms. `/games` metadata title/description changed to explicitly lead with "Rent Board Games in Metro Manila"; the homepage meta description and hero paragraph (`src/app/layout.jsx`, `src/app/page.jsx`) now read as a rental-*service* description, working in "board game rental service" once. Extended the existing `faqs` array in `src/app/page.jsx` with 3 new Q&As matching real search phrasing — "Where can I rent board games in Metro Manila?", party/event rentals, and delivery-near-me — which flow into the existing `FAQPage` JSON-LD automatically (same array, no schema drift). Enriched `localBusinessJsonLd` with `alternateName: "Unboxed Board Game Rentals"` (structured-data only, no visible brand change) and upgraded `areaServed` from a single "Metro Manila" `City` to an array naming Quezon City, Manila, Makati, Taguig, Pasig, and Mandaluyong alongside it. Added a matching "Serving Quezon City, Manila, Makati, Taguig, Pasig, Mandaluyong & the rest of Metro Manila" line to the Footer's existing Rental Info list, and reworked `llms.txt`'s opening summary line to match. Deliberately avoided any unverifiable "best"/"#1"/"top-rated" claims — reads as spammy to both search engines and AI answer engines, and isn't verifiable for a small personal operation — and didn't invent delivery coverage outside Metro Manila or add any new pages/routes. Verified: production build passes; a `next start` smoke test confirmed the new `/games` title, homepage description, new FAQ question, footer line, and `alternateName` JSON-LD field all render correctly.
 
