@@ -1,19 +1,30 @@
-# Unboxed Board Game Rental
+# Unboxed
 
-A personal board game rental site for Metro Manila. Browse games, check availability for a date range, book, and pay via GCash — delivery and returns are handled through Lalamove.
+A personal board game rental site for Metro Manila — browse games, check availability, book, and pay via GCash, with delivery and returns handled through Lalamove.
 
-## Status
+**Live site:** [unboxed.liandrejohn.com](https://unboxed.liandrejohn.com/)
 
-A [Next.js](https://nextjs.org/) (App Router) site styled with Bootstrap, compiled from Sass so the design can be customized beyond Bootstrap's defaults. The game catalog, availability checks, and booking submission are all backed by MongoDB via Server Actions — a booking is validated and priced server-side, persisted with `pending` status, and notified by email server-side via Resend. Payment is GCash (QR code + reference number, manually verified) and delivery/returns are coordinated manually through Lalamove; there's no online payment gateway, customer accounts/auth, or admin dashboard yet — booking status changes are made directly in the database.
+Blog posts about this project:
 
-Pages:
+- [Why I Built Unboxed](http://localhost:5173/blog/why-i-built-unboxed)
+- [How I Built Unboxed](http://localhost:5173/blog/how-i-built-unboxed)
 
-- **Home** (`/`) — introduces Unboxed, highlights featured games, explains how renting works
-- **Games** (`/games`) — full game catalog, availability checker, booking summary, and checkout in one page
+## Screenshot
+
+![Unboxed homepage](docs/screenshot.jpg)
+
+## Features
+
+- **Game catalog** — 8 personal board games (Monopoly, Exploding Kittens, Monopoly Deal, Game of Life, Herd Mentality, Piles, RC Plane, Jackstones), backed by MongoDB
+- **Date-range availability checker** — checks each game against existing confirmed/out-for-delivery/rented/return-pending bookings
+- **Multi-game booking** with a sticky booking summary (pricing, 10% multi-game discount, security deposits, grand total)
+- **Delivery address autocomplete** — Google Places Autocomplete with a map pin, hard-blocks addresses outside Metro Manila
+- **GCash checkout** — QR code + reference number, server-validated and priced end-to-end via a Server Action
+- **Booking confirmation** — booking number, status, and details shown on submission; admin notified by email via Resend
+- **SEO/AEO** — metadata, JSON-LD (`LocalBusiness`, `ItemList`/`Product`, `FAQPage`, `HowTo`), sitemap/robots, and `llms.txt`
+- **Analytics** — GA4 page views + custom event tracking (optional, gated behind an env var)
 
 ## Tech Stack
-
-Current:
 
 - [Next.js](https://nextjs.org/) (App Router, JavaScript)
 - [React](https://react.dev/)
@@ -25,9 +36,7 @@ Current:
 - [Google Analytics](https://analytics.google.com/) (GA4, via `@next/third-parties`) — optional
 - [react-toastify](https://fkhadra.github.io/react-toastify/) — add-to-booking confirmation toasts
 
-Planned (later phases):
-
-- AWS Amplify (deployment)
+Deployed on [AWS Amplify](https://aws.amazon.com/amplify/).
 
 ## Getting Started
 
@@ -52,7 +61,7 @@ npm run build
 npm start
 ```
 
-## MongoDB Setup
+### MongoDB
 
 The app expects a local MongoDB instance. Install it (e.g. `brew install mongodb-community`) and start it, or run it via Docker:
 
@@ -74,47 +83,25 @@ npm run seed
 
 This drops and repopulates the `games` and `bookings` collections. `connectDB` (`src/lib/mongodb.js`) caches the connection across hot reloads, and `Game`/`Booking` models live in `src/models/`.
 
-## Google Maps Setup (optional)
+## Environment Variables
 
-The delivery address field on `/games` uses Google Places Autocomplete and an embedded map pin. Both are optional — without an API key, the field falls back to a plain text address input with no runtime error.
+All variables are optional except `MONGODB_URI` (which itself has a local-dev default). Copy `.env.example` to `.env` and fill in what you need:
 
-To enable it, create a browser API key in [Google Cloud Console](https://console.cloud.google.com/) restricted to the **Places API** and **Maps JavaScript API** (and to your site's HTTP referrers), then set it in `.env`:
+| Variable                          | Required | Description                                                                                          |
+| ---------------------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `MONGODB_URI`                      | No       | MongoDB connection string. Defaults to `mongodb://localhost:27017/unboxed`.                            |
+| `NEXT_PUBLIC_SITE_URL`             | No       | Absolute site URL used for metadata, canonical links, OG/Twitter images, and the sitemap. Falls back to `http://localhost:3000`. |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`  | No       | Enables Google Places Autocomplete + map pin on the delivery address field. Without it, a plain text input is used instead. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`    | No       | GA4 measurement ID. Without it, no Google Analytics script is loaded.                                  |
+| `RESEND_API_KEY`                   | No       | Server-only key used to send the admin booking notification email via [Resend](https://resend.com/). Without it, bookings still save normally, just with no email sent. |
 
-```sh
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-key-here
-```
+### Google Maps setup
 
-## SEO Setup
+Create a browser API key in [Google Cloud Console](https://console.cloud.google.com/) restricted to the **Places API** and **Maps JavaScript API** (and to your site's HTTP referrers).
 
-Metadata (Open Graph/Twitter cards, canonical URLs), the JSON-LD structured data, and `sitemap.xml`/`robots.txt` all resolve absolute URLs from `NEXT_PUBLIC_SITE_URL`. Set it in `.env` once a production domain exists (e.g. AWS Amplify):
+### Booking email notification setup
 
-```sh
-NEXT_PUBLIC_SITE_URL=https://unboxed.example.com
-```
-
-Without it, everything falls back to `http://localhost:3000` for local dev.
-
-## Google Analytics Setup (optional)
-
-Page view tracking (GA4) is wired up via `@next/third-parties`'s `GoogleAnalytics` component, rendered once from the root layout so it covers both `/` and `/games`. It's optional — without a measurement ID, no GA script is loaded and nothing breaks.
-
-To enable it, create a GA4 property and set its measurement ID in `.env`:
-
-```sh
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
-
-## Booking Email Notification Setup (optional)
-
-When a booking is submitted, the `createBooking` Server Action sends the booking details (number, customer info, games, dates, total, GCash reference) server-side via [Resend](https://resend.com/) to the admin inbox, awaited right after the booking is saved and wrapped in try/catch so a send failure never affects the booking response. It's optional — without an API key, the booking still saves to MongoDB normally, just with no email sent.
-
-To enable it, create a Resend account and API key, then set it in `.env`:
-
-```sh
-RESEND_API_KEY=your-api-key-here
-```
-
-The key is server-only (no `NEXT_PUBLIC_` prefix) and never reaches the client bundle. Emails send from Resend's shared `onboarding@resend.dev` address — no custom domain verification is needed since the only recipient is the account owner's own address.
+When a booking is submitted, the `createBooking` Server Action sends the booking details (number, customer info, games, dates, total, GCash reference) server-side via Resend to the admin inbox, right after the booking is saved. Create a Resend account and API key to enable it — the key is server-only and never reaches the client bundle. Emails send from Resend's shared `onboarding@resend.dev` address, since the only recipient is the account owner's own address.
 
 ## Project Structure
 
@@ -127,6 +114,8 @@ The key is server-only (no `NEXT_PUBLIC_` prefix) and never reaches the client b
 │   ├── current-feature.md   # Active feature spec + completed feature history
 │   ├── contents/            # Page copy (Home, Game Listing)
 │   └── features/            # Per-feature specs
+├── docs/
+│   └── screenshot.jpg        # README screenshot
 ├── scripts/
 │   └── seed.mjs              # Seeds MongoDB from src/data/games.json + bookings.json
 ├── src/
@@ -144,10 +133,11 @@ The key is server-only (no `NEXT_PUBLIC_` prefix) and never reaches the client b
 
 `public/fonts/` and `.next/` are build output, not committed — `npm run dev`/`npm run build` regenerate `public/fonts/` automatically, and Next.js regenerates `.next/`.
 
-## npm Scripts
+## Commands
 
 | Script                 | Description                                                |
 | ---------------------- | ----------------------------------------------------------- |
+| `npm install`          | Install dependencies                                         |
 | `npm run dev`          | Starts the Next.js dev server (syncs icon fonts first)       |
 | `npm run build`        | Production build (syncs icon fonts first)                    |
 | `npm start`            | Serves the production build                                  |
