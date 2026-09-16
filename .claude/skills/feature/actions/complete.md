@@ -7,7 +7,8 @@
 
     - Change H1 back to `# Current Feature`
     - Clear Goals and Notes section (keep placeholder comments)
-    - Add concise feature summary bullet point to the END of History
 
-5. Commit the reset.
-6. Push main to origin
+5. Append a concise feature summary bullet to the TOP of `context/feature-history.md` (newest first, right after its intro line) - don't read the rest of that file first, just insert at the top.
+
+6. Commit the reset.
+7. Push main to origin

@@ -10,7 +10,7 @@ Produces a plain-language explainer of a feature for a non-technical reader (e.g
 
 2. Read the resolved spec file in full — this is the primary source of what the feature does and why.
 
-3. Check `context/current-feature.md`'s H1 heading, `## Goals`, and `## Notes` sections — but only if its H1 names this same feature (i.e. it's the currently active/loaded feature). If so, pull any developer context there that isn't already in the spec (deviations, caveats, manual setup steps, things called out as not-yet-done). Do **not** read the `## History` section — it's an append-only log going back to the start of the project and reading it wastes a large amount of context for little gain. If the H1 doesn't match this feature, skip this step entirely and rely on the spec alone.
+3. Read `context/current-feature.md` — but only use it if its H1 names this same feature (i.e. it's the currently active/loaded feature). If so, pull any developer context there that isn't already in the spec (deviations, caveats, manual setup steps, things called out as not-yet-done). If the H1 doesn't match this feature, skip this step entirely and rely on the spec alone.
 
 4. Also check this session's persistent memory (if the memory system is available) for `feedback` or `project` type entries relevant to this feature's subject matter that add context not already covered by the spec. Don't force it — skip silently if nothing relevant turns up.
 
