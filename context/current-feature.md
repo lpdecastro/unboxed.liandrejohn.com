@@ -1,12 +1,23 @@
-# Current Feature
+# Current Feature: HubSpot Booking Sync
 
 ## Goals
 
-<!-- Bullet points of what success looks like -->
+- When a booking is created, sync it into HubSpot as a Contact (customer, deduped by phone) and an associated Deal (the booking) — practice feature for learning CRM concepts, not a real business need.
+- `src/lib/hubspot.js` exports `syncBookingToHubSpot({ bookingNumber, customerName, customerMobile, customerAddress, gamesText, datesText, grandTotal, gcashReferenceNumber })`, using `@hubspot/api-client` with a server-only `HUBSPOT_ACCESS_TOKEN`.
+- Contact: search by `phone`; reuse if found, else create (`firstname`, `phone`, `address`).
+- Deal: always created new — `dealname`, `amount` (stringified `grandTotal`), `pipeline`/`dealstage` from env, `booking_details` custom property (games/dates/GCash ref) — associated to the Contact in the same create call via `AssociationTypes.dealToContact`.
+- No-op if `HUBSPOT_ACCESS_TOKEN`, `HUBSPOT_PIPELINE_ID`, or `HUBSPOT_DEALSTAGE_ID` is unset (degrade-gracefully pattern, same as Resend).
+- Call from `createBooking` (`src/app/actions/bookings.js`) right after `sendBookingNotificationEmail`, in its own try/catch — a HubSpot failure must never affect the booking response or the email send, and vice versa.
+- Document `HUBSPOT_ACCESS_TOKEN`, `HUBSPOT_PIPELINE_ID`, `HUBSPOT_DEALSTAGE_ID` in `.env.example` plus the manual setup steps.
 
 ## Notes
 
-<!-- Additional context, constraints, or details from spec -->
+- One-directional, frozen-at-creation sync: later booking status changes (`confirmed`, `rented`, etc.) do NOT update the HubSpot Deal's stage. MongoDB remains the source of truth for current booking status.
+- `properties` on HubSpot SDK calls is `Record<string, string>` — `amount` must be `String(grandTotal)`, not a raw number.
+- Manual, one-time setup required in the HubSpot portal before code works: create a private app (legacy "Legacy Apps" flow, not the new CLI-based Developer Platform) with `crm.objects.contacts.read/write` + `crm.objects.deals.read/write` scopes → `HUBSPOT_ACCESS_TOKEN`; get/repurpose a pipeline + stage via `GET /crm/v3/pipelines/deals` → `HUBSPOT_PIPELINE_ID`/`HUBSPOT_DEALSTAGE_ID`; create a custom Deal property `booking_details` (multi-line text). Full step-by-step is in the spec.
+- Out of scope: two-way sync, status-change sync as deal-stage moves, marketing automation (lists/workflows/campaigns), any customer-visible UI changes.
+- Reuses already-computed `gamesText`/`datesText`/`gcashReferenceNumber` and raw `grandTotal` (pre-formatting) from `createBooking` — no new computation needed there.
+- Full spec: `context/features/hubspot-booking-sync-spec.md`.
 
 ## History
 

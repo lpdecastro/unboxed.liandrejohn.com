@@ -5,6 +5,7 @@ import Game from "@/models/Game";
 import Booking from "@/models/Booking";
 import { peso, formatDate } from "@/lib/format";
 import { sendBookingNotificationEmail } from "@/lib/notifications";
+import { syncBookingToHubSpot } from "@/lib/hubspot";
 
 // Bookings in these statuses hold a game unavailable for its dates.
 // `pending` bookings don't block availability until manually confirmed.
@@ -174,6 +175,21 @@ export async function createBooking(input) {
     });
   } catch (error) {
     console.error("Booking notification email failed:", error);
+  }
+
+  try {
+    await syncBookingToHubSpot({
+      bookingNumber,
+      customerName: customerRecord.name,
+      customerMobile: customerRecord.mobile,
+      customerAddress: customerRecord.address,
+      gamesText,
+      datesText,
+      grandTotal,
+      gcashReferenceNumber: trimmedGcashReference,
+    });
+  } catch (error) {
+    console.error("HubSpot booking sync failed:", error);
   }
 
   return {
