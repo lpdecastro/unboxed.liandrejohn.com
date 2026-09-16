@@ -9,6 +9,9 @@ frontend:
         # Make selected environment variables available to the Next.js server runtime.
         - env | grep -e MONGODB_URI >> .env.production
         - env | grep -e RESEND_API_KEY >> .env.production
+        - env | grep -e HUBSPOT_ACCESS_TOKEN >> .env.production
+        - env | grep -e HUBSPOT_PIPELINE_ID >> .env.production
+        - env | grep -e HUBSPOT_DEALSTAGE_ID >> .env.production
 
         # Include all public Next.js variables.
         - env | grep -e NEXT_PUBLIC_ >> .env.production
